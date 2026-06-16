@@ -1,41 +1,45 @@
 """
-QuantumCrypt-AI - Post-Quantum Cryptography Library
-June 2026 - FIPS 203/204 Optimized with Hybrid Crypto and Crypto-Agility
+QuantumCrypt-AI: Post-Quantum Cryptography Framework
+June 2026 - FIPS 203, 204, 205 Compliant Implementation
 """
-from .nist_round3_signatures_2026 import (
-    NISTRound3Signatures2026,
-    HybridPQCVerifier2026,
-    KeyPair
-)
 from .fips_standards_2026 import (
-    MLKEM,
-    MLDSA,
-    HybridKeyExchange2026,
-    SecurityLevel,
-    KEMKeyPair,
-    KEMResult,
-    DSAKeyPair,
+    MLKEM, MLDSA, HybridKeyExchange2026,
+    SecurityLevel, KEMKeyPair, KEMResult, DSAKeyPair,
     get_fips_compliance_report
 )
+from .fips_205_slhdsa_2026 import (
+    SLHDSA, SLHDSAParameterSet, SLHDSAKeyPair,
+    NISTRound3Signatures2026, get_slhdsa_compliance_report
+)
 from .hybrid_crypto_system_2026 import HybridCryptosystem, CryptoAgilityFramework
-from .fips_optimized_2026 import OptimizedMLKEM, OptimizedMLDSA
+from .fips_optimized_2026 import OptimizedMLKEM, OptimizedMLDSA, OptimizedHQC
 
+__version__ = "2026.6.17.2"
 __all__ = [
-    "NISTRound3Signatures2026",
-    "HybridPQCVerifier2026",
-    "KeyPair",
+    # FIPS 203 - ML-KEM (Kyber)
     "MLKEM",
-    "MLDSA",
-    "HybridKeyExchange2026",
-    "SecurityLevel",
     "KEMKeyPair",
     "KEMResult",
+    # FIPS 204 - ML-DSA (Dilithium)
+    "MLDSA",
     "DSAKeyPair",
-    "get_fips_compliance_report",
+    # FIPS 205 - SLH-DSA (SPHINCS+)
+    "SLHDSA",
+    "SLHDSAParameterSet",
+    "SLHDSAKeyPair",
+    # Common
+    "SecurityLevel",
+    # Hybrid
+    "HybridKeyExchange2026",
     "HybridCryptosystem",
     "CryptoAgilityFramework",
+    # NIST Round 3 Additional Signatures
+    "NISTRound3Signatures2026",
+    # Optimized
     "OptimizedMLKEM",
-    "OptimizedMLDSA"
+    "OptimizedMLDSA",
+    "OptimizedHQC",
+    # Reports
+    "get_fips_compliance_report",
+    "get_slhdsa_compliance_report",
 ]
-__version__ = "2026.6.17.1"
-from .nist_round4_signatures_2026 import NISTPQCUpdate2026, PQCTLS13, MigrationReadinessAuditor
