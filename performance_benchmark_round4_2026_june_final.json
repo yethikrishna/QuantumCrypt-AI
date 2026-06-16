@@ -1,0 +1,33 @@
+{
+  "suite": "NISTRound4SignatureSuite",
+  "iterations_per_test": 100,
+  "message_size_bytes": 870,
+  "algorithms_tested": 4,
+  "per_algorithm": {
+    "FAEST": {
+      "keygen_avg_ms": 0.0051,
+      "sign_avg_ms": 0.0064,
+      "keygen_per_second": 197100.75,
+      "sign_per_second": 156038.1
+    },
+    "MAYO": {
+      "keygen_avg_ms": 0.0065,
+      "sign_avg_ms": 0.0067,
+      "keygen_per_second": 153919.41,
+      "sign_per_second": 148786.95
+    },
+    "SQIsign": {
+      "keygen_avg_ms": 0.0053,
+      "sign_avg_ms": 0.0118,
+      "keygen_per_second": 188001.08,
+      "sign_per_second": 85094.42
+    },
+    "UOV": {
+      "keygen_avg_ms": 0.0049,
+      "sign_avg_ms": 0.0057,
+      "keygen_per_second": 205603.14,
+      "sign_per_second": 176083.29
+    }
+  },
+  "timestamp": "2026-06-17 04:36:53"
+}
