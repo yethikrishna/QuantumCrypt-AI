@@ -44,3 +44,4 @@ __all__ = [
     "get_slhdsa_compliance_report",
 ]
 from .post_quantum_tls_2026 import PostQuantumTLS13, HybridCertificateChain2026, get_pqc_tls_migration_guide
+from .fips_206_piv_dualstack_2026 import FIPS206BIKE, PIVDualStackManager, HybridKeyMigrationFramework, PQCAlgorithm, ClassicalAlgorithm, PIVKeyType
