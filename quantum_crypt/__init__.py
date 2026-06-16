@@ -38,3 +38,4 @@ __all__ = [
     "OptimizedMLDSA"
 ]
 __version__ = "2026.6.17.1"
+from .nist_round4_signatures_2026 import NISTPQCUpdate2026, PQCTLS13, MigrationReadinessAuditor

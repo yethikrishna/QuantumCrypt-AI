@@ -1,0 +1,7 @@
+{
+  "algorithm_lookup_ms_avg": 0.0,
+  "key_generation_ms_avg": 0.003,
+  "tls_handshake_ms_avg": 0.004,
+  "iterations": 100,
+  "timestamp": "1781632220.6294618"
+}
