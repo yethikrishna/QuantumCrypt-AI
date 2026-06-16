@@ -45,3 +45,22 @@ __all__ = [
 ]
 from .post_quantum_tls_2026 import PostQuantumTLS13, HybridCertificateChain2026, get_pqc_tls_migration_guide
 from .fips_206_piv_dualstack_2026 import FIPS206BIKE, PIVDualStackManager, HybridKeyMigrationFramework, PQCAlgorithm, ClassicalAlgorithm, PIVKeyType
+from .nist_round4_additional_signatures_2026 import (
+    NISTRound4SignatureSuite,
+    Round4Algorithm,
+    SecurityCategory,
+    Round4KeyPair,
+    Round4Signature,
+    get_round4_compliance_report
+)
+
+__all__.extend([
+    "NISTRound4SignatureSuite",
+    "Round4Algorithm",
+    "SecurityCategory",
+    "Round4KeyPair",
+    "Round4Signature",
+    "get_round4_compliance_report",
+])
+
+__version__ = "2026.6.17.3"
