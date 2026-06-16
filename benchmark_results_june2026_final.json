@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-06-16 23:16:16",
+  "nist_reference": "IR 8610 May 2026",
+  "algorithms": {
+    "FAEST": {
+      "security_level": 5,
+      "avg_sign_time_ms": 0.031,
+      "avg_verify_time_ms": 0.616,
+      "signatures_per_sec": 32101.2,
+      "verifications_per_sec": 1622.9,
+      "pk_size_bytes": 1952,
+      "sig_size_bytes": 9880
+    },
+    "HAWK": {
+      "security_level": 3,
+      "avg_sign_time_ms": 0.021,
+      "avg_verify_time_ms": 0.419,
+      "signatures_per_sec": 48126.7,
+      "verifications_per_sec": 2388.8,
+      "pk_size_bytes": 1312,
+      "sig_size_bytes": 6024
+    },
+    "MAYO": {
+      "security_level": 3,
+      "avg_sign_time_ms": 0.018,
+      "avg_verify_time_ms": 0.348,
+      "signatures_per_sec": 55924.8,
+      "verifications_per_sec": 2870.4,
+      "pk_size_bytes": 1088,
+      "sig_size_bytes": 5576
+    },
+    "MQOM": {
+      "security_level": 3,
+      "avg_sign_time_ms": 0.02,
+      "avg_verify_time_ms": 0.378,
+      "signatures_per_sec": 49791.0,
+      "verifications_per_sec": 2647.9,
+      "pk_size_bytes": 1184,
+      "sig_size_bytes": 5960
+    },
+    "QR-UOV": {
+      "security_level": 3,
+      "avg_sign_time_ms": 0.022,
+      "avg_verify_time_ms": 0.41,
+      "signatures_per_sec": 44984.0,
+      "verifications_per_sec": 2439.4,
+      "pk_size_bytes": 1536,
+      "sig_size_bytes": 6600
+    },
+    "SDitH": {
+      "security_level": 5,
+      "avg_sign_time_ms": 0.028,
+      "avg_verify_time_ms": 0.544,
+      "signatures_per_sec": 35912.4,
+      "verifications_per_sec": 1837.3,
+      "pk_size_bytes": 1856,
+      "sig_size_bytes": 8744
+    },
+    "SNOVA": {
+      "security_level": 3,
+      "avg_sign_time_ms": 0.017,
+      "avg_verify_time_ms": 0.323,
+      "signatures_per_sec": 59244.7,
+      "verifications_per_sec": 3097.1,
+      "pk_size_bytes": 992,
+      "sig_size_bytes": 5192
+    },
+    "SQIsign": {
+      "security_level": 5,
+      "avg_sign_time_ms": 0.003,
+      "avg_verify_time_ms": 0.016,
+      "signatures_per_sec": 298284.9,
+      "verifications_per_sec": 64157.1,
+      "pk_size_bytes": 64,
+      "sig_size_bytes": 216
+    },
+    "UOV": {
+      "security_level": 3,
+      "avg_sign_time_ms": 0.021,
+      "avg_verify_time_ms": 0.397,
+      "signatures_per_sec": 48081.5,
+      "verifications_per_sec": 2517.8,
+      "pk_size_bytes": 1472,
+      "sig_size_bytes": 6344
+    }
+  }
+}
