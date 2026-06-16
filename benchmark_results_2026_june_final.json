@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-06-17 02:52:01",
+  "mlkem_768_avg_ms": 0.6625866889953613,
+  "mldsa_65_avg_ms": 0.006604194641113281,
+  "hqc_192_avg_ms": 0.5248355865478516,
+  "algorithms_tested": [
+    "ML-KEM-768",
+    "ML-DSA-65",
+    "HQC-192"
+  ],
+  "nist_compliant": true,
+  "2026_updates_applied": [
+    "HQC addition",
+    "timing tracking",
+    "performance optimizations"
+  ]
+}
