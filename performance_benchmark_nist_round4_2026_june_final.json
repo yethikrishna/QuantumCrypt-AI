@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-06-17",
+  "nist_report": "NIST IR 8610",
+  "publication_date": "2026-05-14",
+  "round": "Third Round (Round 4)",
+  "algorithms_tested": 4,
+  "iterations": 100,
+  "results": [
+    {
+      "algorithm": "FAEST",
+      "category": "FAEST",
+      "security_level": 1,
+      "keygen_ms": 0.005009174346923828,
+      "sign_ms": 0.005543231964111328,
+      "verify_ms": 0.003139972686767578,
+      "pk_bytes": 32,
+      "sig_bytes": 48,
+      "sk_bytes": 64
+    },
+    {
+      "algorithm": "MAYO",
+      "category": "MAYO",
+      "security_level": 1,
+      "keygen_ms": 0.005855560302734375,
+      "sign_ms": 0.004932880401611328,
+      "verify_ms": 0.003788471221923828,
+      "pk_bytes": 32,
+      "sig_bytes": 32,
+      "sk_bytes": 160
+    },
+    {
+      "algorithm": "SQIsign",
+      "category": "SQIsign",
+      "security_level": 1,
+      "keygen_ms": 0.005052089691162109,
+      "sign_ms": 0.010225772857666016,
+      "verify_ms": 0.003273487091064453,
+      "pk_bytes": 32,
+      "sig_bytes": 208,
+      "sk_bytes": 16
+    },
+    {
+      "algorithm": "UOV",
+      "category": "UOV",
+      "security_level": 1,
+      "keygen_ms": 0.004596710205078125,
+      "sign_ms": 0.005052089691162109,
+      "verify_ms": 0.0036144256591796875,
+      "pk_bytes": 64,
+      "sig_bytes": 80,
+      "sk_bytes": 64
+    }
+  ]
+}

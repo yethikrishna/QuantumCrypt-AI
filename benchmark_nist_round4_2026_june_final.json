@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-06-17",
+  "nist_report": "NIST IR 8610",
+  "algorithms_tested": 4,
+  "iterations": 100,
+  "results": [
+    {
+      "algorithm": "FAEST",
+      "name": "FAEST (Hash-based)",
+      "keygen_ms": 0.004699230194091797,
+      "sign_ms": 0.005509853363037109,
+      "verify_ms": 0.002982616424560547,
+      "public_key_bytes": 32,
+      "signature_bytes": 48
+    },
+    {
+      "algorithm": "MAYO",
+      "name": "MAYO (Multivariate, small sigs)",
+      "keygen_ms": 0.005929470062255859,
+      "sign_ms": 0.004808902740478516,
+      "verify_ms": 0.003592967987060547,
+      "public_key_bytes": 32,
+      "signature_bytes": 32
+    },
+    {
+      "algorithm": "SQIsign",
+      "name": "SQIsign (Isogeny, small PK)",
+      "keygen_ms": 0.0047588348388671875,
+      "sign_ms": 0.009989738464355469,
+      "verify_ms": 0.0030684471130371094,
+      "public_key_bytes": 32,
+      "signature_bytes": 208
+    },
+    {
+      "algorithm": "UOV",
+      "name": "UOV (Multivariate)",
+      "keygen_ms": 0.004761219024658203,
+      "sign_ms": 0.004580020904541016,
+      "verify_ms": 0.003559589385986328,
+      "public_key_bytes": 64,
+      "signature_bytes": 80
+    }
+  ]
+}
