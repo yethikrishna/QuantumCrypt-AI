@@ -64,3 +64,21 @@ __all__.extend([
 ])
 
 __version__ = "2026.6.17.3"
+
+# Side-Channel Resistant KDF (June 2026 Production Release)
+from .side_channel_resistant_kdf_2026_june import (
+    SideChannelResistantKDF,
+    KDFResult,
+    KDFSecurityLevel,
+    KDFHashAlgorithm,
+    generate_side_channel_resistant_kdf
+)
+__all__.extend([
+    "SideChannelResistantKDF",
+    "KDFResult",
+    "KDFSecurityLevel",
+    "KDFHashAlgorithm",
+    "generate_side_channel_resistant_kdf"
+])
+
+__version__ = "2026.6.17.4"
