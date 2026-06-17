@@ -150,4 +150,21 @@ __all__.extend([
     "SignatureResult",
     "VerificationResult"
 ])
-__version__ = "2026.6.17.8"
+__version__ = "2026.6.17.9"
+# Quantum-Resistant Random Number Generator (June 2026 Production Release)
+# NIST SP 800-90A/B Compliant CSPRNG
+from .quantum_resistant_rng_2026_june import (
+    QuantumResistantRNG,
+    RNGHealthStatus,
+    EntropySource,
+    EntropyAssessment,
+    RandomGenerationResult
+)
+__all__.extend([
+    "QuantumResistantRNG",
+    "RNGHealthStatus",
+    "EntropySource",
+    "EntropyAssessment",
+    "RandomGenerationResult"
+])
+__version__ = "2026.6.17.10"
