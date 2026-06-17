@@ -451,3 +451,24 @@ __all__.extend([
     "create_secure_checksum"
 ])
 __version__ = "2026.6.17.17"
+# Post-Quantum Secure API Request Signer (June 2026 Production Release)
+# HMAC-SHA512 request signing with replay protection and nonce tracking
+from .post_quantum_api_request_signer_2026_june import (
+    PostQuantumAPISigner,
+    SignatureAlgorithm,
+    VerificationResult,
+    SignedRequest,
+    SigningResult,
+    VerificationOutput,
+    create_api_signer
+)
+__all__.extend([
+    "PostQuantumAPISigner",
+    "SignatureAlgorithm",
+    "VerificationResult",
+    "SignedRequest",
+    "SigningResult",
+    "VerificationOutput",
+    "create_api_signer"
+])
+__version__ = "2026.6.17.18"
