@@ -580,4 +580,26 @@ __all__.extend([
     "ReconstructionResult",
     "create_secret_sharing"
 ])
-__version__ = "2026.6.17.23"
+# Post-Quantum Zero-Knowledge Proof System (June 17, 2026 Production Release)
+# Quantum-resistant ZKPs with hash-based commitments and Fiat-Shamir heuristic
+from .post_quantum_zero_knowledge_2026_june import (
+    ZKPType,
+    SecurityLevel,
+    ProofStatus,
+    ZKProof,
+    ProofResult,
+    CommitmentKey,
+    PostQuantumZKP,
+    create_post_quantum_zkp
+)
+__all__.extend([
+    "ZKPType",
+    "SecurityLevel",
+    "ProofStatus",
+    "ZKProof",
+    "ProofResult",
+    "CommitmentKey",
+    "PostQuantumZKP",
+    "create_post_quantum_zkp"
+])
+__version__ = "2026.6.17.24"
