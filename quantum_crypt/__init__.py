@@ -168,3 +168,29 @@ __all__.extend([
     "RandomGenerationResult"
 ])
 __version__ = "2026.6.17.10"
+# Post-Quantum Secure Session Manager (June 2026 Production Release)
+from .post_quantum_session_manager_2026_june import (
+    PostQuantumSessionManager,
+    SessionKeyDerivation,
+    PostQuantumKeyExchangeSimulator,
+    SessionState,
+    KeyExchangeAlgorithm,
+    HashAlgorithm,
+    SessionKey,
+    SecureSession,
+    SessionToken,
+    SessionOperationResult
+)
+__all__.extend([
+    "PostQuantumSessionManager",
+    "SessionKeyDerivation",
+    "PostQuantumKeyExchangeSimulator",
+    "SessionState",
+    "KeyExchangeAlgorithm",
+    "HashAlgorithm",
+    "SessionKey",
+    "SecureSession",
+    "SessionToken",
+    "SessionOperationResult"
+])
+__version__ = "2026.6.17.11"
