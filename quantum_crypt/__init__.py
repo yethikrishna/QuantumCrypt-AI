@@ -555,3 +555,29 @@ __all__.extend([
 ])
 __version__ = "2026.6.17.21"
 from .post_quantum_hmac_api_signer_2026_june import PostQuantumHMACSigner, SignatureVersion, SignatureResult, VerificationResult
+
+# Post-Quantum Verifiable Secret Sharing Engine (June 17, 2026 Production Release)
+# Shamir's (k,n) threshold secret sharing with Feldman verifiability
+from .post_quantum_verifiable_secret_sharing_2026_june import (
+    VerifiableSecretSharing,
+    SecurityLevel,
+    VerificationStatus,
+    Share,
+    Commitment,
+    PrimeField,
+    SharingResult,
+    ReconstructionResult,
+    create_secret_sharing
+)
+__all__.extend([
+    "VerifiableSecretSharing",
+    "SecurityLevel",
+    "VerificationStatus",
+    "Share",
+    "Commitment",
+    "PrimeField",
+    "SharingResult",
+    "ReconstructionResult",
+    "create_secret_sharing"
+])
+__version__ = "2026.6.17.23"
