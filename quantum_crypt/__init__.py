@@ -132,3 +132,22 @@ __all__.extend([
     "DecryptionResult"
 ])
 __version__ = "2026.6.17.7"
+
+# Quantum-Safe Digital Signature Verifier (June 2026 Production Release)
+from .quantum_safe_signature_verifier_2026_june import (
+    QuantumSafeSigner,
+    SecurityLevel,
+    HashAlgorithm,
+    SignatureKeyPair,
+    SignatureResult,
+    VerificationResult
+)
+__all__.extend([
+    "QuantumSafeSigner",
+    "SecurityLevel",
+    "HashAlgorithm",
+    "SignatureKeyPair",
+    "SignatureResult",
+    "VerificationResult"
+])
+__version__ = "2026.6.17.8"
