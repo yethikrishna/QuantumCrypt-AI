@@ -236,3 +236,79 @@ __all__.extend([
     "EncryptionResult",
     "DecryptionResult"
 ])
+
+# Post-Quantum Crypto Policy Engine (June 2026 Production Release)
+# Policy-based cryptography enforcement, compliance validation, and security governance
+from .post_quantum_crypto_policy_engine_2026_june import (
+    AlgorithmSecurityLevel,
+    AlgorithmStatus,
+    PolicySeverity,
+    ComplianceStandard,
+    AlgorithmInfo,
+    PolicyViolation,
+    ComplianceResult,
+    PolicyAssessment,
+    AlgorithmRegistry,
+    CryptoPolicy,
+    PolicyEnforcer,
+    CryptoPolicyEngine,
+    create_standard_policy,
+    create_high_security_policy,
+    create_crypto_policy_engine,
+)
+__all__.extend([
+    "AlgorithmSecurityLevel",
+    "AlgorithmStatus",
+    "PolicySeverity",
+    "ComplianceStandard",
+    "AlgorithmInfo",
+    "PolicyViolation",
+    "ComplianceResult",
+    "PolicyAssessment",
+    "AlgorithmRegistry",
+    "CryptoPolicy",
+    "PolicyEnforcer",
+    "CryptoPolicyEngine",
+    "create_standard_policy",
+    "create_high_security_policy",
+    "create_crypto_policy_engine",
+])
+__version__ = "2026.6.17.18"
+
+# Post-Quantum Crypto Policy Engine (June 2026 Production Release)
+# Policy-based cryptography enforcement, compliance validation, and security governance
+from .post_quantum_crypto_policy_engine_2026_june import (
+    AlgorithmSecurityLevel,
+    AlgorithmStatus,
+    PolicySeverity,
+    ComplianceStandard,
+    AlgorithmInfo,
+    PolicyViolation,
+    ComplianceResult,
+    PolicyAssessment,
+    AlgorithmRegistry,
+    CryptoPolicy,
+    PolicyEnforcer,
+    CryptoPolicyEngine,
+    create_standard_policy,
+    create_high_security_policy,
+    create_crypto_policy_engine,
+)
+__all__.extend([
+    "AlgorithmSecurityLevel",
+    "AlgorithmStatus",
+    "PolicySeverity",
+    "ComplianceStandard",
+    "AlgorithmInfo",
+    "PolicyViolation",
+    "ComplianceResult",
+    "PolicyAssessment",
+    "AlgorithmRegistry",
+    "CryptoPolicy",
+    "PolicyEnforcer",
+    "CryptoPolicyEngine",
+    "create_standard_policy",
+    "create_high_security_policy",
+    "create_crypto_policy_engine",
+])
+__version__ = "2026.6.17.18"
