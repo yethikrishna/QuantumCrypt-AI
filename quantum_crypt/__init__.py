@@ -99,6 +99,28 @@ __all__.extend([
     "HybridKeyPair"
 ])
 
+# Post-Quantum Secure Backup & Recovery (June 2026 Production Release)
+# Quantum-resistant key backup, sharding, and recovery system
+from .post_quantum_secure_backup_recovery_2026_june import (
+    PostQuantumSecureBackup,
+    EncryptedBackup,
+    RecoveryResult,
+    KeyShare,
+    ShamirSecretSharing,
+    SecurityLevel,
+    create_secure_backup_system
+)
+__all__.extend([
+    "PostQuantumSecureBackup",
+    "EncryptedBackup",
+    "RecoveryResult",
+    "KeyShare",
+    "ShamirSecretSharing",
+    "SecurityLevel",
+    "create_secure_backup_system"
+])
+__version__ = "2026.6.17.6"
+
 # Secure Password Hasher & KDF Engine (June 2026 Production Release)
 from .secure_password_hasher_kdf_2026 import (
     SecurePasswordHasher,
