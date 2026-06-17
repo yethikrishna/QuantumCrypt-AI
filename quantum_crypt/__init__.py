@@ -554,3 +554,4 @@ __all__.extend([
     "create_quantum_email_encryptor"
 ])
 __version__ = "2026.6.17.21"
+from .post_quantum_hmac_api_signer_2026_june import PostQuantumHMACSigner, SignatureVersion, SignatureResult, VerificationResult
