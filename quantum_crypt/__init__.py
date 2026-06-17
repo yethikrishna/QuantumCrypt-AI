@@ -219,4 +219,20 @@ __all__.extend([
     "MPCResult",
     "Commitment",
 ])
-__version__ = "2026.6.17.13"
+__version__ = "2026.6.17.14"
+# Quantum-Safe Stream Cipher (June 2026 Production Release)
+# XChaCha20-Poly1305 with HKDF-SHA3-512 key derivation
+from .quantum_safe_stream_cipher_2026_june import (
+    QuantumSafeStreamCipher,
+    CipherStrength,
+    NonceType,
+    EncryptionResult,
+    DecryptionResult
+)
+__all__.extend([
+    "QuantumSafeStreamCipher",
+    "CipherStrength",
+    "NonceType",
+    "EncryptionResult",
+    "DecryptionResult"
+])
