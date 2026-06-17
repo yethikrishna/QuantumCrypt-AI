@@ -106,7 +106,7 @@ from .post_quantum_secure_backup_recovery_2026_june import (
     EncryptedBackup,
     RecoveryResult,
     KeyShare,
-    ShamirSecretSharing,
+    XORThresholdSecretSharing,
     SecurityLevel,
     create_secure_backup_system
 )
@@ -115,7 +115,7 @@ __all__.extend([
     "EncryptedBackup",
     "RecoveryResult",
     "KeyShare",
-    "ShamirSecretSharing",
+    "XORThresholdSecretSharing",
     "SecurityLevel",
     "create_secure_backup_system"
 ])
