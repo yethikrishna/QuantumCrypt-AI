@@ -521,3 +521,36 @@ __all__.extend([
     "create_secure_token_engine"
 ])
 __version__ = "2026.6.17.20"
+# Post-Quantum Secure Email Encryption Engine (June 17, 2026 Production Release)
+# AES-256-GCM + Kyber key encapsulation + Dilithium signatures for email security
+from .post_quantum_secure_email_encryption_2026_june import (
+    PostQuantumEmailEncryptor,
+    QuantumKeyGenerator,
+    QuantumEmailSigner,
+    EncryptionAlgorithm,
+    SignatureAlgorithm,
+    EmailSecurityLevel,
+    VerificationStatus,
+    EmailHeader,
+    EncryptedEmail,
+    DecryptionResult,
+    KeyPair,
+    SignatureKeyPair,
+    create_quantum_email_encryptor
+)
+__all__.extend([
+    "PostQuantumEmailEncryptor",
+    "QuantumKeyGenerator",
+    "QuantumEmailSigner",
+    "EncryptionAlgorithm",
+    "SignatureAlgorithm",
+    "EmailSecurityLevel",
+    "VerificationStatus",
+    "EmailHeader",
+    "EncryptedEmail",
+    "DecryptionResult",
+    "KeyPair",
+    "SignatureKeyPair",
+    "create_quantum_email_encryptor"
+])
+__version__ = "2026.6.17.21"
