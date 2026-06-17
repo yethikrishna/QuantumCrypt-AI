@@ -602,4 +602,24 @@ __all__.extend([
     "PostQuantumZKP",
     "create_post_quantum_zkp"
 ])
-__version__ = "2026.6.17.24"
+# Post-Quantum Threshold Signature Scheme (June 17, 2026 Production Release)
+# (k, n) threshold signatures with post-quantum hash-based cryptography
+from .post_quantum_threshold_signature_2026_june import (
+    HashAlgorithm,
+    SignatureStatus,
+    KeyShare,
+    PartialSignature,
+    ThresholdKeyPair,
+    ThresholdSignature,
+    PostQuantumThresholdSignature,
+)
+__all__.extend([
+    "HashAlgorithm",
+    "SignatureStatus",
+    "KeyShare",
+    "PartialSignature",
+    "ThresholdKeyPair",
+    "ThresholdSignature",
+    "PostQuantumThresholdSignature",
+])
+__version__ = "2026.6.17.25"
