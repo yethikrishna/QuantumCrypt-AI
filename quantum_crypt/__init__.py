@@ -471,4 +471,31 @@ __all__.extend([
     "VerificationOutput",
     "create_api_signer"
 ])
-__version__ = "2026.6.17.18"
+__version__ = "2026.6.17.19"
+# Post-Quantum Secure Token & JWT Engine (June 2026 Production Release)
+# Quantum-resistant JWT tokens, authentication, and session management
+from .post_quantum_secure_token_jwt_engine_2026_june import (
+    PostQuantumTokenEngine,
+    TokenAlgorithm,
+    TokenType,
+    ValidationStatus,
+    ClaimType,
+    TokenClaims,
+    TokenGenerationResult,
+    TokenValidationResult,
+    RevocationEntry,
+    create_secure_token_engine
+)
+__all__.extend([
+    "PostQuantumTokenEngine",
+    "TokenAlgorithm",
+    "TokenType",
+    "ValidationStatus",
+    "ClaimType",
+    "TokenClaims",
+    "TokenGenerationResult",
+    "TokenValidationResult",
+    "RevocationEntry",
+    "create_secure_token_engine"
+])
+__version__ = "2026.6.17.20"
