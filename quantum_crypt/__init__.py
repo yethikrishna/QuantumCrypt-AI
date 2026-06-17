@@ -374,3 +374,27 @@ __all__.extend([
     "SideChannelResistantKDF"
 ])
 __version__ = "2026.6.17.21"
+
+# Hybrid Post-Quantum Key Exchange with Forward Secrecy (June 2026 Production Release)
+# NIST-compliant hybrid ECDH + PQ KEM with forward secrecy guarantees
+from .hybrid_key_exchange_2026_june import (
+    HybridKeyExchange,
+    KeyExchangeProtocol,
+    SecurityLevel,
+    CurveType,
+    KeyPair,
+    SharedSecret,
+    KeyExchangeResult,
+    PostQuantumKeyEncapsulation
+)
+__all__.extend([
+    "HybridKeyExchange",
+    "KeyExchangeProtocol",
+    "SecurityLevel",
+    "CurveType",
+    "KeyPair",
+    "SharedSecret",
+    "KeyExchangeResult",
+    "PostQuantumKeyEncapsulation"
+])
+__version__ = "2026.6.17.15"
