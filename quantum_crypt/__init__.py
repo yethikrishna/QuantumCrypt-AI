@@ -712,3 +712,23 @@ __all__.extend([
     "create_post_quantum_hsm"
 ])
 __version__ = "2026.6.17.28"
+
+# Post-Quantum Bloom Filter Checksum (June 17, 2026 Production Release)
+# Multi-hash integrity verification with Bloom filter construction
+from .post_quantum_bloom_checksum_2026_june import (
+    PostQuantumBloomChecksum,
+    HashAlgorithm,
+    VerificationStatus,
+    ChecksumResult,
+    VerificationResult,
+    create_post_quantum_checksum
+)
+__all__.extend([
+    "PostQuantumBloomChecksum",
+    "HashAlgorithm",
+    "VerificationStatus",
+    "ChecksumResult",
+    "VerificationResult",
+    "create_post_quantum_checksum"
+])
+__version__ = "2026.6.17.47"
