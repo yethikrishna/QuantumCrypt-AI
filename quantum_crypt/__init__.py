@@ -428,3 +428,26 @@ __all__.extend([
     "create_post_quantum_key_backup"
 ])
 __version__ = "2026.6.17.16"
+# Quantum-Secure Checksum & File Integrity Verifier (June 2026 Production Release)
+# Multi-hash integrity verification with post-quantum HMAC authentication
+from .quantum_secure_checksum_2026_june import (
+    QuantumSecureChecksum,
+    QuantumHashVerifier,
+    HashFunction,
+    VerificationStatus,
+    IntegrityLevel,
+    FileChecksum,
+    VerificationResult,
+    create_secure_checksum
+)
+__all__.extend([
+    "QuantumSecureChecksum",
+    "QuantumHashVerifier",
+    "HashFunction",
+    "VerificationStatus",
+    "IntegrityLevel",
+    "FileChecksum",
+    "VerificationResult",
+    "create_secure_checksum"
+])
+__version__ = "2026.6.17.17"
