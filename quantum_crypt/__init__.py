@@ -732,3 +732,23 @@ __all__.extend([
     "create_post_quantum_checksum"
 ])
 __version__ = "2026.6.17.47"
+
+# Batch Signature Verifier (June 17, 2026 Production Release)
+# Efficient batch verification of post-quantum signatures with parallel processing
+from .batch_signature_verifier_2026_june import (
+    BatchSignatureVerifier,
+    SignatureVerificationRequest,
+    VerificationResult,
+    BatchVerificationResult,
+    VerificationStatus,
+    SignatureAlgorithm
+)
+__all__.extend([
+    "BatchSignatureVerifier",
+    "SignatureVerificationRequest",
+    "VerificationResult",
+    "BatchVerificationResult",
+    "VerificationStatus",
+    "SignatureAlgorithm"
+])
+__version__ = "2026.6.17.48"
