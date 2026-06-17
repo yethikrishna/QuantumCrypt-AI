@@ -81,4 +81,22 @@ __all__.extend([
     "generate_side_channel_resistant_kdf"
 ])
 
-__version__ = "2026.6.17.4"
+# Quantum-Resistant Hybrid Encryption Engine (June 2026 Production Release)
+from .hybrid_encryption_engine_2026_june import (
+    QuantumResistantHybridEngine,
+    EncryptionMode,
+    SecurityLevel,
+    EncryptionResult,
+    DecryptionResult,
+    HybridKeyPair
+)
+__all__.extend([
+    "QuantumResistantHybridEngine",
+    "EncryptionMode",
+    "SecurityLevel",
+    "EncryptionResult",
+    "DecryptionResult",
+    "HybridKeyPair"
+])
+
+__version__ = "2026.6.17.5"
