@@ -602,7 +602,28 @@ __all__.extend([
     "PostQuantumZKP",
     "create_post_quantum_zkp"
 ])
-# Post-Quantum Threshold Signature Scheme (June 17, 2026 Production Release)
+__version__ = "2026.6.17.35"
+
+# Post-Quantum Secure Configuration Vault (June 17, 2026 Production Release)
+# AES-256-GCM encrypted config storage with versioning, audit logging, and integrity checks
+# HONEST: Uses standard AES-256-GCM (quantum-resistant in practice), NOT NIST PQC algorithms
+from .post_quantum_secure_config_vault_2026_june import (
+    PostQuantumSecureConfigVault,
+    ConfigSensitivity,
+    VaultOperation,
+    VaultAuditEntry,
+    ConfigVersion,
+    EncryptedConfigEntry
+)
+__all__.extend([
+    "PostQuantumSecureConfigVault",
+    "ConfigSensitivity",
+    "VaultOperation",
+    "VaultAuditEntry",
+    "ConfigVersion",
+    "EncryptedConfigEntry"
+])
+__version__ = "2026.6.17.36"    "CommitmentKey",
 # (k, n) threshold signatures with post-quantum hash-based cryptography
 from .post_quantum_threshold_signature_2026_june import (
     HashAlgorithm,
