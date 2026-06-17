@@ -193,4 +193,30 @@ __all__.extend([
     "SessionToken",
     "SessionOperationResult"
 ])
-__version__ = "2026.6.17.11"
+__version__ = "2026.6.17.12"
+
+# Post-Quantum Secure Multi-Party Computation Engine (June 2026 Production Release)
+# Privacy-preserving computation for federated learning and secure collaboration
+from .post_quantum_mpc_engine_2026_june import (
+    PostQuantumMPCEngine,
+    SecurityLevel,
+    MPCProtocol,
+    CommitmentScheme,
+    MPCParty,
+    SecretShare,
+    BeaverTriple,
+    MPCResult,
+    Commitment,
+)
+__all__.extend([
+    "PostQuantumMPCEngine",
+    "SecurityLevel",
+    "MPCProtocol",
+    "CommitmentScheme",
+    "MPCParty",
+    "SecretShare",
+    "BeaverTriple",
+    "MPCResult",
+    "Commitment",
+])
+__version__ = "2026.6.17.13"
