@@ -641,3 +641,25 @@ __all__.extend([
     "PostQuantumMultisigEngine",
 ])
 __version__ = "2026.6.17.26"
+
+# Post-Quantum Secure Web Cookie Encryptor (June 17, 2026 Production Release)
+# XChaCha20-Poly1305 AEAD cookie encryption with memory-hard KDF, key rotation, CSRF protection, and timing-safe verification
+from .post_quantum_secure_cookie_encryptor_2026_june import (
+    PostQuantumSecureCookieEncryptor,
+    EncryptedCookie,
+    CookieValidationResult,
+    EncryptionAlgorithm,
+    HashAlgorithm,
+    CookieSecurityLevel,
+    ValidationStatus,
+)
+__all__.extend([
+    "PostQuantumSecureCookieEncryptor",
+    "EncryptedCookie",
+    "CookieValidationResult",
+    "EncryptionAlgorithm",
+    "HashAlgorithm",
+    "CookieSecurityLevel",
+    "ValidationStatus",
+])
+__version__ = "2026.6.17.27"
