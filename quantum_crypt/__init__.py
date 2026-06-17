@@ -663,3 +663,31 @@ __all__.extend([
     "ValidationStatus",
 ])
 __version__ = "2026.6.17.27"
+
+# Post-Quantum HSM Emulator (June 17, 2026 Production Release)
+# FIPS 140-3 compliant Hardware Security Module emulator
+from .post_quantum_hsm_emulator_2026_june import (
+    PostQuantumHSMEmulator,
+    KeyType,
+    KeyUsage,
+    HSMOperation,
+    SecurityLevel,
+    KeyAttributes,
+    StoredKey,
+    HSMEvent,
+    HSMResult,
+    create_post_quantum_hsm
+)
+__all__.extend([
+    "PostQuantumHSMEmulator",
+    "KeyType",
+    "KeyUsage",
+    "HSMOperation",
+    "SecurityLevel",
+    "KeyAttributes",
+    "StoredKey",
+    "HSMEvent",
+    "HSMResult",
+    "create_post_quantum_hsm"
+])
+__version__ = "2026.6.17.28"
