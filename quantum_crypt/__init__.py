@@ -623,3 +623,21 @@ __all__.extend([
     "PostQuantumThresholdSignature",
 ])
 __version__ = "2026.6.17.25"
+# Post-Quantum Secure Multi-Signature Engine (June 17, 2026 Production Release)
+# (k, n) threshold multisig with Shamir's Secret Sharing and quantum-resistant crypto
+from .post_quantum_secure_multisig_2026_june import (
+    SignatureAlgorithm,
+    KeyShareStatus,
+    KeyShare,
+    PartialSignature,
+    AggregatedSignature,
+    PostQuantumMultisigEngine,
+)
+__all__.extend([
+    "SignatureAlgorithm",
+    "KeyShareStatus",
+    "PartialSignature",
+    "AggregatedSignature",
+    "PostQuantumMultisigEngine",
+])
+__version__ = "2026.6.17.26"
