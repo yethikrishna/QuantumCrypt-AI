@@ -330,4 +330,47 @@ __all__.extend([
     "AEADDecryptionResult",
     "AEADKeyPair"
 ])
-__version__ = "2026.6.17.20"
+# Post-Quantum Database Encryption At-Rest (June 2026 Production Release)
+# NIST SP 800-140B & FIPS 140-3 Compliant Field-Level Encryption
+from .post_quantum_database_encryption_2026_june import (
+    PostQuantumDatabaseEncryptor,
+    EncryptionMode,
+    FieldSensitivity,
+    KeyRotationStatus,
+    EncryptedField,
+    EncryptionResult,
+    DecryptionResult,
+    DataEncryptionKey
+)
+__all__.extend([
+    "PostQuantumDatabaseEncryptor",
+    "EncryptionMode",
+    "FieldSensitivity",
+    "KeyRotationStatus",
+    "EncryptedField",
+    "EncryptionResult",
+    "DecryptionResult",
+    "DataEncryptionKey"
+])
+__version__ = "2026.6.17.21"
+# Memory-Hard KDF with Side-Channel Resistance (June 2026 Production Release)
+# Argon2id-style memory-hard key derivation with side-channel protection
+from .memory_hard_kdf_side_channel_2026_june import (
+    QuantumResistantKDF,
+    MemoryHardPBKDF2,
+    ScryptStyleKDF,
+    KDFStrength,
+    KDFParameters,
+    KDFResult,
+    SideChannelResistantKDF
+)
+__all__.extend([
+    "QuantumResistantKDF",
+    "MemoryHardPBKDF2",
+    "ScryptStyleKDF",
+    "KDFStrength",
+    "KDFParameters",
+    "KDFResult",
+    "SideChannelResistantKDF"
+])
+__version__ = "2026.6.17.21"
