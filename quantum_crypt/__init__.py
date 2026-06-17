@@ -99,4 +99,21 @@ __all__.extend([
     "HybridKeyPair"
 ])
 
-__version__ = "2026.6.17.5"
+# Secure Password Hasher & KDF Engine (June 2026 Production Release)
+from .secure_password_hasher_kdf_2026 import (
+    SecurePasswordHasher,
+    HashAlgorithm,
+    PasswordHashAlgorithm,
+    SecurityStrength,
+    PasswordHashResult,
+    PasswordStrengthReport
+)
+__all__.extend([
+    "SecurePasswordHasher",
+    "HashAlgorithm",
+    "PasswordHashAlgorithm",
+    "SecurityStrength",
+    "PasswordHashResult",
+    "PasswordStrengthReport"
+])
+__version__ = "2026.6.17.6"
