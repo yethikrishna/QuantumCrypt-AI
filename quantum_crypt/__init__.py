@@ -116,4 +116,19 @@ __all__.extend([
     "PasswordHashResult",
     "PasswordStrengthReport"
 ])
-__version__ = "2026.6.17.6"
+# Post-Quantum File Encryptor (June 2026 Production Release)
+from .post_quantum_file_encryptor_2026_june import (
+    PostQuantumFileEncryptor,
+    EncryptionMode,
+    KeyStrength,
+    EncryptionResult,
+    DecryptionResult
+)
+__all__.extend([
+    "PostQuantumFileEncryptor",
+    "EncryptionMode",
+    "KeyStrength",
+    "EncryptionResult",
+    "DecryptionResult"
+])
+__version__ = "2026.6.17.7"
