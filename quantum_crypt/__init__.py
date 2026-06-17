@@ -311,4 +311,23 @@ __all__.extend([
     "create_high_security_policy",
     "create_crypto_policy_engine",
 ])
-__version__ = "2026.6.17.18"
+__version__ = "2026.6.17.19"
+# Quantum-Safe AEAD Encryption Wrapper (June 2026 Production Release)
+# ChaCha20-Poly1305 with HKDF-SHA3-512 authenticated encryption
+from .quantum_safe_aead_2026_june import (
+    QuantumSafeAEAD2026,
+    EncryptionStrength,
+    KeyType,
+    AEADEncryptionResult,
+    AEADDecryptionResult,
+    AEADKeyPair
+)
+__all__.extend([
+    "QuantumSafeAEAD2026",
+    "EncryptionStrength",
+    "KeyType",
+    "AEADEncryptionResult",
+    "AEADDecryptionResult",
+    "AEADKeyPair"
+])
+__version__ = "2026.6.17.20"
