@@ -1,0 +1,41 @@
+{
+  "test_suite": "Post-Quantum Secure Session Ticket Manager",
+  "timestamp": "2026-06-19T13:18:12.307668",
+  "passed": 8,
+  "total": 8,
+  "all_passed": true,
+  "results": [
+    {
+      "test": "pq_key_derivation",
+      "status": "PASS"
+    },
+    {
+      "test": "state_serialization",
+      "status": "PASS"
+    },
+    {
+      "test": "ticket_create_validate",
+      "status": "PASS"
+    },
+    {
+      "test": "anti_replay",
+      "status": "PASS"
+    },
+    {
+      "test": "tamper_protection",
+      "status": "PASS"
+    },
+    {
+      "test": "key_rotation",
+      "status": "PASS"
+    },
+    {
+      "test": "statistics_tracking",
+      "status": "PASS"
+    },
+    {
+      "test": "invalid_ticket_handling",
+      "status": "PASS"
+    }
+  ]
+}
