@@ -1,131 +1,527 @@
 {
-  "test_run_timestamp": "2026-06-19T04:39:02.348087Z",
-  "module": "post_quantum_algorithm_health_monitor_rotation_advisor",
-  "total_tests": 20,
-  "passed_tests": 20,
-  "failed_tests": 0,
-  "pass_rate": 100.0,
-  "test_results": [
+  "report_timestamp": "2026-06-19T12:53:38.462924",
+  "overall_system_health_score": 94.7,
+  "algorithms_monitored": 13,
+  "healthy_algorithms": 13,
+  "at_risk_algorithms": 0,
+  "critical_algorithms": 0,
+  "algorithm_metrics": [
     {
-      "test": "Algorithm Registry Initialization",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "CRYSTALS-Kyber-512",
+      "algorithm_type": "Key Encapsulation Mechanism",
+      "status": "HEALTHY",
+      "total_operations": 250,
+      "successful_operations": 248,
+      "failed_operations": 2,
+      "error_rate": 0.8,
+      "avg_latency_ms": 1.48,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.07,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-06-07T12:53:35.956784",
+      "key_age_days": 12,
+      "security_strength_bits": 128,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:37.545331"
     },
     {
-      "test": "Algorithm Health Scoring",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "CRYSTALS-Kyber-768",
+      "algorithm_type": "Key Encapsulation Mechanism",
+      "status": "HEALTHY",
+      "total_operations": 250,
+      "successful_operations": 245,
+      "failed_operations": 5,
+      "error_rate": 2.0,
+      "avg_latency_ms": 1.53,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.98,
+      "throughput_ops_per_sec": 0.07,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-05-14T12:53:35.956799",
+      "key_age_days": 36,
+      "security_strength_bits": 192,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 96.0,
+      "last_updated": "2026-06-19T12:53:37.621227"
     },
     {
-      "test": "Recommended Algorithms Filtering",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "CRYSTALS-Kyber-1024",
+      "algorithm_type": "Key Encapsulation Mechanism",
+      "status": "HEALTHY",
+      "total_operations": 250,
+      "successful_operations": 249,
+      "failed_operations": 1,
+      "error_rate": 0.4,
+      "avg_latency_ms": 1.52,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.98,
+      "throughput_ops_per_sec": 0.07,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-04-23T12:53:35.956805",
+      "key_age_days": 57,
+      "security_strength_bits": 256,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:37.695935"
     },
     {
-      "test": "Monitor Initialization",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "CRYSTALS-Dilithium-2",
+      "algorithm_type": "Digital Signature",
+      "status": "HEALTHY",
+      "total_operations": 250,
+      "successful_operations": 248,
+      "failed_operations": 2,
+      "error_rate": 0.8,
+      "avg_latency_ms": 1.51,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.07,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-05-07T12:53:35.956810",
+      "key_age_days": 43,
+      "security_strength_bits": 128,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:37.774809"
     },
     {
-      "test": "Key Registration",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "CRYSTALS-Dilithium-3",
+      "algorithm_type": "Digital Signature",
+      "status": "HEALTHY",
+      "total_operations": 250,
+      "successful_operations": 249,
+      "failed_operations": 1,
+      "error_rate": 0.4,
+      "avg_latency_ms": 1.52,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.98,
+      "throughput_ops_per_sec": 0.07,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-03-03T12:53:35.956815",
+      "key_age_days": 108,
+      "security_strength_bits": 192,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:37.852441"
     },
     {
-      "test": "Invalid Key Registration Rejection",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "CRYSTALS-Dilithium-5",
+      "algorithm_type": "Digital Signature",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 50,
+      "failed_operations": 0,
+      "error_rate": 0.0,
+      "avg_latency_ms": 1.53,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-03-09T12:53:35.956819",
+      "key_age_days": 102,
+      "security_strength_bits": 256,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:37.929183"
     },
     {
-      "test": "Key Usage Tracking",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "SPHINCS+-SHA2-128f",
+      "algorithm_type": "Digital Signature",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 48,
+      "failed_operations": 2,
+      "error_rate": 4.0,
+      "avg_latency_ms": 1.48,
+      "p95_latency_ms": 1.93,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-04-16T12:53:35.956823",
+      "key_age_days": 64,
+      "security_strength_bits": 128,
+      "nist_compliant": true,
+      "known_vulnerabilities": [
+        "High latency for verification"
+      ],
+      "anomaly_score": 0.0,
+      "health_score": 87.0,
+      "last_updated": "2026-06-19T12:53:38.003676"
     },
     {
-      "test": "Unknown Key Usage Rejection",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "SPHINCS+-SHA2-256f",
+      "algorithm_type": "Digital Signature",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 48,
+      "failed_operations": 2,
+      "error_rate": 4.0,
+      "avg_latency_ms": 1.49,
+      "p95_latency_ms": 1.92,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-03-28T12:53:35.956828",
+      "key_age_days": 83,
+      "security_strength_bits": 256,
+      "nist_compliant": true,
+      "known_vulnerabilities": [
+        "High latency for verification"
+      ],
+      "anomaly_score": 0.0,
+      "health_score": 87.0,
+      "last_updated": "2026-06-19T12:53:38.078466"
     },
     {
-      "test": "Quantum Risk Calculation",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "SHA-256",
+      "algorithm_type": "Hash Function",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 49,
+      "failed_operations": 1,
+      "error_rate": 2.0,
+      "avg_latency_ms": 1.55,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.98,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-04-16T12:53:35.956832",
+      "key_age_days": 64,
+      "security_strength_bits": 128,
+      "nist_compliant": true,
+      "known_vulnerabilities": [
+        "Theoretical collision attacks (not practical)"
+      ],
+      "anomaly_score": 0.0,
+      "health_score": 91.0,
+      "last_updated": "2026-06-19T12:53:38.156038"
     },
     {
-      "test": "Rotation Recommendation (Deprecated Algorithm)",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "SHA-3-256",
+      "algorithm_type": "Hash Function",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 50,
+      "failed_operations": 0,
+      "error_rate": 0.0,
+      "avg_latency_ms": 1.58,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-04-02T12:53:35.956836",
+      "key_age_days": 78,
+      "security_strength_bits": 128,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:38.235182"
     },
     {
-      "test": "Rotation Recommendation (Old Key)",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "SHA-3-512",
+      "algorithm_type": "Hash Function",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 50,
+      "failed_operations": 0,
+      "error_rate": 0.0,
+      "avg_latency_ms": 1.45,
+      "p95_latency_ms": 1.92,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-06-17T12:53:35.956840",
+      "key_age_days": 2,
+      "security_strength_bits": 256,
+      "nist_compliant": true,
+      "known_vulnerabilities": [],
+      "anomaly_score": 0.0,
+      "health_score": 100.0,
+      "last_updated": "2026-06-19T12:53:38.307865"
     },
     {
-      "test": "No Recommendation (Good Key)",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "AES-256-GCM",
+      "algorithm_type": "Symmetric Encryption",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 50,
+      "failed_operations": 0,
+      "error_rate": 0.0,
+      "avg_latency_ms": 1.58,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.97,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-02-20T12:53:35.956845",
+      "key_age_days": 119,
+      "security_strength_bits": 256,
+      "nist_compliant": true,
+      "known_vulnerabilities": [
+        "Grover's algorithm reduces strength"
+      ],
+      "anomaly_score": 0.0,
+      "health_score": 85.0,
+      "last_updated": "2026-06-19T12:53:38.386967"
     },
     {
-      "test": "All Rotation Recommendations",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Health Dashboard Generation",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Compliance Reporting",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Dashboard JSON Export",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Statistics Reporting",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Sample Monitor Function",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Security Level Enum",
-      "passed": true,
-      "result": true,
-      "error": null
-    },
-    {
-      "test": "Algorithm Status Enum",
-      "passed": true,
-      "result": true,
-      "error": null
+      "algorithm_name": "ChaCha20-Poly1305",
+      "algorithm_type": "Symmetric Encryption",
+      "status": "HEALTHY",
+      "total_operations": 50,
+      "successful_operations": 50,
+      "failed_operations": 0,
+      "error_rate": 0.0,
+      "avg_latency_ms": 1.51,
+      "p95_latency_ms": 1.97,
+      "p99_latency_ms": 1.98,
+      "throughput_ops_per_sec": 0.01,
+      "memory_usage_mb": 0.0,
+      "cpu_usage_percent": 0.0,
+      "last_rotation": "2026-02-21T12:53:35.956849",
+      "key_age_days": 118,
+      "security_strength_bits": 256,
+      "nist_compliant": true,
+      "known_vulnerabilities": [
+        "Grover's algorithm reduces strength"
+      ],
+      "anomaly_score": 0.0,
+      "health_score": 85.0,
+      "last_updated": "2026-06-19T12:53:38.462592"
     }
   ],
-  "status": "SUCCESS"
+  "rotation_recommendations": [
+    {
+      "algorithm_name": "CRYSTALS-Kyber-512",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "CRYSTALS-Kyber-768 (NIST Level 3, Recommended for general use)",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "CRYSTALS-Kyber-768",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "LOW - Rotate within 90 days",
+      "reason": "Elevated error rate (2.0%)",
+      "recommended_algorithm": "CRYSTALS-Kyber-768 (NIST Level 3, Recommended for general use)",
+      "estimated_risk_score": 15.0,
+      "rotation_deadline": "2026-09-17T12:53:38.462649",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "CRYSTALS-Kyber-1024",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "CRYSTALS-Kyber-768 (NIST Level 3, Recommended for general use)",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "CRYSTALS-Dilithium-2",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "CRYSTALS-Dilithium-3 (NIST Level 3, Balanced security/performance)",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "CRYSTALS-Dilithium-3",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "CRYSTALS-Dilithium-3 (NIST Level 3, Balanced security/performance)",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "CRYSTALS-Dilithium-5",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "CRYSTALS-Dilithium-3 (NIST Level 3, Balanced security/performance)",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "SPHINCS+-SHA2-128f",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "LOW - Rotate within 90 days",
+      "reason": "Elevated error rate (4.0%); High latency for verification",
+      "recommended_algorithm": "CRYSTALS-Dilithium-3 (NIST Level 3, Balanced security/performance)",
+      "estimated_risk_score": 25.0,
+      "rotation_deadline": "2026-09-17T12:53:38.462735",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "SPHINCS+-SHA2-256f",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "LOW - Rotate within 90 days",
+      "reason": "Elevated error rate (4.0%); High latency for verification",
+      "recommended_algorithm": "CRYSTALS-Dilithium-3 (NIST Level 3, Balanced security/performance)",
+      "estimated_risk_score": 25.0,
+      "rotation_deadline": "2026-09-17T12:53:38.462753",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "SHA-256",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "LOW - Rotate within 90 days",
+      "reason": "Elevated error rate (2.0%); Theoretical collision attacks (not practical)",
+      "recommended_algorithm": "Use NIST-standardized post-quantum algorithms",
+      "estimated_risk_score": 25.0,
+      "rotation_deadline": "2026-09-17T12:53:38.462769",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "SHA-3-256",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "Use NIST-standardized post-quantum algorithms",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "SHA-3-512",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "NONE - No rotation needed",
+      "reason": "No significant risk factors detected",
+      "recommended_algorithm": "Use NIST-standardized post-quantum algorithms",
+      "estimated_risk_score": 0.0,
+      "rotation_deadline": "No deadline - routine rotation only",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "AES-256-GCM",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "LOW - Rotate within 90 days",
+      "reason": "Key has exceeded recommended rotation period; Grover's algorithm reduces strength",
+      "recommended_algorithm": "Use NIST-standardized post-quantum algorithms",
+      "estimated_risk_score": 20.0,
+      "rotation_deadline": "2026-09-17T12:53:38.462814",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    },
+    {
+      "algorithm_name": "ChaCha20-Poly1305",
+      "current_status": "HEALTHY",
+      "rotation_urgency": "LOW - Rotate within 90 days",
+      "reason": "Key has exceeded recommended rotation period; Grover's algorithm reduces strength",
+      "recommended_algorithm": "Use NIST-standardized post-quantum algorithms",
+      "estimated_risk_score": 20.0,
+      "rotation_deadline": "2026-09-17T12:53:38.462830",
+      "mitigation_steps": [
+        "Continue standard monitoring",
+        "Follow scheduled key rotation calendar",
+        "Maintain current security posture"
+      ],
+      "compliance_impact": "LOW - Algorithm maintains NIST compliance"
+    }
+  ],
+  "compliance_status": "FULLY COMPLIANT",
+  "key_findings": [
+    "Average algorithm health score: 94.7/100",
+    "Average key age: 68.2 days",
+    "Elevated error rates (>1%) in: CRYSTALS-Kyber-768, SPHINCS+-SHA2-128f, SPHINCS+-SHA2-256f, SHA-256"
+  ],
+  "action_items": [
+    "Review all rotation recommendations and update key management calendar",
+    "Perform quarterly algorithm health audits",
+    "Verify NIST PQ compliance across all deployed algorithms"
+  ]
 }
