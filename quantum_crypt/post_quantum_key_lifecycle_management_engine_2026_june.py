@@ -464,6 +464,9 @@ class PostQuantumKeyLifecycleEngine:
             context=old_key.metadata.allowed_contexts[0] if old_key.metadata.allowed_contexts else "default"
         )
         
+        # Inherit and increment version from old key
+        new_key.metadata.version = old_key.metadata.version + 1
+        
         # Activate new key
         self.activate_key(new_key.metadata.key_id, actor)
         
@@ -547,8 +550,16 @@ class PostQuantumKeyLifecycleEngine:
         compliance_checks = 0
         compliance_passes = 0
         
-        for key_id, key in self._key_store.items():
-            compliance_checks += 1
+        # Create list of key_ids to iterate (prevents dict changed size error during rotation)
+        key_ids = list(self._key_store.keys())
+        
+        for key_id in key_ids:
+            # Skip if key was removed during iteration
+            if key_id not in self._key_store:
+                continue
+                
+            key = self._key_store[key_id]
+            compliance_checks += 2  # Two checks per key: rotation + security level
             
             # Check expiration
             days_until_expiry = (key.metadata.expires_at - now).days
@@ -557,6 +568,7 @@ class PostQuantumKeyLifecycleEngine:
                 warnings.append(f"Key {key_id} expires in {days_until_expiry} days")
             
             # Check rotation status
+            rotation_pass = False
             if key.metadata.status == KeyStatus.ACTIVE and self._policy.auto_rotation_enabled:
                 last_rotation = key.metadata.last_rotated_at or key.metadata.activated_at or key.metadata.created_at
                 days_since_rotation = (now - last_rotation).days
@@ -568,11 +580,17 @@ class PostQuantumKeyLifecycleEngine:
                         result = self.rotate_key(key_id, "system", "auto_rotation_policy")
                         if result.success:
                             keys_rotated += 1
-                            compliance_passes += 1
+                            rotation_pass = True
                         else:
                             errors.append(f"Failed to auto-rotate {key_id}: {result.message}")
                 else:
-                    compliance_passes += 1
+                    rotation_pass = True
+            elif key.metadata.status != KeyStatus.ACTIVE:
+                # Non-active keys pass rotation check
+                rotation_pass = True
+                
+            if rotation_pass:
+                compliance_passes += 1
             
             # Auto-deprecate old versions
             if key.metadata.status == KeyStatus.DEPRECATED:
