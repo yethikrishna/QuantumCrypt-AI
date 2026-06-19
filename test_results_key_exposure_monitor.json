@@ -1,0 +1,61 @@
+{
+  "test_suite": "post_quantum_key_exposure_risk_monitor_2026_june",
+  "test_date": "2026-06-20",
+  "tests_passed": 9,
+  "tests_failed": 0,
+  "total_tests": 9,
+  "individual_tests": [
+    {
+      "test": "secure_post_quantum_key",
+      "passed": true,
+      "risk_level": "negligible",
+      "risk_score": 0.0
+    },
+    {
+      "test": "quantum_vulnerable_rsa",
+      "passed": true,
+      "quantum_detected": true,
+      "exposure_window": 0.001
+    },
+    {
+      "test": "private_key_pattern_detection",
+      "passed": true,
+      "pattern_found": true,
+      "memory_safety": 0.1
+    },
+    {
+      "test": "weak_entropy_detection",
+      "passed": true,
+      "entropy_found": true,
+      "quality_score": 0.4
+    },
+    {
+      "test": "key_lifetime_compliance",
+      "passed": true,
+      "violation_detected": true,
+      "nist_compliant": false
+    },
+    {
+      "test": "key_reuse_detection",
+      "passed": true,
+      "reuse_found": true
+    },
+    {
+      "test": "hsm_protection_detection",
+      "passed": true,
+      "hsm_warning": true
+    },
+    {
+      "test": "honest_limitations_disclosure",
+      "passed": true,
+      "limitations_count": 7,
+      "no_fake_claims": true
+    },
+    {
+      "test": "critical_risk_scenario",
+      "passed": true,
+      "risk_level": "high",
+      "findings_count": 6
+    }
+  ]
+}
