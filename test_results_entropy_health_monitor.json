@@ -1,0 +1,55 @@
+{
+  "test_engine": "Post-Quantum Entropy Health Monitor",
+  "test_date": "2026-06-19T13:56:03.187804",
+  "total_tests": 25,
+  "passed": 19,
+  "failed": 6,
+  "passed_tests": [
+    "Initialization",
+    "System Random Collection",
+    "CPU Cycles Collection",
+    "All Sources Collection",
+    "Frequency Test",
+    "Runs Test",
+    "Autocorrelation Test",
+    "Chi-Square Test",
+    "Longest Run Test",
+    "Full Health Suite",
+    "Add to Pool",
+    "Pool Size Maintenance",
+    "Source Contributions",
+    "Background Collection",
+    "Statistics Reporting",
+    "Source Statistics Tracking",
+    "Concurrent Access",
+    "Empty Data Edge Case",
+    "Deterministic Output"
+  ],
+  "failures": [
+    {
+      "name": "OS Random Collection",
+      "error": ""
+    },
+    {
+      "name": "Secrets Module Collection",
+      "error": ""
+    },
+    {
+      "name": "Shannon Entropy Calculation",
+      "error": ""
+    },
+    {
+      "name": "Min-Entropy Calculation",
+      "error": ""
+    },
+    {
+      "name": "Random Byte Generation",
+      "error": ""
+    },
+    {
+      "name": "Health Report Generation",
+      "error": ""
+    }
+  ],
+  "success_rate": "76.0%"
+}
