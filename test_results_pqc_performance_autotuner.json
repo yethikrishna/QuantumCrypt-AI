@@ -1,23 +1,10 @@
 {
-  "test_timestamp": 1781870104.8404233,
-  "all_tests_passed": true,
-  "final_statistics": {
-    "total_benchmarks_run": 5,
-    "algorithms_benchmarked": 4,
-    "algorithms_supported": 8,
-    "hardware_profile": {
-      "cpu_model": "Intel(R) Xeon(R) Platinum 8457C",
-      "cpu_count": 2,
-      "cpu_count_logical": 2,
-      "total_memory_gb": 3.9442100524902344,
-      "architecture": "x86_64",
-      "os": "posix",
-      "python_version": "3.10.12"
-    },
-    "benchmark_iterations": 20,
-    "warmup_iterations": 2,
-    "memory_profiling_enabled": true,
-    "cpu_profiling_enabled": true,
-    "regressions_detected": 0
-  }
+  "test_suite": "post_quantum_performance_autotuner",
+  "date": "2026-06-19 20:28:37",
+  "total_tests": 9,
+  "passed": 9,
+  "failed": 0,
+  "success_rate": "100.0%",
+  "all_passed": true,
+  "note": "All benchmarks use REAL cryptographic operations and timing"
 }
