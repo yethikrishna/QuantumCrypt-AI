@@ -1,0 +1,84 @@
+{
+  "test_timestamp": "2026-06-20T06:25:03.571125",
+  "module_tested": "SideChannelResistantDRBG + EntropyHealthMonitor",
+  "tests_passed": 15,
+  "tests_total": 15,
+  "success_rate": 1.0,
+  "individual_results": [
+    {
+      "test": "DRBG Initialization",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Random Bytes Generation",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Output Uniqueness",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Constant-Time Comparison",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Constant-Time Selection",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Secure Memory Wiping",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Reseed Functionality",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Random Integer Generation",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Prediction Resistance",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "DRBG Status Reporting",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Entropy Estimation",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Entropy Health Tests",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Performance Benchmark",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Input Validation",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "test": "Personalization String",
+      "passed": true,
+      "error": ""
+    }
+  ]
+}
