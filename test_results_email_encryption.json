@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "message_id": "7248e2c9b047c0b8a15a4e9c0fb7330b",
+  "fingerprint": "3ba56f17930991e5",
+  "algorithm": "CHACHA20-POLY1305",
+  "attachments_encrypted": 2,
+  "encryption_time_ms": 0.589,
+  "timestamp": "2026-06-19T09:59:39.489707"
+}
