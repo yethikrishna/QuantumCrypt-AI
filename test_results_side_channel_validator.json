@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-06-20 00:59:34",
+  "validation_level": "QUICK",
+  "algorithms_tested": 3,
+  "results": {
+    "SHA-256": {
+      "vulnerable": true,
+      "risk_score": 0.6,
+      "findings": 1,
+      "time_ms": 3.28,
+      "constant_time": false
+    },
+    "SHA-512": {
+      "vulnerable": true,
+      "risk_score": 0.6,
+      "findings": 1,
+      "time_ms": 3.72,
+      "constant_time": false
+    },
+    "BLAKE2b": {
+      "vulnerable": true,
+      "risk_score": 0.6,
+      "findings": 1,
+      "time_ms": 6.43,
+      "constant_time": false
+    }
+  }
+}
