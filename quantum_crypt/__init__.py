@@ -452,3 +452,22 @@ __all__.extend([
     "create_tls13_pq_handshake_simulator"
 ])
 __version__ = "2026.6.20.1"
+
+
+# Post-Quantum Randomness Health Monitor (June 20, 2026 Production Release)
+# NIST SP 800-90B statistical tests, entropy monitoring, and RNG health validation
+from .post_quantum_randomness_health_monitor_2026_june import (
+    RandomnessHealthStatus,
+    RandomnessTestType,
+    RandomnessTestResult,
+    RandomnessHealthReport,
+    PostQuantumRandomnessHealthMonitor
+)
+__all__.extend([
+    "RandomnessHealthStatus",
+    "RandomnessTestType",
+    "RandomnessTestResult",
+    "RandomnessHealthReport",
+    "PostQuantumRandomnessHealthMonitor"
+])
+__version__ = "2026.6.20.2"

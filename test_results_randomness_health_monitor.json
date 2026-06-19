@@ -1,0 +1,57 @@
+{
+  "test_suite": "post_quantum_randomness_health_monitor_2026_june",
+  "test_date": "2026-06-20",
+  "tests_passed": 9,
+  "tests_failed": 0,
+  "total_tests": 9,
+  "individual_tests": [
+    {
+      "test": "system_csprng_quality",
+      "passed": true,
+      "status": "acceptable",
+      "min_entropy": 6.5406,
+      "shannon_entropy": 7.828
+    },
+    {
+      "test": "bad_randomness_detection",
+      "passed": true,
+      "status": "critical",
+      "warnings_count": 5
+    },
+    {
+      "test": "insufficient_sample_size",
+      "passed": true,
+      "sample_size": 64
+    },
+    {
+      "test": "all_tests_execute",
+      "passed": true,
+      "tests_executed": 5
+    },
+    {
+      "test": "recommendations_generated",
+      "passed": true,
+      "recommendations_count": 2
+    },
+    {
+      "test": "health_trend_tracking",
+      "passed": true,
+      "samples_tracked": 5,
+      "trend": "stable"
+    },
+    {
+      "test": "reset_functionality",
+      "passed": true
+    },
+    {
+      "test": "honest_capability_disclosure",
+      "passed": true,
+      "limitations_disclosed": 5
+    },
+    {
+      "test": "patterned_randomness_detection",
+      "passed": true,
+      "score": 0.215
+    }
+  ]
+}
