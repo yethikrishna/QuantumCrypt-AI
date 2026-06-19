@@ -1,9 +1,9 @@
 {
   "test_engine": "Post-Quantum Entropy Health Monitor",
-  "test_date": "2026-06-19T13:56:03.187804",
+  "test_date": "2026-06-19T16:38:06.841069",
   "total_tests": 25,
-  "passed": 19,
-  "failed": 6,
+  "passed": 20,
+  "failed": 5,
   "passed_tests": [
     "Initialization",
     "System Random Collection",
@@ -17,6 +17,7 @@
     "Full Health Suite",
     "Add to Pool",
     "Pool Size Maintenance",
+    "Health Report Generation",
     "Source Contributions",
     "Background Collection",
     "Statistics Reporting",
@@ -45,11 +46,7 @@
     {
       "name": "Random Byte Generation",
       "error": ""
-    },
-    {
-      "name": "Health Report Generation",
-      "error": ""
     }
   ],
-  "success_rate": "76.0%"
+  "success_rate": "80.0%"
 }
