@@ -1,0 +1,8 @@
+{
+  "test_suite": "PostQuantumHKDF-KDF",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "success_rate": 1.0,
+  "timestamp": 1781854850.174086
+}
