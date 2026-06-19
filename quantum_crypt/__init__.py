@@ -420,3 +420,35 @@ __all__.extend([
 ])
 __version__ = "2026.6.19.22"
 
+
+# Post-Quantum TLS 1.3 Handshake Simulator (June 20, 2026 Production Release)
+# Full TLS 1.3 handshake simulation with Kyber KEM and Dilithium signatures
+from .post_quantum_tls13_handshake_simulator_2026_june import (
+    TLS13HandshakeState,
+    PQCipherSuite,
+    PQKeyExchangeMode,
+    HandshakeMessageType,
+    HandshakeMessage,
+    KeyExchangeResult,
+    HandshakeMetrics,
+    TLS13HandshakeResult,
+    KyberKEMSimulator,
+    DilithiumSignatureSimulator,
+    TLS13HandshakeSimulator,
+    create_tls13_pq_handshake_simulator
+)
+__all__.extend([
+    "TLS13HandshakeState",
+    "PQCipherSuite",
+    "PQKeyExchangeMode",
+    "HandshakeMessageType",
+    "HandshakeMessage",
+    "KeyExchangeResult",
+    "HandshakeMetrics",
+    "TLS13HandshakeResult",
+    "KyberKEMSimulator",
+    "DilithiumSignatureSimulator",
+    "TLS13HandshakeSimulator",
+    "create_tls13_pq_handshake_simulator"
+])
+__version__ = "2026.6.20.1"
