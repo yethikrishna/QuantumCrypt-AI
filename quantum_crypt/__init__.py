@@ -529,4 +529,30 @@ __all__.extend([
     "MigrationGap",
     "ReadinessReport"
 ])
-__version__ = "2026.6.20.1"
+# Post-Quantum Secure TLS 1.3 Key Exchange Simulator (June 20, 2026 Production Release)
+# Hybrid ECDHE + Kyber KEM key exchange, TLS 1.3 key schedule, HKDF derivation
+from .post_quantum_secure_key_exchange_tls13_simulator_2026_june import (
+    KeyExchangeMode,
+    CipherSuite,
+    KeyExchangeMessage,
+    KeyExchangeResult,
+    SecurityAssessment,
+    KyberKEMSimulator,
+    ECDHESimulator,
+    TLS13KeySchedule,
+    PQTLS13HandshakeSimulator,
+    get_pq_tls13_simulator
+)
+__all__.extend([
+    "KeyExchangeMode",
+    "CipherSuite",
+    "KeyExchangeMessage",
+    "KeyExchangeResult",
+    "SecurityAssessment",
+    "KyberKEMSimulator",
+    "ECDHESimulator",
+    "TLS13KeySchedule",
+    "PQTLS13HandshakeSimulator",
+    "get_pq_tls13_simulator"
+])
+__version__ = "2026.6.20.2"
