@@ -1,0 +1,42 @@
+{
+  "benchmark_id": "b72f93d9f915",
+  "generated_at": "2026-06-19T04:29:29.820550Z",
+  "total_handshakes": 50,
+  "successful_handshakes": 48,
+  "failed_handshakes": 2,
+  "results_by_kem": {
+    "X25519": {
+      "count": 13,
+      "success": 13,
+      "avg_latency": 2226.6153846153848
+    },
+    "Kyber-512": {
+      "count": 13,
+      "success": 13,
+      "avg_latency": 2185.076923076923
+    },
+    "Kyber-768": {
+      "count": 12,
+      "success": 11,
+      "avg_latency": 2180.6363636363635
+    },
+    "X25519+Kyber-768": {
+      "count": 12,
+      "success": 11,
+      "avg_latency": 2196.6363636363635
+    }
+  },
+  "results_by_cipher": {
+    "TLS_AES_256_GCM_SHA384": {
+      "count": 50,
+      "success": 48
+    }
+  },
+  "performance": {
+    "average_latency_us": 2198.0,
+    "p50_latency_us": 2179,
+    "p95_latency_us": 2306,
+    "p99_latency_us": 2701,
+    "handshakes_per_second": 473.9
+  }
+}
