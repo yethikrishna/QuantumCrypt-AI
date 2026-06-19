@@ -1,0 +1,21 @@
+{
+  "module": "Post-Quantum API Gateway Middleware",
+  "status": "PASSED",
+  "tests": {
+    "client_registration": true,
+    "api_key_validation": true,
+    "signature_validation": true,
+    "nonce_validation": true,
+    "rate_limiting": true,
+    "status_code": true,
+    "security_headers": true,
+    "audit_logging": true,
+    "security_report": true
+  },
+  "metrics": {
+    "registered_clients": 1,
+    "active_api_keys": 1,
+    "audit_log_entries": 0,
+    "security_level": "nist_level_3"
+  }
+}
