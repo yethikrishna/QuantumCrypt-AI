@@ -24,11 +24,12 @@ from .post_quantum_dilithium_signature_engine_2026_june import (
 
 # Hash-based Signature Engine (SPHINCS+ style)
 from .post_quantum_hash_based_signature_engine_2026_june import (
-    HashBasedSignatureEngine,
-    HashSignature,
-    HashKeyPair,
-    WinternitzOTS,
-    HyperTree
+    PostQuantumHashBasedSigner,
+    HashAlgorithm,
+    SecurityLevel,
+    LamportKeyPair,
+    LamportSignature,
+    MerkleSignature
 )
 
 # Hybrid Encryption Engine (Classic + Post-Quantum)
@@ -281,7 +282,7 @@ __all__ = [
     # Core Algorithms
     'KyberKEM',
     'DilithiumSignatureEngine',
-    'HashBasedSignatureEngine',
+    'PostQuantumHashBasedSigner',
     'HybridEncryptionEngine',
     'HybridKEMEngine',
     
@@ -494,3 +495,38 @@ __all__.extend([
     "Share",
     "SMPCResult"
 ])
+
+
+# Post-Quantum Migration Readiness Assessor (June 20, 2026 Production Release)
+# Comprehensive PQC migration readiness evaluation, gap analysis, and roadmap
+from .post_quantum_migration_readiness_assessor_2026_june import (
+    PostQuantumMigrationReadinessAssessor,
+    ReadinessLevel,
+    RiskLevel,
+    AlgorithmCategory,
+    MigrationPriority,
+    AlgorithmAssessment,
+    KeyInventoryAssessment,
+    InfrastructureAssessment,
+    InteroperabilityAssessment,
+    PerformanceAssessment,
+    ComplianceAssessment,
+    MigrationGap,
+    ReadinessReport
+)
+__all__.extend([
+    "PostQuantumMigrationReadinessAssessor",
+    "ReadinessLevel",
+    "RiskLevel",
+    "AlgorithmCategory",
+    "MigrationPriority",
+    "AlgorithmAssessment",
+    "KeyInventoryAssessment",
+    "InfrastructureAssessment",
+    "InteroperabilityAssessment",
+    "PerformanceAssessment",
+    "ComplianceAssessment",
+    "MigrationGap",
+    "ReadinessReport"
+])
+__version__ = "2026.6.20.1"

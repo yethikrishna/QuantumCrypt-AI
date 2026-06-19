@@ -1,613 +1,788 @@
 """
-Post-Quantum Cryptography Migration Readiness Assessor
-Production-grade PQC migration assessment and planning
+Post-Quantum Migration Readiness Assessor
+Production-grade PQC migration readiness evaluation system
 
-Features:
-- Crypto algorithm inventory scanning
-- Quantum vulnerability assessment
-- Migration priority scoring
-- Risk classification
-- Migration roadmap generation
-- Compliance gap analysis
+Evaluates:
+- Algorithm compatibility and quantum resistance
+- Key inventory and management capabilities
+- Infrastructure readiness
+- Interoperability assessment
+- Performance impact analysis
+- Compliance verification
 """
 
-import re
+import json
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple, Any, Set
-from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Tuple, Any
+from dataclasses import dataclass, asdict
 from enum import Enum
-import json
-from collections import defaultdict
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+import threading
 
 
-class CryptoAlgorithmCategory(Enum):
-    KEY_EXCHANGE = "key_exchange"
-    SIGNATURE = "signature"
-    HASH = "hash"
-    SYMMETRIC_ENCRYPTION = "symmetric_encryption"
-    MAC = "message_authentication_code"
-    RANDOM_GENERATOR = "random_generator"
+class ReadinessLevel(Enum):
+    NOT_READY = "not_ready"
+    PARTIALLY_READY = "partially_ready"
+    READY = "ready"
+    FULLY_MIGRATED = "fully_migrated"
 
 
-class QuantumRiskLevel(Enum):
-    CRITICAL = "critical"      # Broken by Shor's algorithm - immediate migration needed
-    HIGH = "high"              # Theoretical quantum vulnerability
-    MEDIUM = "medium"          # Partial vulnerability / large quantum computer needed
-    LOW = "low"                # Quantum-resistant or post-quantum secure
-    UNKNOWN = "unknown"        # Risk not yet assessed
+class RiskLevel(Enum):
+    CRITICAL = "critical"
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+    NONE = "none"
+
+
+class AlgorithmCategory(Enum):
+    CLASSICAL_VULNERABLE = "classical_vulnerable"
+    CLASSICAL_AT_RISK = "classical_at_risk"
+    POST_QUANTUM_STANDARD = "post_quantum_standard"
+    POST_QUANTUM_CANDIDATE = "post_quantum_candidate"
+    HYBRID = "hybrid"
 
 
 class MigrationPriority(Enum):
-    IMMEDIATE = "immediate"    # Migrate within 0-3 months
-    HIGH = "high"              # Migrate within 3-6 months
-    MEDIUM = "medium"          # Migrate within 6-12 months
-    LOW = "low"                # Migrate within 12-24 months
-    NONE = "none"              # No migration needed
+    IMMEDIATE = "immediate"
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+    DEFERRED = "deferred"
 
 
 @dataclass
-class CryptoAlgorithmInfo:
-    name: str
-    category: CryptoAlgorithmCategory
-    quantum_risk: QuantumRiskLevel
-    migration_priority: MigrationPriority
-    nist_standardized: bool = False
-    recommended_replacement: Optional[str] = None
-    key_size_bits: Optional[int] = None
-    security_strength_bits: int = 0
-    deprecation_date: Optional[str] = None
-    notes: str = ""
-
-
-@dataclass
-class CryptoUsageFinding:
+class AlgorithmAssessment:
     algorithm_name: str
-    category: CryptoAlgorithmCategory
-    location: str
-    line_number: Optional[int] = None
-    context: str = ""
-    quantum_risk: QuantumRiskLevel = QuantumRiskLevel.UNKNOWN
-    migration_priority: MigrationPriority = MigrationPriority.MEDIUM
+    category: AlgorithmCategory
+    quantum_resistance_score: float  # 0-100
+    nist_standardized: bool
+    usage_count: int
+    key_sizes_supported: List[int]
+    recommended_replacement: Optional[str]
+    risk_level: RiskLevel
+    migration_priority: MigrationPriority
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = asdict(self)
+        data["category"] = self.category.value
+        data["risk_level"] = self.risk_level.value
+        data["migration_priority"] = self.migration_priority.value
+        return data
 
 
 @dataclass
-class MigrationReadinessScore:
-    overall_score: float  # 0-100, higher = more ready
-    critical_risk_count: int = 0
-    high_risk_count: int = 0
-    medium_risk_count: int = 0
-    low_risk_count: int = 0
-    pqc_adoption_percentage: float = 0.0
-    inventory_coverage: float = 0.0
+class KeyInventoryAssessment:
+    total_keys: int
+    classical_keys: int
+    post_quantum_keys: int
+    hybrid_keys: int
+    keys_with_rotation_enabled: int
+    keys_in_hardware_security_module: int
+    key_rotation_frequency_days: float
+    average_key_age_days: float
+    expired_keys: int
+    weak_keys: int
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass
-class MigrationRecommendation:
-    algorithm: str
-    risk_level: QuantumRiskLevel
+class InfrastructureAssessment:
+    tls_version_supported: str
+    tls_13_enabled: bool
+    certificate_chain_pqc_compatible: bool
+    hsm_pqc_support: bool
+    library_versions: Dict[str, str]
+    network_device_support: bool
+    cloud_provider_support: bool
+    api_gateway_support: bool
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class InteroperabilityAssessment:
+    internal_system_compatibility: float  # 0-1
+    external_partner_compatibility: float  # 0-1
+    protocol_support_coverage: float  # 0-1
+    fallback_mechanisms_exist: bool
+    hybrid_mode_supported: bool
+    certificate_interoperability: float  # 0-1
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class PerformanceAssessment:
+    signature_throughput_impact_percent: float
+    verification_throughput_impact_percent: float
+    key_generation_impact_percent: float
+    memory_overhead_percent: float
+    latency_impact_ms: float
+    hardware_acceleration_available: bool
+    overall_performance_score: float  # 0-100
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class ComplianceAssessment:
+    nist_sp_800_186_compliant: bool
+    nist_sp_800_56c_compliant: bool
+    cnsa_2_0_compliant: bool
+    quantum_safe_mandate_timeline_met: bool
+    industry_regulatory_compliance: Dict[str, bool]
+    documentation_complete: bool
+    audit_trail_exists: bool
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class MigrationGap:
+    gap_id: str
+    description: str
+    category: str
+    risk_level: RiskLevel
     priority: MigrationPriority
+    effort_estimate_hours: int
     recommended_action: str
-    replacement_algorithm: Optional[str] = None
-    estimated_effort_hours: int = 0
-    timeline_months: str = ""
-    dependencies: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = asdict(self)
+        data["risk_level"] = self.risk_level.value
+        data["priority"] = self.priority.value
+        return data
 
 
-# Known algorithm quantum risk database
-ALGORITHM_RISK_DATABASE: Dict[str, CryptoAlgorithmInfo] = {
-    # RSA - CRITICAL risk from Shor's algorithm
-    "RSA": CryptoAlgorithmInfo(
-        name="RSA",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        nist_standardized=True,
-        recommended_replacement="CRYSTALS-Kyber",
-        security_strength_bits=112,
-        notes="Completely broken by Shor's algorithm for factoring"
-    ),
-    "RSA-2048": CryptoAlgorithmInfo(
-        name="RSA-2048",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber-768",
-        key_size_bits=2048,
-        security_strength_bits=112
-    ),
-    "RSA-3072": CryptoAlgorithmInfo(
-        name="RSA-3072",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber-1024",
-        key_size_bits=3072,
-        security_strength_bits=128
-    ),
-    "RSA-4096": CryptoAlgorithmInfo(
-        name="RSA-4096",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.HIGH,
-        recommended_replacement="CRYSTALS-Kyber-1024",
-        key_size_bits=4096,
-        security_strength_bits=192
-    ),
-    
-    # ECC / ECDH / ECDSA - CRITICAL risk
-    "ECDH": CryptoAlgorithmInfo(
-        name="ECDH",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber",
-        notes="Broken by Shor's algorithm for discrete logarithm"
-    ),
-    "ECDSA": CryptoAlgorithmInfo(
-        name="ECDSA",
-        category=CryptoAlgorithmCategory.SIGNATURE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Dilithium"
-    ),
-    "secp256r1": CryptoAlgorithmInfo(
-        name="secp256r1 (NIST P-256)",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber-768"
-    ),
-    "secp384r1": CryptoAlgorithmInfo(
-        name="secp384r1 (NIST P-384)",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber-1024"
-    ),
-    "X25519": CryptoAlgorithmInfo(
-        name="X25519 (Curve25519)",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber-768"
-    ),
-    "Ed25519": CryptoAlgorithmInfo(
-        name="Ed25519 (EdDSA)",
-        category=CryptoAlgorithmCategory.SIGNATURE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Dilithium"
-    ),
-    
-    # Diffie-Hellman - CRITICAL risk
-    "DH": CryptoAlgorithmInfo(
-        name="Diffie-Hellman",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber"
-    ),
-    "DHE": CryptoAlgorithmInfo(
-        name="DHE",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.CRITICAL,
-        migration_priority=MigrationPriority.IMMEDIATE,
-        recommended_replacement="CRYSTALS-Kyber"
-    ),
-    
-    # NIST PQC Algorithms - LOW risk (quantum-resistant)
-    "CRYSTALS-Kyber": CryptoAlgorithmInfo(
-        name="CRYSTALS-Kyber",
-        category=CryptoAlgorithmCategory.KEY_EXCHANGE,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        nist_standardized=True,
-        security_strength_bits=128,
-        notes="NIST PQC standard for key encapsulation"
-    ),
-    "CRYSTALS-Dilithium": CryptoAlgorithmInfo(
-        name="CRYSTALS-Dilithium",
-        category=CryptoAlgorithmCategory.SIGNATURE,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        nist_standardized=True,
-        security_strength_bits=128,
-        notes="NIST PQC standard for digital signatures"
-    ),
-    "FALCON": CryptoAlgorithmInfo(
-        name="FALCON",
-        category=CryptoAlgorithmCategory.SIGNATURE,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        nist_standardized=True,
-        security_strength_bits=128
-    ),
-    "SPHINCS+": CryptoAlgorithmInfo(
-        name="SPHINCS+",
-        category=CryptoAlgorithmCategory.SIGNATURE,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        nist_standardized=True,
-        security_strength_bits=128,
-        notes="Hash-based signature, stateless"
-    ),
-    
-    # Symmetric algorithms - generally LOW risk
-    "AES": CryptoAlgorithmInfo(
-        name="AES",
-        category=CryptoAlgorithmCategory.SYMMETRIC_ENCRYPTION,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.LOW,
-        nist_standardized=True,
-        security_strength_bits=128,
-        notes="Grover's algorithm halves effective security; double key size recommended"
-    ),
-    "AES-128": CryptoAlgorithmInfo(
-        name="AES-128",
-        category=CryptoAlgorithmCategory.SYMMETRIC_ENCRYPTION,
-        quantum_risk=QuantumRiskLevel.MEDIUM,
-        migration_priority=MigrationPriority.MEDIUM,
-        recommended_replacement="AES-256",
-        security_strength_bits=64,  # After Grover
-        notes="Upgrade to AES-256 for post-quantum security"
-    ),
-    "AES-256": CryptoAlgorithmInfo(
-        name="AES-256",
-        category=CryptoAlgorithmCategory.SYMMETRIC_ENCRYPTION,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        security_strength_bits=128,  # After Grover
-        notes="Post-quantum secure with 256-bit key"
-    ),
-    
-    # Hash functions - generally LOW risk
-    "SHA-2": CryptoAlgorithmInfo(
-        name="SHA-2",
-        category=CryptoAlgorithmCategory.HASH,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.LOW,
-        security_strength_bits=128
-    ),
-    "SHA-256": CryptoAlgorithmInfo(
-        name="SHA-256",
-        category=CryptoAlgorithmCategory.HASH,
-        quantum_risk=QuantumRiskLevel.MEDIUM,
-        migration_priority=MigrationPriority.MEDIUM,
-        recommended_replacement="SHA-512",
-        security_strength_bits=128,
-        notes="Grover's reduces pre-image resistance"
-    ),
-    "SHA-512": CryptoAlgorithmInfo(
-        name="SHA-512",
-        category=CryptoAlgorithmCategory.HASH,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        security_strength_bits=256
-    ),
-    "SHA-3": CryptoAlgorithmInfo(
-        name="SHA-3",
-        category=CryptoAlgorithmCategory.HASH,
-        quantum_risk=QuantumRiskLevel.LOW,
-        migration_priority=MigrationPriority.NONE,
-        nist_standardized=True,
-        security_strength_bits=256
-    ),
-}
+@dataclass
+class ReadinessReport:
+    overall_readiness_score: float  # 0-100
+    overall_readiness_level: ReadinessLevel
+    algorithm_assessment: AlgorithmAssessment
+    key_inventory: KeyInventoryAssessment
+    infrastructure: InfrastructureAssessment
+    interoperability: InteroperabilityAssessment
+    performance: PerformanceAssessment
+    compliance: ComplianceAssessment
+    migration_gaps: List[MigrationGap]
+    migration_timeline_months: float
+    estimated_cost_usd: float
+    recommendations: List[str]
+    assessment_timestamp: datetime
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = {
+            "overall_readiness_score": self.overall_readiness_score,
+            "overall_readiness_level": self.overall_readiness_level.value,
+            "algorithm_assessment": self.algorithm_assessment.to_dict(),
+            "key_inventory": self.key_inventory.to_dict(),
+            "infrastructure": self.infrastructure.to_dict(),
+            "interoperability": self.interoperability.to_dict(),
+            "performance": self.performance.to_dict(),
+            "compliance": self.compliance.to_dict(),
+            "migration_gaps": [gap.to_dict() for gap in self.migration_gaps],
+            "migration_timeline_months": self.migration_timeline_months,
+            "estimated_cost_usd": self.estimated_cost_usd,
+            "recommendations": self.recommendations,
+            "assessment_timestamp": self.assessment_timestamp.isoformat()
+        }
+        return data
 
 
-class PQCMigrationReadinessAssessor:
+class PostQuantumMigrationReadinessAssessor:
     """
     Production-grade Post-Quantum Cryptography migration readiness assessor.
     
-    Scans code and configurations for crypto usage, assesses quantum vulnerability,
-    and generates prioritized migration recommendations.
+    Provides comprehensive evaluation of an organization's readiness to migrate
+    to post-quantum cryptographic algorithms, including algorithm analysis,
+    key inventory assessment, infrastructure evaluation, and compliance checking.
     """
 
-    def __init__(self):
-        self.findings: List[CryptoUsageFinding] = []
-        self.algorithm_database = ALGORITHM_RISK_DATABASE
-        self._patterns = self._build_detection_patterns()
+    def __init__(self, config: Optional[Dict] = None):
+        self.config = config or self._default_config()
+        self.logger = self._setup_logger()
+        self.assessments: Dict[str, ReadinessReport] = {}
+        self.lock = threading.Lock()
+        self._initialize_algorithm_database()
 
-    def _build_detection_patterns(self) -> Dict[str, re.Pattern]:
-        """Build regex patterns for algorithm detection."""
-        patterns = {}
+    def _default_config(self) -> Dict:
+        return {
+            "nist_standardized_algorithms": [
+                "CRYSTALS-Kyber",
+                "CRYSTALS-Dilithium",
+                "FALCON",
+                "SPHINCS+"
+            ],
+            "vulnerable_classical_algorithms": [
+                "RSA",
+                "ECC",
+                "ECDSA",
+                "ECDH",
+                "DH",
+                "DSA"
+            ],
+            "minimum_key_rotation_days": 90,
+            "maximum_key_age_days": 365,
+            "performance_impact_threshold_percent": 20,
+            "target_migration_date": "2030-01-01",
+            "cnsa_2_0_deadline": "2030-01-01"
+        }
+
+    def _setup_logger(self) -> logging.Logger:
+        logger = logging.getLogger("PQCMigrationReadinessAssessor")
+        logger.setLevel(logging.INFO)
+        if not logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter(
+                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+        return logger
+
+    def _initialize_algorithm_database(self):
+        """Initialize quantum resistance scores for common algorithms."""
+        self.algorithm_quantum_scores = {
+            # Classical vulnerable algorithms
+            "RSA-2048": 0,
+            "RSA-3072": 5,
+            "RSA-4096": 10,
+            "ECC-P256": 0,
+            "ECC-P384": 5,
+            "ECDSA-P256": 0,
+            "ECDSA-P384": 5,
+            "ECDH-P256": 0,
+            "ECDH-P384": 5,
+            "SHA-256": 80,
+            "SHA-384": 90,
+            "SHA-512": 95,
+            "AES-128": 85,
+            "AES-256": 95,
+            # NIST standardized PQC algorithms
+            "CRYSTALS-Kyber-512": 100,
+            "CRYSTALS-Kyber-768": 100,
+            "CRYSTALS-Kyber-1024": 100,
+            "CRYSTALS-Dilithium-2": 100,
+            "CRYSTALS-Dilithium-3": 100,
+            "CRYSTALS-Dilithium-5": 100,
+            "FALCON-512": 100,
+            "FALCON-1024": 100,
+            "SPHINCS+-128f": 100,
+            "SPHINCS+-128s": 100,
+            "SPHINCS+-192f": 100,
+            "SPHINCS+-192s": 100,
+            "SPHINCS+-256f": 100,
+            "SPHINCS+-256s": 100,
+            # Hybrid modes
+            "Kyber+X25519": 95,
+            "Kyber+P256": 90,
+            "Dilithium+ECDSA": 90
+        }
         
-        # Algorithm name patterns
-        for algo_name in self.algorithm_database.keys():
-            # Create word-boundary pattern for exact matches
-            escaped = re.escape(algo_name)
-            patterns[algo_name] = re.compile(
-                r'\b(' + escaped + r'|' + escaped.replace('-', '_') + r')\b',
-                re.IGNORECASE
+        self.algorithm_replacements = {
+            "RSA-2048": "CRYSTALS-Kyber-768",
+            "RSA-3072": "CRYSTALS-Kyber-768",
+            "RSA-4096": "CRYSTALS-Kyber-1024",
+            "ECC-P256": "CRYSTALS-Kyber-512",
+            "ECC-P384": "CRYSTALS-Kyber-768",
+            "ECDSA-P256": "CRYSTALS-Dilithium-3",
+            "ECDSA-P384": "CRYSTALS-Dilithium-5",
+            "ECDH-P256": "CRYSTALS-Kyber-512",
+            "ECDH-P384": "CRYSTALS-Kyber-768"
+        }
+
+    def assess_algorithm_readiness(
+        self,
+        algorithm_inventory: Dict[str, int],
+        organization_name: str = "default"
+    ) -> AlgorithmAssessment:
+        """Assess algorithm quantum resistance and migration readiness."""
+        total_usage = sum(algorithm_inventory.values())
+        
+        if total_usage == 0:
+            return AlgorithmAssessment(
+                algorithm_name="none",
+                category=AlgorithmCategory.POST_QUANTUM_STANDARD,
+                quantum_resistance_score=100,
+                nist_standardized=True,
+                usage_count=0,
+                key_sizes_supported=[],
+                recommended_replacement=None,
+                risk_level=RiskLevel.NONE,
+                migration_priority=MigrationPriority.DEFERRED
             )
         
-        # Common crypto library patterns
-        patterns["crypto_libs"] = re.compile(
-            r'(cryptography|pycryptodome|openssl|javax\.crypto|bcrypt|hashlib|hmac)',
-            re.IGNORECASE
-        )
-        
-        return patterns
-
-    def scan_code_content(
-        self, 
-        content: str, 
-        file_path: str = "unknown"
-    ) -> List[CryptoUsageFinding]:
-        """
-        Scan source code content for cryptographic algorithm usage.
-        
-        Args:
-            content: Source code text
-            file_path: File path for reference
-            
-        Returns:
-            List of crypto usage findings
-        """
-        findings = []
-        lines = content.split('\n')
-        
-        for line_num, line in enumerate(lines, 1):
-            # Skip comments
-            stripped = line.strip()
-            if stripped.startswith(('#', '//', '/*', '*')):
-                continue
-                
-            # Check for each algorithm
-            for algo_name, pattern in self._patterns.items():
-                if algo_name == "crypto_libs":
-                    continue
-                    
-                if pattern.search(line):
-                    algo_info = self.algorithm_database.get(algo_name)
-                    if algo_info:
-                        finding = CryptoUsageFinding(
-                            algorithm_name=algo_name,
-                            category=algo_info.category,
-                            location=f"{file_path}:{line_num}",
-                            line_number=line_num,
-                            context=stripped[:100],
-                            quantum_risk=algo_info.quantum_risk,
-                            migration_priority=algo_info.migration_priority
-                        )
-                        findings.append(finding)
-                        logger.debug(f"Found {algo_name} at {file_path}:{line_num}")
-        
-        self.findings.extend(findings)
-        return findings
-
-    def scan_file(self, file_path: str) -> List[CryptoUsageFinding]:
-        """Scan a single file for crypto usage."""
-        try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                content = f.read()
-            return self.scan_code_content(content, file_path)
-        except Exception as e:
-            logger.warning(f"Failed to scan {file_path}: {e}")
-            return []
-
-    def get_algorithm_info(self, algorithm_name: str) -> Optional[CryptoAlgorithmInfo]:
-        """Get risk information for a specific algorithm."""
-        return self.algorithm_database.get(algorithm_name)
-
-    def calculate_readiness_score(self) -> MigrationReadinessScore:
-        """
-        Calculate overall PQC migration readiness score.
-        
-        Returns:
-            Readiness score (0-100) with breakdown
-        """
-        if not self.findings:
-            return MigrationReadinessScore(
-                overall_score=50.0,
-                pqc_adoption_percentage=0.0,
-                inventory_coverage=0.0
-            )
-
-        risk_counts = defaultdict(int)
+        # Calculate weighted quantum resistance score
+        weighted_score = 0.0
+        vulnerable_count = 0
         pqc_count = 0
-        total_count = len(self.findings)
-
-        for finding in self.findings:
-            risk_counts[finding.quantum_risk.value] += 1
-            if finding.quantum_risk == QuantumRiskLevel.LOW:
-                pqc_count += 1
-
-        # Calculate score components
-        critical_penalty = risk_counts[QuantumRiskLevel.CRITICAL.value] * 10
-        high_penalty = risk_counts[QuantumRiskLevel.HIGH.value] * 5
-        medium_penalty = risk_counts[QuantumRiskLevel.MEDIUM.value] * 2
         
-        base_score = 100
-        total_penalty = min(critical_penalty + high_penalty + medium_penalty, 80)
-        overall_score = max(base_score - total_penalty, 0)
+        for algo, count in algorithm_inventory.items():
+            score = self.algorithm_quantum_scores.get(algo, 50)
+            weighted_score += score * count
+            
+            if score < 20:
+                vulnerable_count += count
+            elif score >= 90:
+                pqc_count += count
         
-        pqc_adoption = (pqc_count / total_count * 100) if total_count > 0 else 0
-
-        return MigrationReadinessScore(
-            overall_score=overall_score,
-            critical_risk_count=risk_counts[QuantumRiskLevel.CRITICAL.value],
-            high_risk_count=risk_counts[QuantumRiskLevel.HIGH.value],
-            medium_risk_count=risk_counts[QuantumRiskLevel.MEDIUM.value],
-            low_risk_count=risk_counts[QuantumRiskLevel.LOW.value],
-            pqc_adoption_percentage=pqc_adoption,
-            inventory_coverage=100.0  # We scanned all findings
+        avg_score = weighted_score / total_usage
+        
+        # Determine primary algorithm category
+        vulnerable_ratio = vulnerable_count / total_usage
+        pqc_ratio = pqc_count / total_usage
+        
+        if pqc_ratio >= 0.9:
+            category = AlgorithmCategory.POST_QUANTUM_STANDARD
+            risk_level = RiskLevel.NONE
+            priority = MigrationPriority.DEFERRED
+        elif pqc_ratio >= 0.5:
+            category = AlgorithmCategory.HYBRID
+            risk_level = RiskLevel.LOW
+            priority = MigrationPriority.LOW
+        elif vulnerable_ratio > 0.5:
+            category = AlgorithmCategory.CLASSICAL_VULNERABLE
+            risk_level = RiskLevel.CRITICAL
+            priority = MigrationPriority.IMMEDIATE
+        else:
+            category = AlgorithmCategory.CLASSICAL_AT_RISK
+            risk_level = RiskLevel.HIGH
+            priority = MigrationPriority.HIGH
+        
+        # Find most used vulnerable algorithm for recommendation
+        most_used_vulnerable = None
+        max_vulnerable_count = 0
+        for algo, count in algorithm_inventory.items():
+            score = self.algorithm_quantum_scores.get(algo, 50)
+            if score < 20 and count > max_vulnerable_count:
+                max_vulnerable_count = count
+                most_used_vulnerable = algo
+        
+        recommended_replacement = None
+        if most_used_vulnerable:
+            recommended_replacement = self.algorithm_replacements.get(
+                most_used_vulnerable, "CRYSTALS-Kyber-768"
+            )
+        
+        return AlgorithmAssessment(
+            algorithm_name="mixed" if len(algorithm_inventory) > 1 else next(iter(algorithm_inventory.keys())),
+            category=category,
+            quantum_resistance_score=avg_score,
+            nist_standardized=(pqc_ratio >= 0.9),
+            usage_count=total_usage,
+            key_sizes_supported=list(algorithm_inventory.keys()),
+            recommended_replacement=recommended_replacement,
+            risk_level=risk_level,
+            migration_priority=priority
         )
 
-    def generate_migration_recommendations(self) -> List[MigrationRecommendation]:
-        """
-        Generate prioritized migration recommendations.
+    def assess_key_inventory(
+        self,
+        key_metrics: Dict[str, Any]
+    ) -> KeyInventoryAssessment:
+        """Assess key management and inventory readiness."""
+        total_keys = key_metrics.get("total_keys", 0)
+        classical_keys = key_metrics.get("classical_keys", 0)
+        pq_keys = key_metrics.get("post_quantum_keys", 0)
+        hybrid_keys = key_metrics.get("hybrid_keys", 0)
         
-        Returns:
-            List of recommendations sorted by priority
-        """
-        # Group findings by algorithm
-        algo_findings = defaultdict(list)
-        for finding in self.findings:
-            algo_findings[finding.algorithm_name].append(finding)
+        return KeyInventoryAssessment(
+            total_keys=total_keys,
+            classical_keys=classical_keys,
+            post_quantum_keys=pq_keys,
+            hybrid_keys=hybrid_keys,
+            keys_with_rotation_enabled=key_metrics.get("keys_with_rotation_enabled", 0),
+            keys_in_hardware_security_module=key_metrics.get("keys_in_hsm", 0),
+            key_rotation_frequency_days=key_metrics.get("rotation_frequency_days", 365),
+            average_key_age_days=key_metrics.get("avg_key_age_days", 180),
+            expired_keys=key_metrics.get("expired_keys", 0),
+            weak_keys=key_metrics.get("weak_keys", 0)
+        )
 
+    def assess_infrastructure(
+        self,
+        infra_metrics: Dict[str, Any]
+    ) -> InfrastructureAssessment:
+        """Assess infrastructure readiness for PQC migration."""
+        return InfrastructureAssessment(
+            tls_version_supported=infra_metrics.get("tls_version", "1.2"),
+            tls_13_enabled=infra_metrics.get("tls_13_enabled", False),
+            certificate_chain_pqc_compatible=infra_metrics.get("cert_chain_pqc", False),
+            hsm_pqc_support=infra_metrics.get("hsm_pqc_support", False),
+            library_versions=infra_metrics.get("library_versions", {}),
+            network_device_support=infra_metrics.get("network_device_support", False),
+            cloud_provider_support=infra_metrics.get("cloud_provider_support", False),
+            api_gateway_support=infra_metrics.get("api_gateway_support", False)
+        )
+
+    def assess_interoperability(
+        self,
+        interop_metrics: Dict[str, Any]
+    ) -> InteroperabilityAssessment:
+        """Assess interoperability readiness."""
+        return InteroperabilityAssessment(
+            internal_system_compatibility=interop_metrics.get("internal_compat", 0.5),
+            external_partner_compatibility=interop_metrics.get("external_compat", 0.3),
+            protocol_support_coverage=interop_metrics.get("protocol_coverage", 0.4),
+            fallback_mechanisms_exist=interop_metrics.get("fallback_exists", False),
+            hybrid_mode_supported=interop_metrics.get("hybrid_supported", False),
+            certificate_interoperability=interop_metrics.get("cert_interop", 0.5)
+        )
+
+    def assess_performance(
+        self,
+        perf_metrics: Dict[str, Any]
+    ) -> PerformanceAssessment:
+        """Assess performance impact of PQC migration."""
+        sig_impact = perf_metrics.get("signature_impact", 15)
+        ver_impact = perf_metrics.get("verification_impact", 10)
+        keygen_impact = perf_metrics.get("keygen_impact", 25)
+        mem_overhead = perf_metrics.get("memory_overhead", 20)
+        latency = perf_metrics.get("latency_ms", 2)
+        
+        # Calculate overall performance score
+        # Lower impact = higher score
+        impact_scores = [
+            max(0, 100 - sig_impact * 2),
+            max(0, 100 - ver_impact * 2),
+            max(0, 100 - keygen_impact * 2),
+            max(0, 100 - mem_overhead * 2),
+            max(0, 100 - latency * 10)
+        ]
+        overall_score = sum(impact_scores) / len(impact_scores)
+        
+        return PerformanceAssessment(
+            signature_throughput_impact_percent=sig_impact,
+            verification_throughput_impact_percent=ver_impact,
+            key_generation_impact_percent=keygen_impact,
+            memory_overhead_percent=mem_overhead,
+            latency_impact_ms=latency,
+            hardware_acceleration_available=perf_metrics.get("hw_accel", False),
+            overall_performance_score=overall_score
+        )
+
+    def assess_compliance(
+        self,
+        compliance_metrics: Dict[str, Any]
+    ) -> ComplianceAssessment:
+        """Assess compliance with PQC standards and regulations."""
+        return ComplianceAssessment(
+            nist_sp_800_186_compliant=compliance_metrics.get("nist_186", False),
+            nist_sp_800_56c_compliant=compliance_metrics.get("nist_56c", False),
+            cnsa_2_0_compliant=compliance_metrics.get("cnsa_20", False),
+            quantum_safe_mandate_timeline_met=compliance_metrics.get("timeline_met", False),
+            industry_regulatory_compliance=compliance_metrics.get("industry_compliance", {}),
+            documentation_complete=compliance_metrics.get("docs_complete", False),
+            audit_trail_exists=compliance_metrics.get("audit_trail", False)
+        )
+
+    def identify_migration_gaps(
+        self,
+        algo_assessment: AlgorithmAssessment,
+        key_assessment: KeyInventoryAssessment,
+        infra_assessment: InfrastructureAssessment,
+        interop_assessment: InteroperabilityAssessment,
+        perf_assessment: PerformanceAssessment,
+        compliance_assessment: ComplianceAssessment
+    ) -> List[MigrationGap]:
+        """Identify migration gaps and recommendations."""
+        gaps = []
+        
+        # Algorithm gaps
+        if algo_assessment.quantum_resistance_score < 50:
+            gaps.append(MigrationGap(
+                gap_id="GAP-ALG-001",
+                description=f"High quantum vulnerability detected. Average quantum resistance score: {algo_assessment.quantum_resistance_score:.1f}/100",
+                category="algorithms",
+                risk_level=algo_assessment.risk_level,
+                priority=algo_assessment.migration_priority,
+                effort_estimate_hours=80,
+                recommended_action=f"Migrate vulnerable algorithms to {algo_assessment.recommended_replacement}"
+            ))
+        
+        # Key management gaps
+        if key_assessment.classical_keys > 0:
+            gaps.append(MigrationGap(
+                gap_id="GAP-KEY-001",
+                description=f"{key_assessment.classical_keys} classical keys vulnerable to quantum attacks",
+                category="keys",
+                risk_level=RiskLevel.HIGH,
+                priority=MigrationPriority.HIGH,
+                effort_estimate_hours=40,
+                recommended_action="Generate post-quantum key counterparts and implement hybrid mode"
+            ))
+        
+        if key_assessment.key_rotation_frequency_days > self.config["minimum_key_rotation_days"]:
+            gaps.append(MigrationGap(
+                gap_id="GAP-KEY-002",
+                description=f"Key rotation frequency ({key_assessment.key_rotation_frequency_days} days) exceeds recommended maximum",
+                category="keys",
+                risk_level=RiskLevel.MEDIUM,
+                priority=MigrationPriority.MEDIUM,
+                effort_estimate_hours=16,
+                recommended_action="Implement automated key rotation with 90-day maximum period"
+            ))
+        
+        # Infrastructure gaps
+        if not infra_assessment.tls_13_enabled:
+            gaps.append(MigrationGap(
+                gap_id="GAP-INFRA-001",
+                description="TLS 1.3 not enabled - required for PQC cipher suites",
+                category="infrastructure",
+                risk_level=RiskLevel.HIGH,
+                priority=MigrationPriority.HIGH,
+                effort_estimate_hours=24,
+                recommended_action="Upgrade all endpoints to TLS 1.3"
+            ))
+        
+        if not infra_assessment.hsm_pqc_support:
+            gaps.append(MigrationGap(
+                gap_id="GAP-INFRA-002",
+                description="Hardware Security Module does not support PQC algorithms",
+                category="infrastructure",
+                risk_level=RiskLevel.MEDIUM,
+                priority=MigrationPriority.MEDIUM,
+                effort_estimate_hours=40,
+                recommended_action="Upgrade HSM firmware or migrate to PQC-capable HSM"
+            ))
+        
+        # Interoperability gaps
+        if not interop_assessment.hybrid_mode_supported:
+            gaps.append(MigrationGap(
+                gap_id="GAP-INTEROP-001",
+                description="Hybrid mode not supported - critical for gradual migration",
+                category="interoperability",
+                risk_level=RiskLevel.HIGH,
+                priority=MigrationPriority.HIGH,
+                effort_estimate_hours=32,
+                recommended_action="Implement hybrid classical-quantum mode for all connections"
+            ))
+        
+        # Performance gaps
+        if perf_assessment.overall_performance_score < 70:
+            gaps.append(MigrationGap(
+                gap_id="GAP-PERF-001",
+                description=f"Performance impact exceeds acceptable thresholds. Score: {perf_assessment.overall_performance_score:.1f}/100",
+                category="performance",
+                risk_level=RiskLevel.MEDIUM,
+                priority=MigrationPriority.MEDIUM,
+                effort_estimate_hours=24,
+                recommended_action="Implement hardware acceleration and performance optimization"
+            ))
+        
+        # Compliance gaps
+        if not compliance_assessment.cnsa_2_0_compliant:
+            gaps.append(MigrationGap(
+                gap_id="GAP-COMP-001",
+                description="Not compliant with CNSA 2.0 quantum-safe requirements",
+                category="compliance",
+                risk_level=RiskLevel.CRITICAL,
+                priority=MigrationPriority.IMMEDIATE,
+                effort_estimate_hours=120,
+                recommended_action="Initiate CNSA 2.0 compliance program immediately"
+            ))
+        
+        return gaps
+
+    def calculate_overall_readiness_score(
+        self,
+        algo_assessment: AlgorithmAssessment,
+        key_assessment: KeyInventoryAssessment,
+        infra_assessment: InfrastructureAssessment,
+        interop_assessment: InteroperabilityAssessment,
+        perf_assessment: PerformanceAssessment,
+        compliance_assessment: ComplianceAssessment
+    ) -> Tuple[float, ReadinessLevel]:
+        """Calculate overall readiness score and level."""
+        # Algorithm score (weight: 30%)
+        algo_score = algo_assessment.quantum_resistance_score * 0.30
+        
+        # Key management score (weight: 20%)
+        pq_key_ratio = (
+            key_assessment.post_quantum_keys / max(1, key_assessment.total_keys)
+        )
+        key_score = pq_key_ratio * 100 * 0.20
+        
+        # Infrastructure score (weight: 20%)
+        infra_items = [
+            infra_assessment.tls_13_enabled,
+            infra_assessment.certificate_chain_pqc_compatible,
+            infra_assessment.hsm_pqc_support,
+            infra_assessment.cloud_provider_support,
+            infra_assessment.api_gateway_support
+        ]
+        infra_score = (sum(1 for x in infra_items if x) / len(infra_items)) * 100 * 0.20
+        
+        # Interoperability score (weight: 15%)
+        interop_score = (
+            (interop_assessment.internal_system_compatibility * 0.4 +
+             interop_assessment.external_partner_compatibility * 0.3 +
+             interop_assessment.protocol_support_coverage * 0.3) * 100
+        ) * 0.15
+        
+        # Performance score (weight: 10%)
+        perf_score = perf_assessment.overall_performance_score * 0.10
+        
+        # Compliance score (weight: 5%)
+        compliance_items = [
+            compliance_assessment.nist_sp_800_186_compliant,
+            compliance_assessment.nist_sp_800_56c_compliant,
+            compliance_assessment.cnsa_2_0_compliant,
+            compliance_assessment.documentation_complete,
+            compliance_assessment.audit_trail_exists
+        ]
+        compliance_score = (sum(1 for x in compliance_items if x) / len(compliance_items)) * 100 * 0.05
+        
+        total_score = algo_score + key_score + infra_score + interop_score + perf_score + compliance_score
+        
+        # Determine readiness level
+        if total_score >= 90:
+            level = ReadinessLevel.FULLY_MIGRATED
+        elif total_score >= 70:
+            level = ReadinessLevel.READY
+        elif total_score >= 40:
+            level = ReadinessLevel.PARTIALLY_READY
+        else:
+            level = ReadinessLevel.NOT_READY
+        
+        return total_score, level
+
+    def generate_recommendations(
+        self,
+        gaps: List[MigrationGap],
+        readiness_level: ReadinessLevel
+    ) -> List[str]:
+        """Generate prioritized recommendations."""
         recommendations = []
         
-        for algo_name, findings in algo_findings.items():
-            algo_info = self.algorithm_database.get(algo_name)
-            
-            if not algo_info:
-                continue
-                
-            # Skip if already PQC secure
-            if algo_info.quantum_risk == QuantumRiskLevel.LOW:
-                continue
-                
-            # Determine effort estimate
-            usage_count = len(findings)
-            if algo_info.migration_priority == MigrationPriority.IMMEDIATE:
-                effort = usage_count * 8
-                timeline = "0-3 months"
-            elif algo_info.migration_priority == MigrationPriority.HIGH:
-                effort = usage_count * 4
-                timeline = "3-6 months"
-            elif algo_info.migration_priority == MigrationPriority.MEDIUM:
-                effort = usage_count * 2
-                timeline = "6-12 months"
-            else:
-                effort = usage_count
-                timeline = "12-24 months"
-
-            action = f"Migrate {usage_count} instance(s) of {algo_name}"
-            if algo_info.recommended_replacement:
-                action += f" to {algo_info.recommended_replacement}"
-
-            recommendation = MigrationRecommendation(
-                algorithm=algo_name,
-                risk_level=algo_info.quantum_risk,
-                priority=algo_info.migration_priority,
-                recommended_action=action,
-                replacement_algorithm=algo_info.recommended_replacement,
-                estimated_effort_hours=effort,
-                timeline_months=timeline
-            )
-            recommendations.append(recommendation)
-
-        # Sort by priority
-        priority_order = {
-            MigrationPriority.IMMEDIATE: 0,
-            MigrationPriority.HIGH: 1,
-            MigrationPriority.MEDIUM: 2,
-            MigrationPriority.LOW: 3,
-            MigrationPriority.NONE: 4
-        }
-        recommendations.sort(key=lambda r: priority_order[r.priority])
+        immediate_gaps = [g for g in gaps if g.priority == MigrationPriority.IMMEDIATE]
+        high_gaps = [g for g in gaps if g.priority == MigrationPriority.HIGH]
+        
+        if readiness_level == ReadinessLevel.NOT_READY:
+            recommendations.append("PHASE 1 (URGENT): Initiate emergency quantum risk assessment program")
+            recommendations.append("  - Deploy hybrid mode immediately for all critical connections")
+            recommendations.append("  - Create PQC migration steering committee")
+            recommendations.append("  - Conduct full cryptographic inventory audit")
+        elif readiness_level == ReadinessLevel.PARTIALLY_READY:
+            recommendations.append("PHASE 1: Complete hybrid mode deployment for high-risk systems")
+            recommendations.append("PHASE 2: Upgrade infrastructure to TLS 1.3")
+            recommendations.append("PHASE 3: Begin full PQC migration for non-critical systems")
+        elif readiness_level == ReadinessLevel.READY:
+            recommendations.append("PHASE 1: Complete migration of remaining classical systems")
+            recommendations.append("PHASE 2: Optimize performance with hardware acceleration")
+            recommendations.append("PHASE 3: Achieve CNSA 2.0 compliance")
+        else:
+            recommendations.append("Maintain: Continue monitoring for new PQC standards")
+            recommendations.append("Maintain: Perform quarterly PQC health assessments")
+            recommendations.append("Maintain: Update cryptographic inventory continuously")
+        
+        # Add specific gap recommendations
+        for gap in immediate_gaps[:3]:
+            recommendations.append(f"IMMEDIATE: {gap.recommended_action}")
+        for gap in high_gaps[:3]:
+            recommendations.append(f"HIGH PRIORITY: {gap.recommended_action}")
         
         return recommendations
 
-    def generate_migration_roadmap(self) -> Dict[str, Any]:
-        """
-        Generate a complete migration roadmap.
+    def estimate_migration_timeline_and_cost(
+        self,
+        gaps: List[MigrationGap]
+    ) -> Tuple[float, float]:
+        """Estimate migration timeline in months and cost in USD."""
+        total_effort_hours = sum(g.effort_estimate_hours for g in gaps)
         
-        Returns:
-            Structured roadmap with phases and timelines
-        """
-        readiness = self.calculate_readiness_score()
-        recommendations = self.generate_migration_recommendations()
+        # Assume 40 hours per week per FTE, 2 FTEs
+        timeline_months = (total_effort_hours / 40 / 4 / 2)
         
-        # Group by timeline
-        phases = defaultdict(list)
-        total_effort = 0
+        # $150 per hour for specialized cryptography consulting
+        estimated_cost = total_effort_hours * 150
         
-        for rec in recommendations:
-            phases[rec.timeline_months].append({
-                "algorithm": rec.algorithm,
-                "action": rec.recommended_action,
-                "replacement": rec.replacement_algorithm,
-                "risk": rec.risk_level.value
-            })
-            total_effort += rec.estimated_effort_hours
+        return max(1, timeline_months), max(10000, estimated_cost)
 
-        return {
-            "assessment_date": datetime.utcnow().isoformat(),
-            "readiness_score": readiness.overall_score,
-            "risk_summary": {
-                "critical": readiness.critical_risk_count,
-                "high": readiness.high_risk_count,
-                "medium": readiness.medium_risk_count,
-                "low": readiness.low_risk_count
-            },
-            "pqc_adoption": readiness.pqc_adoption_percentage,
-            "total_effort_estimate_hours": total_effort,
-            "migration_phases": dict(phases),
-            "recommendations": [
-                {
-                    "algorithm": r.algorithm,
-                    "priority": r.priority.value,
-                    "action": r.recommended_action,
-                    "replacement": r.replacement_algorithm,
-                    "timeline": r.timeline_months
-                }
-                for r in recommendations
-            ]
-        }
-
-    def generate_readiness_report(self) -> str:
-        """Generate human-readable migration readiness report."""
-        readiness = self.calculate_readiness_score()
-        roadmap = self.generate_migration_roadmap()
+    def perform_full_assessment(
+        self,
+        organization_id: str,
+        algorithm_inventory: Dict[str, int],
+        key_metrics: Dict[str, Any],
+        infra_metrics: Dict[str, Any],
+        interop_metrics: Dict[str, Any],
+        perf_metrics: Dict[str, Any],
+        compliance_metrics: Dict[str, Any]
+    ) -> ReadinessReport:
+        """Perform complete PQC migration readiness assessment."""
+        self.logger.info(f"Starting PQC migration readiness assessment for: {organization_id}")
         
-        lines = [
-            "=" * 70,
-            "POST-QUANTUM CRYPTOGRAPHY MIGRATION READINESS REPORT",
-            "=" * 70,
-            f"Generated: {roadmap['assessment_date']}",
-            "",
-            f"OVERALL READINESS SCORE: {readiness.overall_score:.1f} / 100",
-            "",
-        ]
+        # Perform individual assessments
+        algo_assessment = self.assess_algorithm_readiness(algorithm_inventory)
+        key_assessment = self.assess_key_inventory(key_metrics)
+        infra_assessment = self.assess_infrastructure(infra_metrics)
+        interop_assessment = self.assess_interoperability(interop_metrics)
+        perf_assessment = self.assess_performance(perf_metrics)
+        compliance_assessment = self.assess_compliance(compliance_metrics)
+        
+        # Identify gaps
+        gaps = self.identify_migration_gaps(
+            algo_assessment, key_assessment, infra_assessment,
+            interop_assessment, perf_assessment, compliance_assessment
+        )
+        
+        # Calculate overall score
+        overall_score, readiness_level = self.calculate_overall_readiness_score(
+            algo_assessment, key_assessment, infra_assessment,
+            interop_assessment, perf_assessment, compliance_assessment
+        )
+        
+        # Generate recommendations
+        recommendations = self.generate_recommendations(gaps, readiness_level)
+        
+        # Estimate timeline and cost
+        timeline, cost = self.estimate_migration_timeline_and_cost(gaps)
+        
+        report = ReadinessReport(
+            overall_readiness_score=overall_score,
+            overall_readiness_level=readiness_level,
+            algorithm_assessment=algo_assessment,
+            key_inventory=key_assessment,
+            infrastructure=infra_assessment,
+            interoperability=interop_assessment,
+            performance=perf_assessment,
+            compliance=compliance_assessment,
+            migration_gaps=gaps,
+            migration_timeline_months=timeline,
+            estimated_cost_usd=cost,
+            recommendations=recommendations,
+            assessment_timestamp=datetime.utcnow()
+        )
+        
+        with self.lock:
+            self.assessments[organization_id] = report
+        
+        self.logger.info(
+            f"Assessment complete for {organization_id}: "
+            f"Score={overall_score:.1f}/100, Level={readiness_level.value}"
+        )
+        
+        return report
 
-        # Interpret score
-        if readiness.overall_score >= 80:
-            readiness_level = "EXCELLENT - Well prepared for PQC migration"
-        elif readiness.overall_score >= 60:
-            readiness_level = "GOOD - Moderate preparation, some critical items"
-        elif readiness.overall_score >= 40:
-            readiness_level = "FAIR - Significant work needed"
-        else:
-            readiness_level = "CRITICAL - Immediate action required"
-            
-        lines.extend([
-            f"Readiness Level: {readiness_level}",
-            f"PQC Algorithm Adoption: {readiness.pqc_adoption_percentage:.1f}%",
-            "",
-            "RISK SUMMARY:",
-            f"  CRITICAL (Shor-vulnerable): {readiness.critical_risk_count} instances",
-            f"  HIGH: {readiness.high_risk_count} instances",
-            f"  MEDIUM: {readiness.medium_risk_count} instances",
-            f"  LOW (PQC-secure): {readiness.low_risk_count} instances",
-            "",
-            f"Total Estimated Migration Effort: {roadmap['total_effort_estimate_hours']} hours",
-            "",
-            "-" * 70,
-            "MIGRATION RECOMMENDATIONS (PRIORITIZED):",
-            "-" * 70,
-        ])
+    def get_assessment_report(
+        self, organization_id: str
+    ) -> Optional[ReadinessReport]:
+        """Get assessment report for an organization."""
+        with self.lock:
+            return self.assessments.get(organization_id)
 
-        for rec in roadmap["recommendations"][:10]:  # Top 10
-            lines.append(f"\n[{rec['priority'].upper()}] {rec['algorithm']}")
-            lines.append(f"  Action: {rec['action']}")
-            if rec['replacement']:
-                lines.append(f"  Recommended: {rec['replacement']}")
-            lines.append(f"  Timeline: {rec['timeline']}")
-
-        lines.extend([
-            "",
-            "=" * 70,
-            "QUANTUM SECURITY NOTE:",
-            "RSA, ECC, DH, and related algorithms are completely vulnerable to",
-            "Shor's algorithm. Migrate to NIST PQC standards (CRYSTALS-Kyber,",
-            "CRYSTALS-Dilithium, SPHINCS+, FALCON) immediately.",
-            "=" * 70
-        ])
-
-        return "\n".join(lines)
+    def export_assessment_json(
+        self, organization_id: str
+    ) -> Optional[str]:
+        """Export assessment as JSON string."""
+        report = self.get_assessment_report(organization_id)
+        if report:
+            return json.dumps(report.to_dict(), indent=2)
+        return None

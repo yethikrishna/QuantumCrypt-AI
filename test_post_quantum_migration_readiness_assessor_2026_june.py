@@ -1,258 +1,427 @@
-#!/usr/bin/env python3
 """
-Test suite for Post-Quantum Cryptography Migration Readiness Assessor
-Production-grade testing with real assertions
+Test Suite for Post-Quantum Migration Readiness Assessor
+Production-grade testing of all functionality
 """
 
-import sys
 import json
-sys.path.insert(0, 'quantum_crypt')
+import sys
+from datetime import datetime
 
-from post_quantum_migration_readiness_assessor_2026_june import (
-    PQCMigrationReadinessAssessor,
-    ALGORITHM_RISK_DATABASE,
-    QuantumRiskLevel,
-    MigrationPriority,
-    CryptoAlgorithmCategory
+# Add the module path
+sys.path.insert(0, '/home/user/autonomous-developer/QuantumCrypt-AI')
+
+from quantum_crypt.post_quantum_migration_readiness_assessor_2026_june import (
+    PostQuantumMigrationReadinessAssessor,
+    ReadinessLevel,
+    RiskLevel,
+    AlgorithmCategory,
+    MigrationPriority
 )
 
 
 def run_tests():
-    print("=" * 60)
-    print("PQC MIGRATION READINESS ASSESSOR - TEST SUITE")
-    print("=" * 60)
+    """Run all production tests."""
+    print("=" * 70)
+    print("POST-QUANTUM MIGRATION READINESS ASSESSOR - PRODUCTION TEST SUITE")
+    print("=" * 70)
+    print(f"Test started: {datetime.utcnow().isoformat()}")
     
-    test_results = {
-        "passed": 0,
-        "failed": 0,
-        "tests": []
-    }
-
-    # Test 1: Basic initialization
-    print("\n[TEST 1] Basic Initialization")
+    test_results = []
+    all_passed = True
+    
+    # Test 1: Assessor Initialization
+    print("\n[TEST 1] Assessor Initialization")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        assert assessor is not None
-        assert len(assessor.findings) == 0
-        assert len(assessor.algorithm_database) > 0
-        print("  ✓ Assessor initialized correctly")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "initialization", "status": "passed"})
+        assessor = PostQuantumMigrationReadinessAssessor()
+        assert len(assessor.algorithm_quantum_scores) > 0
+        print("  ✓ Assessor initialized with algorithm database")
+        test_results.append(("Initialization", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "initialization", "status": "failed", "error": str(e)})
-
-    # Test 2: Algorithm risk database
-    print("\n[TEST 2] Algorithm Risk Database")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Initialization", False))
+        all_passed = False
+    
+    # Test 2: Algorithm Readiness Assessment - Vulnerable Classical
+    print("\n[TEST 2] Algorithm Readiness - Vulnerable Classical")
     try:
-        # RSA should be CRITICAL risk
-        rsa_info = ALGORITHM_RISK_DATABASE["RSA"]
-        assert rsa_info.quantum_risk == QuantumRiskLevel.CRITICAL
-        assert rsa_info.migration_priority == MigrationPriority.IMMEDIATE
-        
-        # Kyber should be LOW risk
-        kyber_info = ALGORITHM_RISK_DATABASE["CRYSTALS-Kyber"]
-        assert kyber_info.quantum_risk == QuantumRiskLevel.LOW
-        assert kyber_info.migration_priority == MigrationPriority.NONE
-        
-        print(f"  ✓ Database has {len(ALGORITHM_RISK_DATABASE)} algorithms")
-        print("  ✓ RSA = CRITICAL risk, CRYSTALS-Kyber = LOW risk")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "risk_database", "status": "passed"})
+        assessor = PostQuantumMigrationReadinessAssessor()
+        # All classical vulnerable algorithms
+        algo_inventory = {
+            "RSA-2048": 100,
+            "ECC-P256": 50,
+            "ECDSA-P256": 30
+        }
+        assessment = assessor.assess_algorithm_readiness(algo_inventory)
+        assert assessment.quantum_resistance_score < 20
+        assert assessment.category == AlgorithmCategory.CLASSICAL_VULNERABLE
+        assert assessment.risk_level == RiskLevel.CRITICAL
+        assert assessment.migration_priority == MigrationPriority.IMMEDIATE
+        print(f"  ✓ Vulnerable algorithms correctly assessed")
+        print(f"    - Quantum resistance score: {assessment.quantum_resistance_score:.1f}/100")
+        print(f"    - Risk level: {assessment.risk_level.value}")
+        test_results.append(("Algorithm Vulnerable Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "risk_database", "status": "failed", "error": str(e)})
-
-    # Test 3: Code scanning - RSA detection
-    print("\n[TEST 3] Code Scanning - RSA Detection")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Algorithm Vulnerable Assessment", False))
+        all_passed = False
+    
+    # Test 3: Algorithm Readiness - PQC Standardized
+    print("\n[TEST 3] Algorithm Readiness - PQC Standardized")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        code = """
-        from cryptography.hazmat.primitives.asymmetric import rsa
-        private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-        """
-        findings = assessor.scan_code_content(code, "test_rsa.py")
-        assert len(findings) >= 1
-        assert findings[0].quantum_risk == QuantumRiskLevel.CRITICAL
-        print(f"  ✓ Found {len(findings)} RSA instance(s) with CRITICAL risk")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "rsa_detection", "status": "passed"})
+        # All NIST standardized PQC algorithms
+        algo_inventory = {
+            "CRYSTALS-Kyber-768": 100,
+            "CRYSTALS-Dilithium-3": 50
+        }
+        assessment = assessor.assess_algorithm_readiness(algo_inventory)
+        assert assessment.quantum_resistance_score == 100
+        assert assessment.nist_standardized == True
+        print(f"  ✓ PQC algorithms correctly assessed")
+        print(f"    - Quantum resistance score: {assessment.quantum_resistance_score:.1f}/100")
+        test_results.append(("Algorithm PQC Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "rsa_detection", "status": "failed", "error": str(e)})
-
-    # Test 4: Code scanning - ECC detection
-    print("\n[TEST 4] Code Scanning - ECC Detection")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Algorithm PQC Assessment", False))
+        all_passed = False
+    
+    # Test 4: Key Inventory Assessment
+    print("\n[TEST 4] Key Inventory Assessment")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        code = """
-        from cryptography.hazmat.primitives.asymmetric import ec
-        private_key = ec.generate_private_key(ec.SECP256R1())
-        """
-        findings = assessor.scan_code_content(code, "test_ecc.py")
-        secp_findings = [f for f in findings if "secp256r1" in f.algorithm_name.lower()]
-        assert len(findings) >= 1
-        print(f"  ✓ Found ECC algorithm(s) with quantum vulnerability")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "ecc_detection", "status": "passed"})
+        key_metrics = {
+            "total_keys": 1000,
+            "classical_keys": 800,
+            "post_quantum_keys": 150,
+            "hybrid_keys": 50,
+            "keys_with_rotation_enabled": 200,
+            "keys_in_hsm": 500,
+            "rotation_frequency_days": 180,
+            "avg_key_age_days": 120,
+            "expired_keys": 10,
+            "weak_keys": 5
+        }
+        assessment = assessor.assess_key_inventory(key_metrics)
+        assert assessment.total_keys == 1000
+        assert assessment.classical_keys == 800
+        assert assessment.post_quantum_keys == 150
+        print("  ✓ Key inventory assessment completed")
+        print(f"    - Total keys: {assessment.total_keys}")
+        print(f"    - Classical keys: {assessment.classical_keys}")
+        print(f"    - PQC keys: {assessment.post_quantum_keys}")
+        test_results.append(("Key Inventory Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "ecc_detection", "status": "failed", "error": str(e)})
-
-    # Test 5: Readiness score calculation
-    print("\n[TEST 5] Readiness Score Calculation")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Key Inventory Assessment", False))
+        all_passed = False
+    
+    # Test 5: Infrastructure Assessment
+    print("\n[TEST 5] Infrastructure Assessment")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        # Simulate vulnerable code
-        code = """
-        import rsa
-        from cryptography.hazmat.primitives.asymmetric import ec
-        key = ec.generate_private_key(ec.SECP256R1())
-        """
-        assessor.scan_code_content(code, "vulnerable.py")
-        readiness = assessor.calculate_readiness_score()
-        
-        assert readiness.overall_score < 100  # Should be penalized
-        assert readiness.critical_risk_count > 0
-        print(f"  ✓ Readiness score: {readiness.overall_score:.1f}/100")
-        print(f"  ✓ Critical risks found: {readiness.critical_risk_count}")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "readiness_score", "status": "passed"})
+        infra_metrics = {
+            "tls_version": "1.3",
+            "tls_13_enabled": True,
+            "cert_chain_pqc": False,
+            "hsm_pqc_support": False,
+            "library_versions": {"openssl": "3.0.0", "botan": "3.0.0"},
+            "network_device_support": True,
+            "cloud_provider_support": True,
+            "api_gateway_support": False
+        }
+        assessment = assessor.assess_infrastructure(infra_metrics)
+        assert assessment.tls_13_enabled == True
+        assert assessment.tls_version_supported == "1.3"
+        print("  ✓ Infrastructure assessment completed")
+        print(f"    - TLS 1.3 enabled: {assessment.tls_13_enabled}")
+        print(f"    - HSM PQC support: {assessment.hsm_pqc_support}")
+        test_results.append(("Infrastructure Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "readiness_score", "status": "failed", "error": str(e)})
-
-    # Test 6: Migration recommendations
-    print("\n[TEST 6] Migration Recommendations Generation")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Infrastructure Assessment", False))
+        all_passed = False
+    
+    # Test 6: Interoperability Assessment
+    print("\n[TEST 6] Interoperability Assessment")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        code = """
-        # Vulnerable RSA usage
-        import rsa
-        (pubkey, privkey) = rsa.newkeys(2048)
-        """
-        assessor.scan_code_content(code, "rsa_test.py")
-        recommendations = assessor.generate_migration_recommendations()
-        
-        assert len(recommendations) >= 1
-        assert recommendations[0].priority == MigrationPriority.IMMEDIATE
-        assert "Kyber" in (recommendations[0].replacement_algorithm or "")
-        print(f"  ✓ Generated {len(recommendations)} recommendation(s)")
-        print(f"  ✓ Top priority: {recommendations[0].priority.value}")
-        print(f"  ✓ Recommended: {recommendations[0].replacement_algorithm}")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "recommendations", "status": "passed"})
+        interop_metrics = {
+            "internal_compat": 0.7,
+            "external_compat": 0.4,
+            "protocol_coverage": 0.6,
+            "fallback_exists": True,
+            "hybrid_supported": False,
+            "cert_interop": 0.5
+        }
+        assessment = assessor.assess_interoperability(interop_metrics)
+        assert assessment.internal_system_compatibility == 0.7
+        assert assessment.fallback_mechanisms_exist == True
+        print("  ✓ Interoperability assessment completed")
+        test_results.append(("Interoperability Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "recommendations", "status": "failed", "error": str(e)})
-
-    # Test 7: PQC secure algorithm detection
-    print("\n[TEST 7] PQC-Secure Algorithm Recognition")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Interoperability Assessment", False))
+        all_passed = False
+    
+    # Test 7: Performance Assessment
+    print("\n[TEST 7] Performance Assessment")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        code = """
-        # Using NIST PQC standard
-        algorithm = "CRYSTALS-Kyber"
-        signature = "CRYSTALS-Dilithium"
-        """
-        assessor.scan_code_content(code, "pqc_secure.py")
-        readiness = assessor.calculate_readiness_score()
-        
-        # Should have low risk count
-        assert readiness.low_risk_count > 0
-        print(f"  ✓ PQC algorithms detected: LOW risk count = {readiness.low_risk_count}")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "pqc_detection", "status": "passed"})
+        perf_metrics = {
+            "signature_impact": 15,
+            "verification_impact": 10,
+            "keygen_impact": 25,
+            "memory_overhead": 20,
+            "latency_ms": 2,
+            "hw_accel": True
+        }
+        assessment = assessor.assess_performance(perf_metrics)
+        assert assessment.overall_performance_score > 0
+        assert assessment.hardware_acceleration_available == True
+        print("  ✓ Performance assessment completed")
+        print(f"    - Overall performance score: {assessment.overall_performance_score:.1f}/100")
+        test_results.append(("Performance Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "pqc_detection", "status": "failed", "error": str(e)})
-
-    # Test 8: Migration roadmap
-    print("\n[TEST 8] Migration Roadmap Generation")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Performance Assessment", False))
+        all_passed = False
+    
+    # Test 8: Compliance Assessment
+    print("\n[TEST 8] Compliance Assessment")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        code = """
-        import rsa
-        from cryptography.hazmat.primitives.asymmetric import ec
-        """
-        assessor.scan_code_content(code, "mixed.py")
-        roadmap = assessor.generate_migration_roadmap()
-        
-        assert "readiness_score" in roadmap
-        assert "risk_summary" in roadmap
-        assert "migration_phases" in roadmap
-        assert "recommendations" in roadmap
-        print("  ✓ Roadmap contains all required fields")
-        print(f"  ✓ Migration phases: {list(roadmap['migration_phases'].keys())}")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "roadmap", "status": "passed"})
+        compliance_metrics = {
+            "nist_186": False,
+            "nist_56c": False,
+            "cnsa_20": False,
+            "timeline_met": False,
+            "industry_compliance": {"HIPAA": True, "PCI-DSS": False},
+            "docs_complete": True,
+            "audit_trail": True
+        }
+        assessment = assessor.assess_compliance(compliance_metrics)
+        assert assessment.cnsa_2_0_compliant == False
+        assert assessment.documentation_complete == True
+        print("  ✓ Compliance assessment completed")
+        test_results.append(("Compliance Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "roadmap", "status": "failed", "error": str(e)})
-
-    # Test 9: Readiness report
-    print("\n[TEST 9] Human-Readable Report")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Compliance Assessment", False))
+        all_passed = False
+    
+    # Test 9: Full Assessment - NOT READY scenario
+    print("\n[TEST 9] Full Assessment - NOT READY Scenario")
     try:
-        assessor = PQCMigrationReadinessAssessor()
-        code = "import rsa"
-        assessor.scan_code_content(code, "simple.py")
-        report = assessor.generate_readiness_report()
-        
-        assert isinstance(report, str)
-        assert len(report) > 0
-        assert "POST-QUANTUM CRYPTOGRAPHY" in report
-        assert "READINESS SCORE" in report
-        print("  ✓ Full readiness report generated")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "report", "status": "passed"})
+        report = assessor.perform_full_assessment(
+            organization_id="test_org_not_ready",
+            algorithm_inventory={"RSA-2048": 100, "ECC-P256": 50},
+            key_metrics={
+                "total_keys": 150,
+                "classical_keys": 150,
+                "post_quantum_keys": 0,
+                "hybrid_keys": 0,
+                "keys_with_rotation_enabled": 0,
+                "keys_in_hsm": 0,
+                "rotation_frequency_days": 365,
+                "avg_key_age_days": 200,
+                "expired_keys": 10,
+                "weak_keys": 5
+            },
+            infra_metrics={
+                "tls_version": "1.2",
+                "tls_13_enabled": False,
+                "cert_chain_pqc": False,
+                "hsm_pqc_support": False,
+                "library_versions": {},
+                "network_device_support": False,
+                "cloud_provider_support": False,
+                "api_gateway_support": False
+            },
+            interop_metrics={
+                "internal_compat": 0.2,
+                "external_compat": 0.1,
+                "protocol_coverage": 0.1,
+                "fallback_exists": False,
+                "hybrid_supported": False,
+                "cert_interop": 0.1
+            },
+            perf_metrics={
+                "signature_impact": 50,
+                "verification_impact": 40,
+                "keygen_impact": 60,
+                "memory_overhead": 50,
+                "latency_ms": 10,
+                "hw_accel": False
+            },
+            compliance_metrics={
+                "nist_186": False,
+                "nist_56c": False,
+                "cnsa_20": False,
+                "timeline_met": False,
+                "industry_compliance": {},
+                "docs_complete": False,
+                "audit_trail": False
+            }
+        )
+        assert report.overall_readiness_level == ReadinessLevel.NOT_READY
+        assert report.overall_readiness_score < 40
+        assert len(report.migration_gaps) > 0
+        assert len(report.recommendations) > 0
+        print(f"  ✓ NOT_READY scenario correctly assessed")
+        print(f"    - Overall score: {report.overall_readiness_score:.1f}/100")
+        print(f"    - Readiness level: {report.overall_readiness_level.value}")
+        print(f"    - Migration gaps identified: {len(report.migration_gaps)}")
+        print(f"    - Estimated timeline: {report.migration_timeline_months:.1f} months")
+        print(f"    - Estimated cost: ${report.estimated_cost_usd:,.0f}")
+        test_results.append(("Full NOT_READY Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "report", "status": "failed", "error": str(e)})
-
-    # Test 10: AES-128 vs AES-256 risk difference
-    print("\n[TEST 10] AES Security Level Differentiation")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Full NOT_READY Assessment", False))
+        all_passed = False
+    
+    # Test 10: Full Assessment - PARTIALLY_READY scenario
+    print("\n[TEST 10] Full Assessment - PARTIALLY_READY Scenario")
     try:
-        aes128 = ALGORITHM_RISK_DATABASE["AES-128"]
-        aes256 = ALGORITHM_RISK_DATABASE["AES-256"]
-        
-        assert aes128.quantum_risk == QuantumRiskLevel.MEDIUM
-        assert aes256.quantum_risk == QuantumRiskLevel.LOW
-        assert aes128.migration_priority == MigrationPriority.MEDIUM
-        assert aes256.migration_priority == MigrationPriority.NONE
-        print("  ✓ AES-128 = MEDIUM risk (upgrade to AES-256)")
-        print("  ✓ AES-256 = LOW risk (post-quantum secure)")
-        test_results["passed"] += 1
-        test_results["tests"].append({"test": "aes_differentiation", "status": "passed"})
+        report = assessor.perform_full_assessment(
+            organization_id="test_org_partial",
+            algorithm_inventory={
+                "RSA-2048": 50,
+                "CRYSTALS-Kyber-768": 50,
+                "AES-256": 100
+            },
+            key_metrics={
+                "total_keys": 200,
+                "classical_keys": 100,
+                "post_quantum_keys": 80,
+                "hybrid_keys": 20,
+                "keys_with_rotation_enabled": 100,
+                "keys_in_hsm": 150,
+                "rotation_frequency_days": 90,
+                "avg_key_age_days": 60,
+                "expired_keys": 2,
+                "weak_keys": 1
+            },
+            infra_metrics={
+                "tls_version": "1.3",
+                "tls_13_enabled": True,
+                "cert_chain_pqc": False,
+                "hsm_pqc_support": False,
+                "library_versions": {"openssl": "3.2.0"},
+                "network_device_support": True,
+                "cloud_provider_support": True,
+                "api_gateway_support": True
+            },
+            interop_metrics={
+                "internal_compat": 0.6,
+                "external_compat": 0.4,
+                "protocol_coverage": 0.5,
+                "fallback_exists": True,
+                "hybrid_supported": True,
+                "cert_interop": 0.5
+            },
+            perf_metrics={
+                "signature_impact": 15,
+                "verification_impact": 10,
+                "keygen_impact": 20,
+                "memory_overhead": 15,
+                "latency_ms": 2,
+                "hw_accel": True
+            },
+            compliance_metrics={
+                "nist_186": True,
+                "nist_56c": False,
+                "cnsa_20": False,
+                "timeline_met": False,
+                "industry_compliance": {"HIPAA": True},
+                "docs_complete": True,
+                "audit_trail": True
+            }
+        )
+        assert report.overall_readiness_level == ReadinessLevel.PARTIALLY_READY
+        assert 40 <= report.overall_readiness_score < 70
+        print(f"  ✓ PARTIALLY_READY scenario correctly assessed")
+        print(f"    - Overall score: {report.overall_readiness_score:.1f}/100")
+        print(f"    - Readiness level: {report.overall_readiness_level.value}")
+        test_results.append(("Full PARTIALLY_READY Assessment", True))
     except Exception as e:
-        print(f"  ✗ Failed: {e}")
-        test_results["failed"] += 1
-        test_results["tests"].append({"test": "aes_differentiation", "status": "failed", "error": str(e)})
-
-    # Print final results
-    print("\n" + "=" * 60)
-    print("TEST RESULTS SUMMARY")
-    print("=" * 60)
-    print(f"Passed: {test_results['passed']}")
-    print(f"Failed: {test_results['failed']}")
-    print(f"Total:  {test_results['passed'] + test_results['failed']}")
-    print(f"Success Rate: {(test_results['passed']/(test_results['passed']+test_results['failed'])*100):.1f}%")
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Full PARTIALLY_READY Assessment", False))
+        all_passed = False
+    
+    # Test 11: JSON Export
+    print("\n[TEST 11] JSON Export")
+    try:
+        json_str = assessor.export_assessment_json("test_org_not_ready")
+        assert json_str is not None
+        data = json.loads(json_str)
+        assert "overall_readiness_score" in data
+        assert "migration_gaps" in data
+        assert "recommendations" in data
+        print("  ✓ JSON export successful")
+        test_results.append(("JSON Export", True))
+    except Exception as e:
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("JSON Export", False))
+        all_passed = False
+    
+    # Test 12: Migration Gap Identification
+    print("\n[TEST 12] Migration Gap Identification")
+    try:
+        report = assessor.get_assessment_report("test_org_not_ready")
+        critical_gaps = [g for g in report.migration_gaps if g.risk_level == RiskLevel.CRITICAL]
+        high_gaps = [g for g in report.migration_gaps if g.risk_level == RiskLevel.HIGH]
+        print(f"  ✓ Migration gaps identified:")
+        print(f"    - Critical gaps: {len(critical_gaps)}")
+        print(f"    - High gaps: {len(high_gaps)}")
+        print(f"    - Total gaps: {len(report.migration_gaps)}")
+        test_results.append(("Migration Gap Identification", True))
+    except Exception as e:
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Migration Gap Identification", False))
+        all_passed = False
+    
+    # Test 13: Recommendations Generation
+    print("\n[TEST 13] Recommendations Generation")
+    try:
+        report = assessor.get_assessment_report("test_org_not_ready")
+        assert len(report.recommendations) > 0
+        print("  ✓ Recommendations generated:")
+        for i, rec in enumerate(report.recommendations[:5], 1):
+            print(f"    {i}. {rec}")
+        test_results.append(("Recommendations Generation", True))
+    except Exception as e:
+        print(f"  ✗ FAILED: {e}")
+        test_results.append(("Recommendations Generation", False))
+        all_passed = False
+    
+    # Summary
+    print("\n" + "=" * 70)
+    print("TEST SUMMARY")
+    print("=" * 70)
+    
+    passed_count = 0
+    for name, passed in test_results:
+        status = "✓ PASS" if passed else "✗ FAIL"
+        print(f"  {status} - {name}")
+        if passed:
+            passed_count += 1
+    
+    print(f"\nTotal: {passed_count}/{len(test_results)} tests passed")
+    
+    if all_passed:
+        print("\n✅ ALL TESTS PASSED - Production ready!")
+    else:
+        print(f"\n❌ {len(test_results) - passed_count} TEST(S) FAILED")
     
     # Save results
-    with open("test_results_pqc_migration_readiness.json", "w") as f:
-        json.dump(test_results, f, indent=2)
+    result_data = {
+        "test_timestamp": datetime.utcnow().isoformat(),
+        "total_tests": len(test_results),
+        "passed_tests": passed_count,
+        "all_passed": all_passed,
+        "results": [{"name": n, "passed": p} for n, p in test_results]
+    }
     
-    print("\nTest results saved to test_results_pqc_migration_readiness.json")
+    with open("/home/user/autonomous-developer/QuantumCrypt-AI/test_results_pqc_readiness_assessor.json", "w") as f:
+        json.dump(result_data, f, indent=2)
     
-    return test_results["failed"] == 0
+    print(f"\nTest results saved to test_results_pqc_readiness_assessor.json")
+    
+    return all_passed
 
 
 if __name__ == "__main__":
