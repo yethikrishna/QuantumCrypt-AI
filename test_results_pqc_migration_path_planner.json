@@ -1,0 +1,50 @@
+{
+  "test_timestamp": "2026-06-20T03:13:19.853111",
+  "module": "post_quantum_migration_path_planner_risk_assessor",
+  "passed": 10,
+  "total": 10,
+  "success_rate": 1.0,
+  "all_passed": true,
+  "test_details": [
+    {
+      "name": "NIST PQC Standards Data",
+      "passed": true
+    },
+    {
+      "name": "Classical Algorithm Risk Data",
+      "passed": true
+    },
+    {
+      "name": "Planner Initialization",
+      "passed": true
+    },
+    {
+      "name": "Add Single Asset",
+      "passed": true
+    },
+    {
+      "name": "Batch Add Assets",
+      "passed": true
+    },
+    {
+      "name": "Single Asset Assessment",
+      "passed": true
+    },
+    {
+      "name": "Full Assessment",
+      "passed": true
+    },
+    {
+      "name": "Roadmap Generation",
+      "passed": true
+    },
+    {
+      "name": "Executive Summary",
+      "passed": true
+    },
+    {
+      "name": "Singleton & Report Export",
+      "passed": true
+    }
+  ]
+}
