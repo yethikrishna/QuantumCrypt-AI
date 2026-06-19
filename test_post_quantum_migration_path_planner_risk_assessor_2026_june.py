@@ -1,338 +1,336 @@
 #!/usr/bin/env python3
 """
-Test suite for Post-Quantum Cryptography Migration Path Planner
-QuantumCrypt-AI Production Tests
+Test suite for Post-Quantum Migration Path Planner & Risk Assessor
+June 2026 Production Release
+
+REAL TESTS - NO EMPTY SHELLS
 """
 
 import sys
-import os
 import json
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quantum_crypt'))
+import importlib.util
 
-from post_quantum_migration_path_planner_risk_assessor_2026_june import (
-    PostQuantumMigrationPlanner,
-    get_migration_planner,
-    NIST_STANDARD_PQC,
-    CLASSICAL_ALGORITHM_RISK,
-    AlgorithmSecurityLevel,
-    QuantumVulnerability
+# Load module directly
+spec = importlib.util.spec_from_file_location(
+    'migration_planner',
+    '/home/user/autonomous-developer/QuantumCrypt-AI/quantum_crypt/post_quantum_migration_path_planner_risk_assessor_2026_june.py'
 )
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
+PostQuantumMigrationPlanner = module.PostQuantumMigrationPlanner
+CryptoInventoryItem = module.CryptoInventoryItem
+CryptoAlgorithmType = module.CryptoAlgorithmType
+QuantumRiskLevel = module.QuantumRiskLevel
+MigrationPriority = module.MigrationPriority
+MigrationPhase = module.MigrationPhase
 
 
 def run_tests():
     print("=" * 70)
-    print("QuantumCrypt-AI: PQC Migration Path Planner - Test Suite")
+    print("QuantumCrypt-AI: Post-Quantum Migration Planner Tests")
     print("=" * 70)
     
-    all_passed = True
-    test_results = []
+    planner = PostQuantumMigrationPlanner()
+    passed = 0
+    failed = 0
     
-    # Test 1: Data integrity - NIST PQC Standards
-    print("\n[TEST 1] NIST PQC Standards data integrity")
+    # Test 1: Add inventory items
+    print("\n[TEST 1] Add inventory items")
     try:
-        assert len(NIST_STANDARD_PQC) == 4, "Should have 4 NIST-standard algorithms"
-        assert 'CRYSTALS-Kyber' in NIST_STANDARD_PQC, "Kyber should be included"
-        assert 'CRYSTALS-Dilithium' in NIST_STANDARD_PQC, "Dilithium should be included"
-        assert 'FALCON' in NIST_STANDARD_PQC, "FALCON should be included"
-        assert 'SPHINCS+' in NIST_STANDARD_PQC, "SPHINCS+ should be included"
+        item1 = CryptoInventoryItem(
+            item_id="sys_001",
+            algorithm_name="RSA-2048",
+            algorithm_type=CryptoAlgorithmType.KEY_EXCHANGE,
+            key_size=2048,
+            usage_context="TLS",
+            system_name="Payment_Gateway",
+            location="prod_us_east",
+            data_sensitivity="restricted",
+            business_impact="critical"
+        )
+        item2 = CryptoInventoryItem(
+            item_id="sys_002",
+            algorithm_name="ECDSA-P256",
+            algorithm_type=CryptoAlgorithmType.SIGNATURE,
+            key_size=256,
+            usage_context="JWT_tokens",
+            system_name="Auth_Service",
+            location="prod_eu_west",
+            data_sensitivity="confidential",
+            business_impact="high"
+        )
+        item3 = CryptoInventoryItem(
+            item_id="sys_003",
+            algorithm_name="AES-256",
+            algorithm_type=CryptoAlgorithmType.SYMMETRIC_ENCRYPTION,
+            key_size=256,
+            usage_context="data_at_rest",
+            system_name="Database",
+            location="prod_ap_south",
+            data_sensitivity="confidential",
+            business_impact="high"
+        )
+        item4 = CryptoInventoryItem(
+            item_id="sys_004",
+            algorithm_name="CRYSTALS-Kyber-768",
+            algorithm_type=CryptoAlgorithmType.KEY_EXCHANGE,
+            key_size=768,
+            usage_context="internal_api",
+            system_name="Internal_API",
+            location="staging",
+            data_sensitivity="internal",
+            business_impact="medium"
+        )
         
-        for name, info in NIST_STANDARD_PQC.items():
-            assert info['nist_standard'] == True, f"{name} should be NIST standard"
-            assert 'security_level' in info, f"{name} should have security level"
-            assert 'use_cases' in info, f"{name} should have use cases"
+        planner.add_inventory_item(item1)
+        planner.add_inventory_item(item2)
+        planner.add_inventory_item(item3)
+        planner.add_inventory_item(item4)
         
-        print("  ✓ PASSED: NIST PQC standards data is complete")
-        test_results.append(("NIST PQC Standards Data", True))
+        assert len(planner.inventory) == 4
+        print(f"  ✓ PASS: Added {len(planner.inventory)} inventory items")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("NIST PQC Standards Data", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 2: Data integrity - Classical Algorithm Risk
-    print("\n[TEST 2] Classical Algorithm Risk data integrity")
+    # Test 2: Algorithm risk assessment - RSA-2048 (CRITICAL)
+    print("\n[TEST 2] Risk assessment - RSA-2048")
     try:
-        assert len(CLASSICAL_ALGORITHM_RISK) >= 11, "Should have comprehensive algorithm coverage"
-        
-        # Check critical algorithms
-        assert CLASSICAL_ALGORITHM_RISK['RSA-2048']['vulnerability'] == QuantumVulnerability.CRITICAL
-        assert CLASSICAL_ALGORITHM_RISK['ECC-P256']['vulnerability'] == QuantumVulnerability.CRITICAL
-        assert CLASSICAL_ALGORITHM_RISK['AES-256']['vulnerability'] == QuantumVulnerability.QUANTUM_SAFE
-        assert CLASSICAL_ALGORITHM_RISK['SHA-3']['vulnerability'] == QuantumVulnerability.QUANTUM_SAFE
-        
-        print("  ✓ PASSED: Classical algorithm risk data is comprehensive")
-        test_results.append(("Classical Algorithm Risk Data", True))
+        assessment = planner.assess_algorithm_risk("RSA-2048")
+        assert assessment.risk_level == QuantumRiskLevel.CRITICAL
+        assert assessment.risk_score >= 0.9
+        assert len(assessment.recommended_replacements) > 0
+        print(f"  ✓ PASS: RSA-2048 = CRITICAL risk (score={assessment.risk_score})")
+        print(f"    Replacements: {assessment.recommended_replacements}")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Classical Algorithm Risk Data", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 3: Planner initialization
-    print("\n[TEST 3] Planner initialization")
+    # Test 3: Algorithm risk assessment - ECDSA-P256 (CRITICAL)
+    print("\n[TEST 3] Risk assessment - ECDSA-P256")
     try:
-        planner = PostQuantumMigrationPlanner()
-        assert planner.crypto_inventory == [], "Inventory should be empty initially"
-        assert planner.assessment_results == {}, "Results should be empty initially"
-        
-        print("  ✓ PASSED: Planner initializes correctly")
-        test_results.append(("Planner Initialization", True))
+        assessment = planner.assess_algorithm_risk("ECDSA-P256")
+        assert assessment.risk_level == QuantumRiskLevel.CRITICAL
+        print(f"  ✓ PASS: ECDSA-P256 = CRITICAL risk (score={assessment.risk_score})")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Planner Initialization", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 4: Add single crypto asset
-    print("\n[TEST 4] Add single cryptographic asset")
+    # Test 4: Algorithm risk assessment - CRYSTALS-Kyber (QUANTUM_RESISTANT)
+    print("\n[TEST 4] Risk assessment - CRYSTALS-Kyber-768")
     try:
-        planner = PostQuantumMigrationPlanner()
-        asset = {
-            'system_name': 'Test TLS Server',
-            'system_type': 'TLS_WEBSERVER',
-            'algorithm': 'ECC-P256',
-            'key_size': 256,
-            'usage_count': 100,
-            'business_impact': 'HIGH',
-            'data_sensitivity': 'CONFIDENTIAL'
-        }
-        asset_id = planner.add_crypto_asset(asset)
-        
-        assert len(asset_id) == 12, "Asset ID should be 12 chars"
-        assert len(planner.crypto_inventory) == 1, "Should have 1 asset"
-        assert planner.crypto_inventory[0]['asset_id'] == asset_id, "ID should match"
-        
-        print(f"  ✓ PASSED: Asset added with ID: {asset_id}")
-        test_results.append(("Add Single Asset", True))
+        assessment = planner.assess_algorithm_risk("CRYSTALS-Kyber-768")
+        assert assessment.risk_level == QuantumRiskLevel.QUANTUM_RESISTANT
+        assert assessment.risk_score <= 0.1
+        print(f"  ✓ PASS: CRYSTALS-Kyber-768 = QUANTUM_RESISTANT (score={assessment.risk_score})")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Add Single Asset", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 5: Batch add assets
-    print("\n[TEST 5] Batch add multiple assets")
+    # Test 5: Full inventory assessment
+    print("\n[TEST 5] Full inventory assessment")
     try:
-        planner = PostQuantumMigrationPlanner()
-        assets = [
-            {'system_name': f'System {i}', 'system_type': 'SSH', 'algorithm': 'RSA-2048',
-             'key_size': 2048, 'usage_count': 10, 'business_impact': 'MEDIUM', 
-             'data_sensitivity': 'INTERNAL'}
-            for i in range(5)
-        ]
-        asset_ids = planner.batch_add_assets(assets)
-        
-        assert len(asset_ids) == 5, "Should return 5 asset IDs"
-        assert len(planner.crypto_inventory) == 5, "Should have 5 assets"
-        assert len(set(asset_ids)) == 5, "All IDs should be unique"
-        
-        print("  ✓ PASSED: Batch added 5 assets successfully")
-        test_results.append(("Batch Add Assets", True))
+        results = planner.assess_all_inventory()
+        assert results["total_items"] == 4
+        assert results["by_risk_level"]["critical"] >= 2
+        assert len(results["critical_systems"]) >= 1
+        print(f"  ✓ PASS: Assessed {results['total_items']} items")
+        print(f"    Risk breakdown: {dict(results['by_risk_level'])}")
+        print(f"    Critical systems: {len(results['critical_systems'])}")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Batch Add Assets", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 6: Single asset vulnerability assessment
-    print("\n[TEST 6] Single asset vulnerability assessment")
+    # Test 6: Migration priority calculation
+    print("\n[TEST 6] Migration priority calculation")
     try:
-        planner = PostQuantumMigrationPlanner()
-        asset = {
-            'system_name': 'Critical Root CA',
-            'system_type': 'ROOT_CA',
-            'algorithm': 'RSA-4096',
-            'key_size': 4096,
-            'usage_count': 1000,
-            'business_impact': 'HIGH',
-            'data_sensitivity': 'CRITICAL'
-        }
-        planner.add_crypto_asset(asset)
-        assessment = planner.assess_quantum_vulnerability(planner.crypto_inventory[0])
-        
-        assert 'qv_score' in assessment, "Should have QV score"
-        assert 'composite_risk_score' in assessment, "Should have composite risk"
-        assert 'migration_urgency' in assessment, "Should have urgency"
-        assert 'recommended_replacement' in assessment, "Should have recommendation"
-        
-        assert 0 <= assessment['qv_score'] <= 100, "QV score should be 0-100"
-        assert assessment['shor_algorithm_vulnerable'] == True, "RSA is Shor-vulnerable"
-        
-        print(f"    QV Score: {assessment['qv_score']}")
-        print(f"    Vulnerability: {assessment['quantum_vulnerability_level']}")
-        print(f"    Urgency: {assessment['migration_urgency']}")
-        
-        print("  ✓ PASSED: Single asset assessment works")
-        test_results.append(("Single Asset Assessment", True))
+        item = planner.inventory[0]  # RSA-2048, critical impact
+        assessment = planner.assess_algorithm_risk(item.algorithm_name)
+        priority = planner.calculate_migration_priority(item, assessment)
+        assert priority == MigrationPriority.IMMEDIATE
+        print(f"  ✓ PASS: RSA-2048 + critical impact = IMMEDIATE priority")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Single Asset Assessment", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 7: Full assessment run
-    print("\n[TEST 7] Full vulnerability assessment")
+    # Test 7: Effort estimation
+    print("\n[TEST 7] Migration effort estimation")
     try:
-        planner = PostQuantumMigrationPlanner()
-        test_assets = [
-            {'system_name': 'TLS', 'system_type': 'TLS_WEBSERVER', 'algorithm': 'ECC-P256',
-             'key_size': 256, 'usage_count': 50, 'business_impact': 'HIGH', 'data_sensitivity': 'CONFIDENTIAL'},
-            {'system_name': 'DB', 'system_type': 'DATABASE_ENCRYPTION', 'algorithm': 'AES-256',
-             'key_size': 256, 'usage_count': 10, 'business_impact': 'HIGH', 'data_sensitivity': 'CRITICAL'},
-            {'system_name': 'VPN', 'system_type': 'VPN_GATEWAY', 'algorithm': 'ECC-P384',
-             'key_size': 384, 'usage_count': 20, 'business_impact': 'HIGH', 'data_sensitivity': 'CONFIDENTIAL'},
-        ]
-        planner.batch_add_assets(test_assets)
-        results = planner.run_full_assessment()
-        
-        assert results['total_assets_assessed'] == 3, "Should assess 3 assets"
-        assert 'average_qv_score' in results, "Should have average QV"
-        assert 'overall_quantum_readiness' in results, "Should have readiness score"
-        assert 'risk_distribution' in results, "Should have risk distribution"
-        
-        print(f"    Total Assets: {results['total_assets_assessed']}")
-        print(f"    Avg QV Score: {results['average_qv_score']}")
-        print(f"    Overall Readiness: {results['overall_quantum_readiness']}/100")
-        
-        print("  ✓ PASSED: Full assessment runs correctly")
-        test_results.append(("Full Assessment", True))
+        item = planner.inventory[0]
+        effort = planner.estimate_migration_effort(item, "CRYSTALS-Kyber-768")
+        assert effort > 0
+        print(f"  ✓ PASS: Estimated {effort} hours for migration")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Full Assessment", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 8: Migration roadmap generation
-    print("\n[TEST 8] Migration roadmap generation")
+    # Test 8: Generate migration tasks
+    print("\n[TEST 8] Generate migration tasks")
     try:
-        planner = PostQuantumMigrationPlanner()
-        test_assets = [
-            {'system_name': 'Root CA', 'system_type': 'ROOT_CA', 'algorithm': 'RSA-4096',
-             'key_size': 4096, 'usage_count': 1000, 'business_impact': 'HIGH', 'data_sensitivity': 'CRITICAL'},
-            {'system_name': 'TLS', 'system_type': 'TLS_WEBSERVER', 'algorithm': 'ECC-P256',
-             'key_size': 256, 'usage_count': 50, 'business_impact': 'HIGH', 'data_sensitivity': 'CONFIDENTIAL'},
-        ]
-        planner.batch_add_assets(test_assets)
+        tasks = planner.generate_migration_tasks()
+        # Should generate tasks for non-PQC algorithms (3 out of 4)
+        assert len(tasks) >= 2
+        immediate_tasks = [t for t in tasks if t.priority == MigrationPriority.IMMEDIATE]
+        assert len(immediate_tasks) >= 1
+        print(f"  ✓ PASS: Generated {len(tasks)} migration tasks")
+        print(f"    Immediate: {len([t for t in tasks if t.priority == MigrationPriority.IMMEDIATE])}")
+        print(f"    Phase 1: {len([t for t in tasks if t.phase == MigrationPhase.PHASE_1])}")
+        passed += 1
+    except Exception as e:
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
+    
+    # Test 9: Generate milestones
+    print("\n[TEST 9] Generate migration milestones")
+    try:
+        milestones = planner.generate_milestones()
+        assert len(milestones) == 5
+        assert milestones[0].phase == MigrationPhase.ASSESSMENT
+        assert milestones[-1].phase == MigrationPhase.PHASE_3
+        print(f"  ✓ PASS: Generated {len(milestones)} milestones")
+        for m in milestones:
+            print(f"    - {m.name}: {m.target_date}")
+        passed += 1
+    except Exception as e:
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
+    
+    # Test 10: Generate full roadmap
+    print("\n[TEST 10] Generate migration roadmap")
+    try:
         roadmap = planner.generate_migration_roadmap()
-        
-        assert len(roadmap) == 2, "Should have 2 roadmap items"
-        for item in roadmap:
-            assert 'migration_id' in item, "Should have migration ID"
-            assert 'priority' in item, "Should have priority"
-            assert 'target_algorithm' in item, "Should have target algorithm"
-            assert 'estimated_effort_hours' in item, "Should have effort estimate"
-            assert 'success_criteria' in item, "Should have success criteria"
-            assert 'rollback_plan' in item, "Should have rollback plan"
-        
-        # Check prioritization (higher priority first)
-        assert roadmap[0]['priority'] == 1, "First item should be priority 1"
-        assert roadmap[1]['priority'] == 2, "Second item should be priority 2"
-        
-        print(f"    Roadmap items: {len(roadmap)}")
-        print(f"    Top priority: {roadmap[0]['system_name']} ({roadmap[0]['urgency']})")
-        
-        print("  ✓ PASSED: Migration roadmap generated correctly")
-        test_results.append(("Roadmap Generation", True))
+        assert roadmap.total_algorithms == 4
+        assert roadmap.critical_risk_count >= 2
+        assert len(roadmap.phases) >= 3
+        assert len(roadmap.milestones) == 5
+        assert roadmap.total_effort_hours > 0
+        print(f"  ✓ PASS: Generated roadmap {roadmap.roadmap_id}")
+        print(f"    Systems: {roadmap.total_systems}, Algorithms: {roadmap.total_algorithms}")
+        print(f"    Critical risk: {roadmap.critical_risk_count}, High risk: {roadmap.high_risk_count}")
+        print(f"    Total effort: {roadmap.total_effort_hours} hours")
+        print(f"    Completion: {roadmap.estimated_completion_date}")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Roadmap Generation", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 9: Executive summary generation
-    print("\n[TEST 9] Executive summary generation")
+    # Test 11: Algorithm compatibility check
+    print("\n[TEST 11] Algorithm compatibility check")
     try:
-        planner = PostQuantumMigrationPlanner()
-        test_assets = [
-            {'system_name': 'Root CA', 'system_type': 'ROOT_CA', 'algorithm': 'RSA-4096',
-             'key_size': 4096, 'usage_count': 1000, 'business_impact': 'HIGH', 'data_sensitivity': 'CRITICAL'},
-            {'system_name': 'Code Signing', 'system_type': 'CODE_SIGNING', 'algorithm': 'RSA-3072',
-             'key_size': 3072, 'usage_count': 5, 'business_impact': 'HIGH', 'data_sensitivity': 'CRITICAL'},
-            {'system_name': 'TLS', 'system_type': 'TLS_WEBSERVER', 'algorithm': 'ECC-P256',
-             'key_size': 256, 'usage_count': 50, 'business_impact': 'HIGH', 'data_sensitivity': 'CONFIDENTIAL'},
-            {'system_name': 'DB AES-256', 'system_type': 'DATABASE_ENCRYPTION', 'algorithm': 'AES-256',
-             'key_size': 256, 'usage_count': 10, 'business_impact': 'HIGH', 'data_sensitivity': 'CRITICAL'},
-        ]
-        planner.batch_add_assets(test_assets)
-        summary = planner.get_executive_summary()
-        
-        assert 'overall_quantum_readiness_score' in summary
-        assert 'readiness_rating' in summary
-        assert 'key_findings' in summary
-        assert 'recommendations' in summary
-        assert 'total_estimated_effort_hours' in summary
-        
-        assert len(summary['key_findings']) >= 5, "Should have at least 5 key findings"
-        assert len(summary['recommendations']) >= 4, "Should have at least 4 recommendations"
-        
-        print(f"    Readiness Score: {summary['overall_quantum_readiness_score']}/100")
-        print(f"    Readiness Rating: {summary['readiness_rating']}")
-        print(f"    Total Effort: {summary['total_estimated_effort_hours']} hours")
-        
-        print("  ✓ PASSED: Executive summary generated correctly")
-        test_results.append(("Executive Summary", True))
+        result = planner.check_algorithm_compatibility("RSA-2048", "CRYSTALS-Kyber-768")
+        assert result.is_compatible == True
+        assert result.compatibility_score >= 0.8
+        print(f"  ✓ PASS: RSA-2048 + Kyber-768 compatible (score={result.compatibility_score})")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Executive Summary", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
-    # Test 10: Singleton pattern and report export
-    print("\n[TEST 10] Singleton pattern and report export")
+    # Test 12: Executive summary
+    print("\n[TEST 12] Executive summary")
     try:
-        planner1 = get_migration_planner()
-        planner2 = get_migration_planner()
-        assert planner1 is planner2, "Should return same singleton instance"
-        
-        # Test report export
-        planner1.batch_add_assets([
-            {'system_name': 'Test', 'system_type': 'SSH', 'algorithm': 'RSA-2048',
-             'key_size': 2048, 'usage_count': 1, 'business_impact': 'MEDIUM', 'data_sensitivity': 'INTERNAL'}
-        ])
-        success = planner1.export_report('/tmp/pqc_migration_report.json')
-        assert success == True, "Report export should succeed"
-        
-        # Verify file exists and is valid JSON
-        with open('/tmp/pqc_migration_report.json') as f:
-            report = json.load(f)
-            assert 'executive_summary' in report
-            assert 'migration_roadmap' in report
-        
-        print("  ✓ PASSED: Singleton and report export work")
-        test_results.append(("Singleton & Report Export", True))
+        roadmap = planner.generate_migration_roadmap()
+        summary = planner.get_executive_summary(roadmap)
+        assert "urgent_actions_required" in summary
+        assert "critical_systems_at_risk" in summary
+        assert "total_migration_effort_fte" in summary
+        print(f"  ✓ PASS: Executive summary generated")
+        print(f"    Urgent action needed: {summary['urgent_actions_required']}")
+        print(f"    Critical systems at risk: {summary['critical_systems_at_risk']}")
+        print(f"    Effort: {summary['total_migration_effort_fte']} FTE-months")
+        print(f"    Duration: {summary['estimated_duration_months']} months")
+        passed += 1
     except Exception as e:
-        print(f"  ✗ FAILED: {e}")
-        test_results.append(("Singleton & Report Export", False))
-        all_passed = False
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
+    
+    # Test 13: Codebase scanning simulation
+    print("\n[TEST 13] Codebase scanning simulation")
+    try:
+        patterns = ["RSA encryption", "ECDSA sign", "AES-256-GCM", "SHA256 hash"]
+        discovered = planner.scan_codebase_for_crypto(patterns)
+        assert len(discovered) >= 3
+        print(f"  ✓ PASS: Discovered {len(discovered)} crypto usages")
+        for d in discovered[:3]:
+            print(f"    - {d.algorithm_name} in {d.location}")
+        passed += 1
+    except Exception as e:
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
+    
+    # Test 14: Risk mitigation recommendations
+    print("\n[TEST 14] Risk mitigation recommendations")
+    try:
+        roadmap = planner.generate_migration_roadmap()
+        assert len(roadmap.risk_mitigation_recommendations) >= 3
+        print(f"  ✓ PASS: {len(roadmap.risk_mitigation_recommendations)} recommendations")
+        for rec in roadmap.risk_mitigation_recommendations[:3]:
+            print(f"    - {rec[:60]}...")
+        passed += 1
+    except Exception as e:
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
+    
+    # Test 15: Compliance gap detection
+    print("\n[TEST 15] Compliance gap detection")
+    try:
+        roadmap = planner.generate_migration_roadmap()
+        assert len(roadmap.compliance_gaps) >= 1
+        print(f"  ✓ PASS: Detected {len(roadmap.compliance_gaps)} compliance gaps")
+        for gap in roadmap.compliance_gaps[:2]:
+            print(f"    - {gap[:60]}...")
+        passed += 1
+    except Exception as e:
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
+    
+    # Test 16: Roadmap JSON export
+    print("\n[TEST 16] Roadmap JSON export")
+    try:
+        roadmap = planner.generate_migration_roadmap()
+        json_output = planner.export_roadmap_json(roadmap)
+        parsed = json.loads(json_output)
+        assert "summary" in parsed
+        assert "phases" in parsed
+        assert "milestones" in parsed
+        print(f"  ✓ PASS: JSON export successful")
+        passed += 1
+    except Exception as e:
+        print(f"  ✗ FAIL: {e}")
+        failed += 1
     
     # Summary
     print("\n" + "=" * 70)
-    print("TEST SUMMARY")
+    print(f"TEST SUMMARY: {passed} PASSED, {failed} FAILED")
     print("=" * 70)
     
-    passed = sum(1 for _, ok in test_results if ok)
-    total = len(test_results)
-    
-    for name, ok in test_results:
-        status = "✓ PASS" if ok else "✗ FAIL"
-        print(f"  {status} - {name}")
-    
-    print(f"\nTotal: {passed}/{total} tests passed")
-    
     # Save test results
-    test_output = {
-        'test_timestamp': __import__('datetime').datetime.now().isoformat(),
-        'module': 'post_quantum_migration_path_planner_risk_assessor',
-        'passed': passed,
-        'total': total,
-        'success_rate': passed / total,
-        'all_passed': all_passed,
-        'test_details': [{'name': n, 'passed': o} for n, o in test_results]
+    results = {
+        "test_module": "post_quantum_migration_path_planner_risk_assessor_2026_june",
+        "passed": passed,
+        "failed": failed,
+        "total": passed + failed,
+        "success_rate": passed / (passed + failed) * 100 if (passed + failed) > 0 else 0,
+        "timestamp": __import__("time").time()
     }
     
-    with open('test_results_pqc_migration_path_planner.json', 'w') as f:
-        json.dump(test_output, f, indent=2)
+    with open("/home/user/autonomous-developer/QuantumCrypt-AI/test_results_pqc_migration_path_planner.json", "w") as f:
+        json.dump(results, f, indent=2)
     
     print(f"\nTest results saved to test_results_pqc_migration_path_planner.json")
+    print(f"Success rate: {results['success_rate']:.1f}%")
     
-    if all_passed:
-        print("\n✓ ALL TESTS PASSED! Feature is production-ready.")
-        return 0
-    else:
-        print("\n✗ SOME TESTS FAILED")
-        return 1
+    return results
 
 
 if __name__ == "__main__":
-    sys.exit(run_tests())
+    results = run_tests()
+    sys.exit(0 if results["failed"] == 0 else 1)
