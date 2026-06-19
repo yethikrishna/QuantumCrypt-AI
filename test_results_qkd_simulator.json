@@ -1,0 +1,61 @@
+{
+  "test_timestamp": 1781891743.6626801,
+  "module": "post_quantum_qkd_simulator_2026_june",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "success_rate": 100.0,
+  "execution_time_ms": 41.88,
+  "test_results": [
+    {
+      "test": "Initialization",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Channel Init",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Photon Prep",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Photon Tx",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Channel Noise",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Full Protocol",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Eavesdrop Detect",
+      "status": "PASSED",
+      "error": "Probabilistic detection working"
+    },
+    {
+      "test": "Key Sifting",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Privacy Amp",
+      "status": "PASSED",
+      "error": ""
+    },
+    {
+      "test": "Report Gen",
+      "status": "PASSED",
+      "error": ""
+    }
+  ]
+}
