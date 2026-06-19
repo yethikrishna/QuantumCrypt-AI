@@ -1,0 +1,17 @@
+{
+  "test_timestamp": 1781880797.5803907,
+  "passed": 6,
+  "failed": 0,
+  "tests_run": [
+    "constant_time_byte_compare: PASSED",
+    "constant_time_int_compare: PASSED",
+    "timing_jitter: PASSED",
+    "execution_protection: PASSED",
+    "protection_report: PASSED",
+    "leak_detection: PASSED"
+  ],
+  "benchmark_results": {
+    "jitter_ns_sample": 24943
+  },
+  "total_test_time_ms": 1.112222671508789
+}

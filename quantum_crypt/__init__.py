@@ -262,8 +262,20 @@ from .post_quantum_key_rotation_rekey_manager_2026_june import (
     RekeyEvent,
     RotationSchedule
 )
+# Constant-Time Execution Protector (June 19, 2026 Production Release)
+# Side-channel attack protection: constant-time comparisons, timing jitter,
+# statistical leak detection, branch prediction mitigation
+from .post_quantum_constant_time_execution_protector_2026_june import (
+    ConstantTimeExecutor,
+    ProtectionLevel,
+    LeakSeverity,
+    TimingMeasurement,
+    TimingLeakDetection,
+    ProtectionResult,
+    create_constant_time_protector
+)
 
-__version__ = "2026.6.19.1"
+__version__ = "2026.6.19.2"
 
 __all__ = [
     # Core Algorithms
@@ -285,6 +297,8 @@ __all__ = [
     'SecretSharingEngine',
     'SecureBackupEngine',
     'MemoryHardKDF',
+    'ConstantTimeExecutor',
+    'create_constant_time_protector',
     
     # HSM Integration
     'HSMIntegrationEngine',
