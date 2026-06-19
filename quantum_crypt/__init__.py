@@ -21,4 +21,18 @@ from .post_quantum_side_channel_resistant_drbg_2026_june import (
     EntropyHealthMonitor
 )
 
-__version__ = "2026.6.20.4"
+# Post-Quantum Secure Database Field Encryption (June 20, 2026)
+# Column-level encryption with AES-GCM-256, blind indexing, and key rotation
+from .post_quantum_secure_database_field_encryption_2026_june import (
+    PostQuantumDatabaseFieldEncryptor,
+    EncryptedField,
+    EncryptionKey,
+    AESGCMCipher,
+    PostQuantumKeyDerivation,
+    BlindIndex,
+    EncryptionAlgorithm,
+    KeyWrappingAlgorithm,
+    FieldSensitivityLevel
+)
+
+__version__ = "2026.6.20.5"
