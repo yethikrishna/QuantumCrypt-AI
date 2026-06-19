@@ -1,515 +1,455 @@
+#!/usr/bin/env python3
 """
-Test suite for Enhanced Post-Quantum Secure Audit Logger
-Production-grade tests with actual cryptographic verification
+Test suite for QuantumCrypt AI - Post-Quantum Secure Audit Logger Enhanced
+
+Honest testing: Real crypto tests, actual verification, no fake results.
 """
 
 import json
+import sys
 import os
 import tempfile
-import time
-import unittest
 import shutil
-from datetime import datetime
-from pathlib import Path
+from datetime import datetime, timedelta, timezone
 
-from quantum_crypt.post_quantum_secure_audit_logger_enhanced_2026_june import (
+# Add the module path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quantum_crypt'))
+
+from post_quantum_secure_audit_logger_enhanced_2026_june import (
+    PostQuantumAuditLogger,
     AuditEventType,
     AuditSeverity,
-    AuditLogEntry,
-    VerificationResult,
-    PostQuantumSecureAuditLoggerEnhanced
+    MerkleTree
 )
 
 
-class TestPostQuantumSecureAuditLoggerEnhanced(unittest.TestCase):
-    """Test cases for PostQuantumSecureAuditLoggerEnhanced"""
+def test_merkle_tree_basic():
+    """Test basic Merkle tree functionality"""
+    print("Test 1: Merkle Tree Basic Operations")
+    mt = MerkleTree("sha3_256")
+    
+    # Add leaves
+    mt.add_leaf("entry1")
+    mt.add_leaf("entry2")
+    mt.add_leaf("entry3")
+    mt.add_leaf("entry4")
+    
+    root = mt.build_tree()
+    
+    assert root is not None, "Root should not be None"
+    assert len(root) == 64, "SHA3-256 hash should be 64 hex chars"
+    print(f"  ✓ Merkle root generated: {root[:16]}...")
+    
+    # Get proof
+    proof = mt.get_proof(1)
+    assert len(proof) > 0, "Should have proof elements"
+    print(f"  ✓ Merkle proof generated with {len(proof)} elements")
+    
+    # Verify proof
+    is_valid = mt.verify_proof("entry2", proof, root, 1)
+    assert is_valid, "Proof should verify correctly"
+    print("  ✓ Proof verification works correctly")
+    
+    print("  PASSED\n")
+    return True
 
-    def setUp(self):
-        """Set up test fixtures"""
-        self.test_dir = tempfile.mkdtemp()
-        self.logger = PostQuantumSecureAuditLoggerEnhanced(
-            log_path=self.test_dir,
-            hash_algorithm="sha3_512",
-            chain_interval=1,
-            merkle_batch_size=4
-        )
 
-    def tearDown(self):
-        """Clean up test files"""
-        shutil.rmtree(self.test_dir, ignore_errors=True)
-
-    def test_hash_data_sha3_512(self):
-        """Test SHA3-512 hashing - real crypto"""
-        hash1 = self.logger._hash_data("test data")
-        hash2 = self.logger._hash_data("test data")
-        hash3 = self.logger._hash_data("different data")
-
-        # Same input = same hash
-        self.assertEqual(hash1, hash2)
-        # Different input = different hash
-        self.assertNotEqual(hash1, hash3)
-        # SHA3-512 produces 128 hex chars (512 bits)
-        self.assertEqual(len(hash1), 128)
-
-    def test_hash_data_sha256(self):
-        """Test SHA256 hashing"""
-        logger256 = PostQuantumSecureAuditLoggerEnhanced(
-            log_path=self.test_dir,
-            hash_algorithm="sha256"
-        )
-        h = logger256._hash_data("test")
-        self.assertEqual(len(h), 64)  # 256 bits = 64 hex chars
-
-    def test_calculate_hmac(self):
-        """Test HMAC calculation - real authentication"""
-        hmac1 = self.logger._calculate_hmac("message1")
-        hmac2 = self.logger._calculate_hmac("message1")
-        hmac3 = self.logger._calculate_hmac("message2")
-
-        self.assertEqual(hmac1, hmac2)
-        self.assertNotEqual(hmac1, hmac3)
-        self.assertEqual(len(hmac1), 128)  # SHA3-512 HMAC
-
-    def test_calculate_genesis_hash(self):
-        """Test genesis hash generation"""
-        genesis = self.logger._calculate_genesis_hash()
-        self.assertEqual(len(genesis), 128)
-        self.assertIsInstance(genesis, str)
-
-    def test_build_merkle_tree_empty(self):
-        """Test Merkle tree with empty input"""
-        root, levels = self.logger._build_merkle_tree([])
-        self.assertEqual(len(levels), 0)
-        self.assertEqual(len(root), 128)
-
-    def test_build_merkle_tree_single(self):
-        """Test Merkle tree with single entry"""
-        hashes = ["abc123"]
-        root, levels = self.logger._build_merkle_tree(hashes)
-        self.assertGreater(len(levels), 0)
-        self.assertEqual(levels[0], hashes)
-
-    def test_build_merkle_tree_multiple(self):
-        """Test Merkle tree with multiple entries"""
-        hashes = ["a" * 128, "b" * 128, "c" * 128, "d" * 128]
-        root, levels = self.logger._build_merkle_tree(hashes)
+def test_logger_basic_logging():
+    """Test basic audit logging functionality"""
+    print("Test 2: Basic Audit Logging")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        logger = PostQuantumAuditLogger(log_file)
         
-        # Should have log2(n) levels
-        self.assertEqual(len(levels), 3)  # 4 -> 2 -> 1
-        self.assertEqual(len(levels[0]), 4)
-        self.assertEqual(len(levels[1]), 2)
-        self.assertEqual(len(levels[2]), 1)
-        self.assertEqual(levels[2][0], root)
-
-    def test_log_event_basic(self):
-        """Test basic event logging"""
-        entry = self.logger.log_event(
-            AuditEventType.ENCRYPTION,
-            AuditSeverity.INFO,
-            "user_alice",
-            "encrypt_file",
-            "/data/secret.txt",
-            "success",
-            "File encrypted successfully"
+        # Log some events
+        entry1 = logger.log(
+            event_type=AuditEventType.KEY_GENERATION,
+            severity=AuditSeverity.INFO,
+            actor="system",
+            action="generate_key",
+            resource="key_123",
+            status="success",
+            key_type="RSA-4096"
         )
-
-        self.assertIsNotNone(entry.event_id)
-        self.assertEqual(entry.event_type, "encryption")
-        self.assertEqual(entry.severity, "info")
-        self.assertEqual(entry.actor, "user_alice")
-        self.assertGreater(len(entry.entry_hash), 0)
-        self.assertIn("hmac", entry.metadata)
-        self.assertEqual(len(self.logger.entries), 1)
-
-    def test_log_event_with_metadata(self):
-        """Test logging with additional metadata"""
-        entry = self.logger.log_event(
-            AuditEventType.KEY_GENERATION,
-            AuditSeverity.NOTICE,
-            "system",
-            "generate_key",
-            "key_management",
-            "success",
-            "New encryption key generated",
-            source_ip="192.168.1.100",
-            user_agent="CryptoApp/1.0",
-            key_id="key_001",
-            algorithm="kyber-768"
+        
+        entry2 = logger.log(
+            event_type=AuditEventType.ENCRYPTION,
+            severity=AuditSeverity.INFO,
+            actor="user_alice",
+            action="encrypt_file",
+            resource="/data/secret.txt",
+            status="success",
+            ip_address="192.168.1.100"
         )
-
-        self.assertEqual(entry.source_ip, "192.168.1.100")
-        self.assertEqual(entry.metadata["key_id"], "key_001")
-        self.assertEqual(entry.metadata["algorithm"], "kyber-768")
-
-    def test_log_event_hash_chain(self):
-        """Test hash chain linking between entries"""
-        entry1 = self.logger.log_event(
-            AuditEventType.SYSTEM_STARTUP,
-            AuditSeverity.INFO,
-            "system",
-            "start",
-            "system",
-            "success",
-            "System started"
+        
+        entry3 = logger.log(
+            event_type=AuditEventType.ACCESS_DENIED,
+            severity=AuditSeverity.WARNING,
+            actor="user_bob",
+            action="read_file",
+            resource="/data/secret.txt",
+            status="denied",
+            ip_address="10.0.0.50"
         )
+        
+        assert logger.entry_count == 3, "Should have 3 entries"
+        print(f"  ✓ Logged {logger.entry_count} audit entries")
+        
+        # Verify hash chain linking
+        assert entry1.entry_hash == entry2.previous_hash, "Hash chain broken"
+        assert entry2.entry_hash == entry3.previous_hash, "Hash chain broken"
+        print("  ✓ Hash chain integrity verified")
+        
+        # Verify each entry has HMAC
+        assert 'hmac' in entry1.details, "Missing HMAC"
+        assert 'hmac' in entry2.details, "Missing HMAC"
+        assert 'hmac' in entry3.details, "Missing HMAC"
+        print("  ✓ All entries authenticated with HMAC")
+        
+        print("  PASSED\n")
+        return True
 
-        entry2 = self.logger.log_event(
-            AuditEventType.KEY_GENERATION,
-            AuditSeverity.INFO,
-            "system",
-            "gen_key",
-            "keys",
-            "success",
-            "Key generated"
+
+def test_integrity_verification_clean():
+    """Test integrity verification on untampered log"""
+    print("Test 3: Integrity Verification (Clean Log)")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        logger = PostQuantumAuditLogger(log_file)
+        
+        # Log several events
+        for i in range(5):
+            logger.log(
+                event_type=AuditEventType.ENCRYPTION,
+                severity=AuditSeverity.INFO,
+                actor=f"user_{i}",
+                action="encrypt",
+                resource=f"file_{i}.dat",
+                status="success"
+            )
+        
+        # Run integrity check
+        result = logger.verify_integrity()
+        
+        assert result["overall_status"] == "PASS", "Should pass integrity check"
+        assert result["tamper_detected"] == False, "Should not detect tamper"
+        assert result["entries_verified"] == 5, "Should verify all 5 entries"
+        assert result["hash_chain_verified"] == True, "Hash chain should be intact"
+        
+        print(f"  ✓ Verified {result['entries_verified']} entries")
+        print(f"  ✓ Status: {result['overall_status']}")
+        print(f"  ✓ Hash chain: {'INTACT' if result['hash_chain_verified'] else 'BROKEN'}")
+        
+        print("  PASSED\n")
+        return True
+
+
+def test_tamper_detection():
+    """Test that tampering is detected"""
+    print("Test 4: Tamper Detection")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        logger = PostQuantumAuditLogger(log_file)
+        
+        # Log events
+        for i in range(3):
+            logger.log(
+                event_type=AuditEventType.ENCRYPTION,
+                severity=AuditSeverity.INFO,
+                actor=f"user_{i}",
+                action="encrypt",
+                resource=f"file_{i}.dat",
+                status="success"
+            )
+        
+        # Now tamper with the log file - modify an entry
+        with open(log_file, 'r') as f:
+            lines = f.readlines()
+        
+        # Modify second entry - change status from success to failure
+        entry = json.loads(lines[1])
+        entry['status'] = 'modified_tampered'
+        lines[1] = json.dumps(entry) + '\n'
+        
+        with open(log_file, 'w') as f:
+            f.writelines(lines)
+        
+        # Create new logger instance to verify (simulates fresh startup)
+        logger2 = PostQuantumAuditLogger(log_file, secret_key=logger.secret_key)
+        result = logger2.verify_integrity()
+        
+        assert result["tamper_detected"] == True, "Should detect tampering"
+        assert result["overall_status"] == "FAIL", "Should fail integrity check"
+        
+        print(f"  ✓ Tamper detected: {result['tamper_detected']}")
+        print(f"  ✓ Tamper locations found: {len(result['tamper_locations'])}")
+        for loc in result['tamper_locations']:
+            print(f"    - Line {loc['line']}: {loc['issue']}")
+        
+        print("  PASSED\n")
+        return True
+
+
+def test_merkle_proof_verification():
+    """Test Merkle proof generation and verification"""
+    print("Test 5: Merkle Proof Verification")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        logger = PostQuantumAuditLogger(log_file)
+        
+        # Log multiple entries
+        for i in range(8):
+            logger.log(
+                event_type=AuditEventType.SIGNATURE,
+                severity=AuditSeverity.INFO,
+                actor=f"signer_{i}",
+                action="sign",
+                resource=f"doc_{i}.pdf",
+                status="success"
+            )
+        
+        # Get proof for entry 3
+        proof_data = logger.get_entry_proof(3)
+        
+        assert "error" not in proof_data, "Should not have error"
+        assert len(proof_data["merkle_proof"]) > 0, "Should have proof elements"
+        
+        print(f"  ✓ Merkle root: {proof_data['merkle_root'][:16]}...")
+        print(f"  ✓ Proof length: {len(proof_data['merkle_proof'])} hashes")
+        print(f"  ✓ Leaf hash: {proof_data['leaf_hash'][:16]}...")
+        
+        # Manually verify the proof
+        mt = logger.merkle_tree
+        is_valid = mt.verify_proof(
+            logger.entries[3].entry_hash,
+            proof_data["merkle_proof"],
+            proof_data["merkle_root"],
+            3
         )
+        
+        assert is_valid, "Merkle proof should validate"
+        print("  ✓ Merkle proof validated successfully")
+        
+        print("  PASSED\n")
+        return True
 
-        # Chain should link properly
-        self.assertEqual(entry2.previous_hash, entry1.entry_hash)
 
-    def test_verify_entry_integrity_valid(self):
-        """Test integrity verification on valid entry"""
-        entry = self.logger.log_event(
+def test_logger_statistics():
+    """Test logger statistics tracking"""
+    print("Test 6: Logger Statistics")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        logger = PostQuantumAuditLogger(log_file)
+        
+        # Log some events
+        for i in range(10):
+            logger.log(
+                event_type=AuditEventType.ENCRYPTION,
+                severity=AuditSeverity.INFO,
+                actor="test_user",
+                action="encrypt",
+                resource=f"file_{i}",
+                status="success"
+            )
+        
+        # Run integrity check
+        logger.verify_integrity()
+        
+        stats = logger.get_statistics()
+        
+        assert stats["total_entries"] == 10, "Entry count mismatch"
+        assert stats["integrity_checks_passed"] >= 1, "Should have passed checks"
+        assert stats["current_entry_count"] == 10, "Current count mismatch"
+        assert stats["tamper_detected_flag"] == False, "Should not be tampered"
+        
+        print(f"  ✓ Total entries: {stats['total_entries']}")
+        print(f"  ✓ Integrity checks passed: {stats['integrity_checks_passed']}")
+        print(f"  ✓ Log file size: {stats['log_file_size_bytes']} bytes")
+        print(f"  ✓ Hash algorithm: {stats['hash_algorithm']}")
+        
+        print("  PASSED\n")
+        return True
+
+
+def test_log_search_functionality():
+    """Test log search and filtering"""
+    print("Test 7: Log Search and Filtering")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        logger = PostQuantumAuditLogger(log_file)
+        
+        # Mixed events
+        logger.log(AuditEventType.ENCRYPTION, AuditSeverity.INFO, "alice", "encrypt", "file1", "success")
+        logger.log(AuditEventType.DECRYPTION, AuditSeverity.INFO, "bob", "decrypt", "file1", "success")
+        logger.log(AuditEventType.ACCESS_DENIED, AuditSeverity.WARNING, "mallory", "read", "file1", "denied")
+        logger.log(AuditEventType.KEY_GENERATION, AuditSeverity.INFO, "system", "genkey", "key1", "success")
+        logger.log(AuditEventType.ACCESS_DENIED, AuditSeverity.CRITICAL, "hacker", "read", "secret", "denied")
+        
+        # Search by event type
+        denied = logger.search_entries(event_type=AuditEventType.ACCESS_DENIED)
+        assert len(denied) == 2, "Should find 2 access denied events"
+        print(f"  ✓ Found {len(denied)} ACCESS_DENIED events")
+        
+        # Search by severity
+        critical = logger.search_entries(severity=AuditSeverity.CRITICAL)
+        assert len(critical) == 1, "Should find 1 critical event"
+        print(f"  ✓ Found {len(critical)} CRITICAL severity events")
+        
+        # Search by actor
+        alice_events = logger.search_entries(actor="alice")
+        assert len(alice_events) == 1, "Should find 1 alice event"
+        print(f"  ✓ Found {len(alice_events)} events for actor 'alice'")
+        
+        # Combined search
+        warnings = logger.search_entries(severity=AuditSeverity.WARNING, limit=10)
+        print(f"  ✓ Found {len(warnings)} WARNING events")
+        
+        print("  PASSED\n")
+        return True
+
+
+def test_log_rotation():
+    """Test log rotation functionality"""
+    print("Test 8: Log Rotation")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        archive_file = os.path.join(tmpdir, "audit_archive.json")
+        logger = PostQuantumAuditLogger(log_file)
+        
+        # Log some entries
+        for i in range(5):
+            logger.log(
+                AuditEventType.ENCRYPTION,
+                AuditSeverity.INFO,
+                f"user_{i}",
+                "encrypt",
+                f"file_{i}",
+                "success"
+            )
+        
+        pre_rotation_root = logger.get_merkle_root()
+        
+        # Rotate
+        result = logger.rotate_log(archive_path=archive_file)
+        
+        assert result["entries_rotated"] == 5, "Should rotate 5 entries"
+        assert "final_merkle_root" in result, "Should have final root"
+        assert result["final_merkle_root"] == pre_rotation_root, "Root should match"
+        
+        print(f"  ✓ Rotated {result['entries_rotated']} entries")
+        print(f"  ✓ Final Merkle root preserved: {result['final_merkle_root'][:16]}...")
+        print(f"  ✓ Archive created: {os.path.exists(archive_file)}")
+        
+        # New entries should start fresh
+        logger.log(AuditEventType.SYSTEM_STARTUP, AuditSeverity.INFO, "system", "startup", "logger", "success")
+        assert logger.entry_count == 1, "Should have 1 entry after rotation"
+        print(f"  ✓ New log started with fresh entry")
+        
+        print("  PASSED\n")
+        return True
+
+
+def test_hmac_authentication():
+    """Test HMAC authentication security"""
+    print("Test 9: HMAC Authentication Security")
+    
+    with tempfile.TemporaryDirectory() as tmpdir:
+        log_file = os.path.join(tmpdir, "audit.log")
+        key1 = b"test_secret_key_12345"
+        key2 = b"different_key_67890"
+        
+        logger1 = PostQuantumAuditLogger(log_file, secret_key=key1)
+        
+        logger1.log(
             AuditEventType.ENCRYPTION,
             AuditSeverity.INFO,
             "user",
             "encrypt",
             "file",
-            "success",
-            "OK"
+            "success"
         )
-
-        is_valid, msg = self.logger.verify_entry_integrity(entry)
-        self.assertTrue(is_valid, msg)
-        self.assertIn("verified", msg.lower())
-
-    def test_verify_entry_integrity_tampered(self):
-        """Test detection of tampered entry - REAL TAMPER DETECTION"""
-        entry = self.logger.log_event(
-            AuditEventType.ACCESS_GRANTED,
-            AuditSeverity.INFO,
-            "legit_user",
-            "access",
-            "/public",
-            "success",
-            "Normal access"
-        )
-
-        # Actually tamper with the entry
-        entry.message = "[HACKED] Access granted to /secret"
-        # Don't update hash - simulate attacker who doesn't know to recalculate
-
-        is_valid, msg = self.logger.verify_entry_integrity(entry)
-        self.assertFalse(is_valid, "Tampered entry should fail verification")
-        self.assertIn("mismatch", msg.lower())
-
-    def test_verify_entry_integrity_hmac(self):
-        """Test HMAC authentication failure detection"""
-        entry = self.logger.log_event(
-            AuditEventType.DECRYPTION,
-            AuditSeverity.INFO,
-            "user",
-            "decrypt",
-            "file",
-            "success",
-            "OK"
-        )
-
-        # Tamper with HMAC
-        entry.metadata["hmac"] = "fake_hmac_value"
-
-        is_valid, msg = self.logger.verify_entry_integrity(entry)
-        self.assertFalse(is_valid)
-        self.assertIn("hmac", msg.lower())
-
-    def test_verify_chain_integrity_clean(self):
-        """Test full chain verification on untampered log"""
-        for i in range(10):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO,
-                f"user_{i}",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        result = self.logger.verify_chain_integrity()
-        self.assertTrue(result.is_valid)
-        self.assertEqual(result.verified_count, 10)
-        self.assertEqual(result.tampered_count, 0)
-        self.assertEqual(len(result.tampered_indices), 0)
-        self.assertLess(result.verification_time, 1.0)  # Should be fast
-
-    def test_verify_chain_integrity_tampered(self):
-        """Test chain verification detects tampering"""
-        for i in range(5):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO,
-                f"user_{i}",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        # Tamper with entry 2
-        self.logger.entries[2].message = "[TAMPERED] Modified event"
-
-        result = self.logger.verify_chain_integrity()
-        self.assertFalse(result.is_valid)
-        self.assertGreater(result.tampered_count, 0)
-        self.assertIn(2, result.tampered_indices)
-
-    def test_tamper_detection_simulator_modify(self):
-        """Test tamper detection simulator - modify attack"""
-        for i in range(5):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO,
-                f"user_{i}",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        # Run honest tamper detection test
-        result = self.logger.tamper_detection_simulator(2, "modify")
-
-        # Should detect tampering
-        self.assertFalse(result.is_valid)
-        self.assertGreater(result.tampered_count, 0)
-        print(f"\nTamper (modify) detection: {result.message}")
-
-    def test_tamper_detection_simulator_delete(self):
-        """Test tamper detection simulator - delete attack"""
-        for i in range(5):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO,
-                f"user_{i}",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        result = self.logger.tamper_detection_simulator(2, "delete")
-        print(f"Tamper (delete) detection: {result.message}")
-        # Chain should break
-        self.assertGreater(len(result.broken_chains), 0)
-
-    def test_get_log_statistics_empty(self):
-        """Test statistics on empty log"""
-        stats = self.logger.get_log_statistics()
-        self.assertEqual(stats["total_entries"], 0)
-        self.assertEqual(stats["unique_actors"], 0)
-
-    def test_get_log_statistics_with_data(self):
-        """Test statistics with log entries"""
-        for i in range(3):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO if i < 2 else AuditSeverity.WARNING,
-                f"user_{i % 2}",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        stats = self.logger.get_log_statistics()
-        self.assertEqual(stats["total_entries"], 3)
-        self.assertEqual(stats["unique_actors"], 2)
-        self.assertIn("info", stats["severity_distribution"])
-        self.assertIn("warning", stats["severity_distribution"])
-
-    def test_verify_merkle_batch(self):
-        """Test Merkle batch verification"""
-        # Fill a complete batch
-        for i in range(4):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO,
-                "user",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        self.assertEqual(len(self.logger.merkle_batches), 1)
-        is_valid, root, msg = self.logger.verify_merkle_batch(0)
-        self.assertTrue(is_valid)
-        self.assertEqual(len(root), 128)
-        print(f"Merkle root: {root[:32]}...")
-
-    def test_search_logs(self):
-        """Test log search functionality"""
-        # Create varied entries
-        self.logger.log_event(
-            AuditEventType.ENCRYPTION, AuditSeverity.INFO,
-            "alice", "encrypt", "/data/a", "success", "OK"
-        )
-        self.logger.log_event(
-            AuditEventType.DECRYPTION, AuditSeverity.WARNING,
-            "bob", "decrypt", "/data/b", "failed", "Error"
-        )
-        self.logger.log_event(
-            AuditEventType.ENCRYPTION, AuditSeverity.ERROR,
-            "alice", "encrypt", "/data/c", "failed", "Error"
-        )
-
-        # Search by event type
-        enc_events = self.logger.search_logs(event_type="encryption")
-        self.assertEqual(len(enc_events), 2)
-
-        # Search by severity
-        warnings = self.logger.search_logs(severity="warning")
-        self.assertEqual(len(warnings), 1)
-
-        # Search by actor
-        alice_events = self.logger.search_logs(actor="alice")
-        self.assertEqual(len(alice_events), 2)
-
-    def test_export_audit_report(self):
-        """Test audit report export"""
-        for i in range(5):
-            self.logger.log_event(
-                AuditEventType.ENCRYPTION,
-                AuditSeverity.INFO,
-                f"user_{i}",
-                "action",
-                "resource",
-                "success",
-                f"Event {i}"
-            )
-
-        report = self.logger.export_audit_report()
-
-        self.assertIn("logger_version", report)
-        self.assertIn("integrity_verification", report)
-        self.assertIn("statistics", report)
-        self.assertIn("security_features", report)
-        self.assertIn("limitations", report)  # Honest about limitations!
-        self.assertTrue(report["integrity_verification"]["is_valid"])
-
-        print(f"\nAudit Report:")
-        print(f"  Version: {report['logger_version']}")
-        print(f"  Valid: {report['integrity_verification']['is_valid']}")
-        print(f"  Entries: {report['statistics']['total_entries']}")
-        print(f"  Limitations: {len(report['limitations'])} items")
-
-    def test_file_persistence(self):
-        """Test that entries are actually written to disk"""
-        self.logger.log_event(
-            AuditEventType.SYSTEM_STARTUP,
-            AuditSeverity.NOTICE,
-            "system",
-            "startup",
-            "system",
-            "success",
-            "System initialized"
-        )
-
-        # File should exist
-        self.assertTrue(self.logger.current_log_file.exists())
-
-        # Read and verify
-        with open(self.logger.current_log_file, 'r') as f:
-            lines = f.readlines()
-            self.assertEqual(len(lines), 1)
-            data = json.loads(lines[0])
-            self.assertEqual(data["event_type"], "system_startup")
-            self.assertIn("entry_hash", data)
-            self.assertIn("hmac", data["metadata"])
-
-    def test_full_integration_security_demo(self):
-        """Full integration test demonstrating security features"""
-        print("\n=== FULL SECURITY DEMO ===")
-
-        # Step 1: Initialize secure logger
-        print("Initializing post-quantum secure audit logger...")
-        logger = PostQuantumSecureAuditLoggerEnhanced(
-            log_path=self.test_dir,
-            hash_algorithm="sha3_512",
-            chain_interval=1,
-            merkle_batch_size=4
-        )
-        print(f"  Hash algorithm: {logger.hash_algorithm}")
-        print(f"  Chain interval: {logger.chain_interval}")
-
-        # Step 2: Log normal operations
-        print("\nLogging security events...")
-        events = [
-            (AuditEventType.SYSTEM_STARTUP, AuditSeverity.NOTICE, "system", "init", "core", "success", "System started"),
-            (AuditEventType.KEY_GENERATION, AuditSeverity.INFO, "kms", "gen_key", "keys", "success", "Kyber-768 key generated"),
-            (AuditEventType.ENCRYPTION, AuditSeverity.INFO, "user_john", "encrypt", "/data/file1", "success", "File encrypted"),
-            (AuditEventType.ENCRYPTION, AuditSeverity.INFO, "user_jane", "encrypt", "/data/file2", "success", "File encrypted"),
-            (AuditEventType.DECRYPTION, AuditSeverity.INFO, "user_john", "decrypt", "/data/file1", "success", "File decrypted"),
-            (AuditEventType.ACCESS_GRANTED, AuditSeverity.INFO, "user_jane", "read", "/data/file2", "success", "Access granted"),
-            (AuditEventType.CONFIG_CHANGE, AuditSeverity.WARNING, "admin", "update", "policy", "success", "Encryption policy updated"),
-        ]
-
-        for et, sev, actor, action, res, status, msg in events:
-            entry = logger.log_event(et, sev, actor, action, res, status, msg)
-            print(f"  [{entry.event_id[:8]}] {actor}: {msg}")
-
-        # Step 3: Verify integrity
-        print("\nVerifying log integrity...")
-        result = logger.verify_chain_integrity()
-        print(f"  Valid: {result.is_valid}")
-        print(f"  Verified: {result.verified_count}")
-        print(f"  Tampered: {result.tampered_count}")
-        print(f"  Time: {result.verification_time:.4f}s")
-        self.assertTrue(result.is_valid)
-
-        # Step 4: Demonstrate tamper detection
-        print("\n=== TAMPER DETECTION DEMO ===")
-        print("Simulating attacker modifying log entry...")
         
-        tamper_result = logger.tamper_detection_simulator(3, "modify")
-        print(f"  Tamper detected: {not tamper_result.is_valid}")
-        print(f"  Tampered indices: {tamper_result.tampered_indices}")
-        print(f"  Result: {tamper_result.message}")
-        self.assertFalse(tamper_result.is_valid)
+        # Try to verify with wrong key
+        logger2 = PostQuantumAuditLogger(log_file, secret_key=key2)
+        result = logger2.verify_integrity()
+        
+        # With wrong key, HMAC verification should fail
+        assert result["hmac_authentication_verified"] == False or result["tamper_detected"], "HMAC should fail with wrong key"
+        print("  ✓ HMAC correctly rejects entries with wrong verification key")
+        
+        # Verify with correct key
+        logger3 = PostQuantumAuditLogger(log_file, secret_key=key1)
+        result3 = logger3.verify_integrity()
+        
+        assert result3["hmac_authentication_verified"] == True, "HMAC should pass with correct key"
+        print("  ✓ HMAC correctly validates entries with proper key")
+        
+        print("  PASSED\n")
+        return True
 
-        # Step 5: Generate report
-        print("\n=== FINAL AUDIT REPORT ===")
-        report = logger.export_audit_report()
-        print(f"  Logger version: {report['logger_version']}")
-        print(f"  Total entries: {report['statistics']['total_entries']}")
-        print(f"  Integrity valid: {report['integrity_verification']['is_valid']}")
-        print(f"  Security features: {len(report['security_features'])}")
-        print(f"  Documented limitations: {len(report['limitations'])}")
 
-        print("\n=== SECURITY DEMO COMPLETE ===")
-
-
-def run_tests():
-    """Run all tests and return results"""
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestPostQuantumSecureAuditLoggerEnhanced)
-    runner = unittest.TextTestRunner(verbosity=2)
-    result = runner.run(suite)
-
-    # Save results
-    results_data = {
-        "timestamp": datetime.now().isoformat(),
-        "tests_run": result.testsRun,
-        "failures": len(result.failures),
-        "errors": len(result.errors),
-        "success": result.wasSuccessful(),
-        "module": "post_quantum_secure_audit_logger_enhanced_2026_june"
+def main():
+    """Run all tests"""
+    print("=" * 70)
+    print("QuantumCrypt AI - Post-Quantum Secure Audit Logger Test Suite")
+    print("=" * 70)
+    print()
+    
+    tests = [
+        test_merkle_tree_basic,
+        test_logger_basic_logging,
+        test_integrity_verification_clean,
+        test_tamper_detection,
+        test_merkle_proof_verification,
+        test_logger_statistics,
+        test_log_search_functionality,
+        test_log_rotation,
+        test_hmac_authentication,
+    ]
+    
+    passed = 0
+    failed = 0
+    
+    for test in tests:
+        try:
+            if test():
+                passed += 1
+            else:
+                failed += 1
+        except Exception as e:
+            print(f"  FAILED with exception: {e}\n")
+            import traceback
+            traceback.print_exc()
+            failed += 1
+    
+    print("=" * 70)
+    print(f"TEST SUMMARY: {passed} PASSED, {failed} FAILED")
+    print("=" * 70)
+    
+    # Save test results
+    results = {
+        "test_timestamp": datetime.now(timezone.utc).isoformat(),
+        "total_tests": len(tests),
+        "passed": passed,
+        "failed": failed,
+        "success_rate": f"{(passed/len(tests)*100):.1f}%"
     }
-
+    
     with open("test_results_secure_audit_logger_enhanced.json", "w") as f:
-        json.dump(results_data, f, indent=2)
-
-    return result
+        json.dump(results, f, indent=2)
+    
+    print(f"\nResults saved to test_results_secure_audit_logger_enhanced.json")
+    
+    return failed == 0
 
 
 if __name__ == "__main__":
-    result = run_tests()
-    exit(0 if result.wasSuccessful() else 1)
+    success = main()
+    sys.exit(0 if success else 1)
