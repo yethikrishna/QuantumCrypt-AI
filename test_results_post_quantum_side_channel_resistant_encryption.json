@@ -1,0 +1,66 @@
+{
+  "test_timestamp": "2026-06-20",
+  "module": "post_quantum_side_channel_resistant_encryption_engine",
+  "total_tests": 11,
+  "passed_tests": 11,
+  "failed_tests": 0,
+  "test_cases": [
+    {
+      "test_name": "Encryption/Decryption Roundtrip",
+      "passed": true
+    },
+    {
+      "test_name": "Constant-Time Comparison",
+      "passed": true
+    },
+    {
+      "test_name": "Secure Memory Wipe",
+      "passed": true
+    },
+    {
+      "test_name": "Power Analysis Blinding",
+      "passed": true
+    },
+    {
+      "test_name": "Boolean Masking",
+      "passed": true
+    },
+    {
+      "test_name": "Cache Pattern Shuffling",
+      "passed": true
+    },
+    {
+      "test_name": "Timing Normalization",
+      "passed": true
+    },
+    {
+      "test_name": "Side-Channel Resistance Assessment",
+      "passed": true
+    },
+    {
+      "test_name": "Engine Metrics Collection",
+      "passed": true
+    },
+    {
+      "test_name": "Different Input Sizes",
+      "passed": true
+    },
+    {
+      "test_name": "Resistance Level Configuration",
+      "passed": true
+    }
+  ],
+  "pass_rate": 100.0,
+  "final_engine_metrics": {
+    "operations_completed": 37,
+    "resistance_level": "high",
+    "average_execution_time_ns": 200429.08,
+    "average_normalized_time_ns": 200429.08,
+    "timing_normalization_enabled": true,
+    "power_blinding_enabled": true,
+    "cache_masking_enabled": true,
+    "blinding_factor_pool_size": 256,
+    "assessments_completed": 1,
+    "latest_assessment_score": 1.0
+  }
+}
