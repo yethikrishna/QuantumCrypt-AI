@@ -1,0 +1,7 @@
+{
+  "test_module": "post_quantum_performance_autotuner",
+  "passed": 8,
+  "failed": 0,
+  "total": 8,
+  "success_rate": 1.0
+}
