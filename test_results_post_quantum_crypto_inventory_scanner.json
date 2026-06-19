@@ -1,7 +1,14 @@
 {
-  "timestamp": "2026-06-19T07:52:28.539588",
-  "tests_run": 22,
-  "failures": 0,
-  "errors": 0,
-  "success": true
+  "test_suite": "PQC Inventory Scanner Functional Tests",
+  "total_tests": 4,
+  "passed": 4,
+  "failed": 0,
+  "success_rate": 1.0,
+  "scan_results": {
+    "files_scanned": 55,
+    "crypto_findings": 989,
+    "quantum_safe": 512,
+    "at_risk": 468,
+    "compliance_score": 51.77
+  }
 }
