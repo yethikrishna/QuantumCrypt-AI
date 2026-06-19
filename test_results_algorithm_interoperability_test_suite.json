@@ -1,0 +1,52 @@
+{
+  "test_timestamp": "2026-06-19T11:17:50.200322",
+  "module": "post_quantum_algorithm_interoperability_test_suite_2026_june",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "success_rate": 100.0,
+  "algorithms_tested": 6,
+  "formats_tested": 6,
+  "results": [
+    [
+      "test_parameter_validation",
+      "PASSED"
+    ],
+    [
+      "test_key_format_interoperability",
+      "PASSED"
+    ],
+    [
+      "test_round_trip_kem",
+      "PASSED"
+    ],
+    [
+      "test_round_trip_signature",
+      "PASSED"
+    ],
+    [
+      "test_algorithm_compatibility",
+      "PASSED"
+    ],
+    [
+      "test_performance_benchmarking",
+      "PASSED"
+    ],
+    [
+      "test_nist_compliance",
+      "PASSED"
+    ],
+    [
+      "test_error_condition_handling",
+      "PASSED"
+    ],
+    [
+      "test_full_suite_execution",
+      "PASSED"
+    ],
+    [
+      "test_report_generation",
+      "PASSED"
+    ]
+  ]
+}
