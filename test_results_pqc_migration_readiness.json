@@ -1,0 +1,46 @@
+{
+  "passed": 10,
+  "failed": 0,
+  "tests": [
+    {
+      "test": "initialization",
+      "status": "passed"
+    },
+    {
+      "test": "risk_database",
+      "status": "passed"
+    },
+    {
+      "test": "rsa_detection",
+      "status": "passed"
+    },
+    {
+      "test": "ecc_detection",
+      "status": "passed"
+    },
+    {
+      "test": "readiness_score",
+      "status": "passed"
+    },
+    {
+      "test": "recommendations",
+      "status": "passed"
+    },
+    {
+      "test": "pqc_detection",
+      "status": "passed"
+    },
+    {
+      "test": "roadmap",
+      "status": "passed"
+    },
+    {
+      "test": "report",
+      "status": "passed"
+    },
+    {
+      "test": "aes_differentiation",
+      "status": "passed"
+    }
+  ]
+}
