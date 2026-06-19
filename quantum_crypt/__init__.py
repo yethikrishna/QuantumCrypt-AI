@@ -391,3 +391,32 @@ __all__.extend([
 ])
 
 __version__ = "2026.6.19.4"
+
+# Post-Quantum Timing Side-Channel Attack Detector (June 19, 2026 Production Release)
+# Statistical timing analysis, constant-time verification, side-channel detection
+from .post_quantum_timing_side_channel_detector_2026_june import (
+    VulnerabilityLevel,
+    TimingTestType,
+    TimingMeasurement,
+    TimingAnalysisResult,
+    HighPrecisionTimer,
+    StatisticalAnalyzer,
+    TimingSideChannelDetector,
+    generate_test_byte_patterns,
+    timing_safe_compare,
+    timing_unsafe_compare
+)
+__all__.extend([
+    "VulnerabilityLevel",
+    "TimingTestType",
+    "TimingMeasurement",
+    "TimingAnalysisResult",
+    "HighPrecisionTimer",
+    "StatisticalAnalyzer",
+    "TimingSideChannelDetector",
+    "generate_test_byte_patterns",
+    "timing_safe_compare",
+    "timing_unsafe_compare"
+])
+__version__ = "2026.6.19.22"
+

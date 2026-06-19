@@ -1,0 +1,20 @@
+{
+  "test_timestamp": 1781884302.2599902,
+  "test_module": "post_quantum_timing_side_channel_detector",
+  "unit_tests_passed": true,
+  "features_tested": [
+    "High-precision nanosecond timing",
+    "Statistical variance analysis",
+    "Welch's t-test for distribution comparison",
+    "Constant-time operation verification",
+    "Secret-dependent timing detection",
+    "Vulnerability level classification",
+    "Security recommendation generation"
+  ],
+  "code_quality": {
+    "type_hints": "Full coverage",
+    "thread_safety": "RLock implemented",
+    "statistical_methods": "Welch's t-test, CV, Z-score",
+    "documentation": "Docstrings on all classes/methods"
+  }
+}
