@@ -354,3 +354,40 @@ __all__ = [
     'BackupFragment',
     'AuditEvent',
 ]
+
+# Post-Quantum Entropy Quality Validator (June 19, 2026 Production Release)
+# Real NIST SP 800-90B statistical tests, entropy estimation, health monitoring
+from .post_quantum_entropy_quality_validator_2026_june import (
+    EntropySourceType,
+    HealthStatus,
+    RandomnessTestType,
+    EntropyMeasurement,
+    EntropyPoolHealth,
+    ValidationResult,
+    BaseRandomnessTest,
+    FrequencyTest,
+    ChiSquareTest,
+    AutocorrelationTest,
+    RunsTest,
+    EntropyEstimator,
+    EntropyQualityValidator,
+    create_entropy_validator,
+)
+__all__.extend([
+    'EntropySourceType',
+    'HealthStatus',
+    'RandomnessTestType',
+    'EntropyMeasurement',
+    'EntropyPoolHealth',
+    'ValidationResult',
+    'BaseRandomnessTest',
+    'FrequencyTest',
+    'ChiSquareTest',
+    'AutocorrelationTest',
+    'RunsTest',
+    'EntropyEstimator',
+    'EntropyQualityValidator',
+    'create_entropy_validator',
+])
+
+__version__ = "2026.6.19.4"
