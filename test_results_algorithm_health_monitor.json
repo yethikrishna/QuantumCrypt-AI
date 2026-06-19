@@ -1,0 +1,131 @@
+{
+  "test_run_timestamp": "2026-06-19T04:39:02.348087Z",
+  "module": "post_quantum_algorithm_health_monitor_rotation_advisor",
+  "total_tests": 20,
+  "passed_tests": 20,
+  "failed_tests": 0,
+  "pass_rate": 100.0,
+  "test_results": [
+    {
+      "test": "Algorithm Registry Initialization",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Algorithm Health Scoring",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Recommended Algorithms Filtering",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Monitor Initialization",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Key Registration",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Invalid Key Registration Rejection",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Key Usage Tracking",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Unknown Key Usage Rejection",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Quantum Risk Calculation",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Rotation Recommendation (Deprecated Algorithm)",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Rotation Recommendation (Old Key)",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "No Recommendation (Good Key)",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "All Rotation Recommendations",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Health Dashboard Generation",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Compliance Reporting",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Dashboard JSON Export",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Statistics Reporting",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Sample Monitor Function",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Security Level Enum",
+      "passed": true,
+      "result": true,
+      "error": null
+    },
+    {
+      "test": "Algorithm Status Enum",
+      "passed": true,
+      "result": true,
+      "error": null
+    }
+  ],
+  "status": "SUCCESS"
+}
