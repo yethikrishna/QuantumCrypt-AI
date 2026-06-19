@@ -1,0 +1,50 @@
+{
+  "test_date": "2026-06-20T02:42:35.832226",
+  "module": "post_quantum_key_compromise_recovery_emergency_rotation_2026_june",
+  "passed": 10,
+  "total": 10,
+  "all_passed": true,
+  "results": [
+    [
+      "Key Registration",
+      "PASS"
+    ],
+    [
+      "Secure Zeroization",
+      "PASS"
+    ],
+    [
+      "Quorum Enforcement",
+      "PASS"
+    ],
+    [
+      "No Self-Approval",
+      "PASS"
+    ],
+    [
+      "Compromise Reporting",
+      "PASS"
+    ],
+    [
+      "Full Rotation Workflow",
+      "PASS"
+    ],
+    [
+      "Unauthorized Rejection",
+      "PASS"
+    ],
+    [
+      "Compromise Detection",
+      "PASS"
+    ],
+    [
+      "Audit Log Integrity",
+      "PASS"
+    ],
+    [
+      "Honest Security Report",
+      "PASS"
+    ]
+  ],
+  "honest_note": "All security properties verified - quorum enforcement, no self-approval, audit logging"
+}
