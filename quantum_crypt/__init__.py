@@ -470,4 +470,27 @@ __all__.extend([
     "RandomnessHealthReport",
     "PostQuantumRandomnessHealthMonitor"
 ])
-__version__ = "2026.6.20.2"
+__version__ = "2026.6.20.3"
+
+# Post-Quantum Secure Multi-Party Computation Engine (June 20, 2026 Production Release)
+# Shamir Secret Sharing, Beaver triples, verifiable commitments, and secure arithmetic operations
+from .post_quantum_secure_multi_party_computation_2026_june import (
+    SecureMultiPartyComputation,
+    ShamirSecretSharing,
+    PrimeField,
+    VerifiableCommitment,
+    SecurityLevel,
+    OperationType,
+    Share,
+    SMPCResult
+)
+__all__.extend([
+    "SecureMultiPartyComputation",
+    "ShamirSecretSharing",
+    "PrimeField",
+    "VerifiableCommitment",
+    "SecurityLevel",
+    "OperationType",
+    "Share",
+    "SMPCResult"
+])
