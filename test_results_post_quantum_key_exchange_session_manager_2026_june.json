@@ -1,0 +1,61 @@
+{
+  "test_suite": "Post-Quantum Key Exchange Session Manager",
+  "timestamp": "2026-06-20T23:06:42Z",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "success_rate": 1.0,
+  "elapsed_seconds": 1.5260448455810547,
+  "results": [
+    {
+      "name": "test_hash_function",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_session_lifecycle",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_session_tickets",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_key_refresh_forward_secrecy",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_anti_replay_nonces",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_session_expiration",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_session_revocation",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_max_sessions_lru",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_concurrent_access",
+      "status": "PASS",
+      "error": null
+    },
+    {
+      "name": "test_ticket_manager_standalone",
+      "status": "PASS",
+      "error": null
+    }
+  ]
+}
