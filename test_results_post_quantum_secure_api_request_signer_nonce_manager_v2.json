@@ -1,0 +1,58 @@
+{
+  "test_date": "2026-06-21 06:41:35",
+  "module": "post_quantum_secure_api_request_signer_nonce_manager_v2",
+  "total_tests": 12,
+  "passed": 12,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "results": [
+    {
+      "test": "test_nonce_generator",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_nonce_tracker_basic",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_nonce_tracker_cleanup",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_signed_request_payload",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_signer_basic_sign_verify",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_signer_replay_protection",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_signer_tamper_detection",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_signer_timestamp_validation",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_different_algorithms",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_auth_headers",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_batch_signer",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_metrics_tracking",
+      "status": "PASSED"
+    }
+  ]
+}
