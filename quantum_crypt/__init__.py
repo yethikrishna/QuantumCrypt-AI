@@ -92,4 +92,50 @@ __all__.extend([
     "create_entropy_manager",
     "verify_entropy_manager"
 ])
-__version__ = "2026.6.20.7"
+
+# Post-Quantum Key Exchange Performance Benchmarker (June 20, 2026 - Session 32)
+from .post_quantum_key_exchange_performance_benchmarker_2026_june import (
+    PostQuantumKeyExchangeBenchmarker,
+    AlgorithmType,
+    OperationType,
+    BenchmarkResult,
+    KeyPair,
+    EncapsulationResult,
+)
+__all__.extend([
+    "PostQuantumKeyExchangeBenchmarker",
+    "AlgorithmType",
+    "OperationType",
+    "BenchmarkResult",
+    "KeyPair",
+    "EncapsulationResult",
+])
+__version__ = "2026.6.20.8"
+
+
+# Post-Quantum Hybrid Encryption Engine (June 20, 2026 Production Release)
+# Real working hybrid encryption: AES-256-GCM + Lattice-based KEM
+from .post_quantum_hybrid_encryption_engine_2026_june import (
+    PostQuantumHybridEncryptionEngine,
+    LatticeBasedKEM,
+    KeySecurityLevel,
+    EncryptionAlgorithm,
+    EncryptionResult,
+    DecryptionResult,
+    KeyPair,
+    create_hybrid_encryption_engine,
+    verify_hybrid_encryption_works
+)
+__all__.extend([
+    "PostQuantumHybridEncryptionEngine",
+    "LatticeBasedKEM",
+    "KeySecurityLevel",
+    "EncryptionAlgorithm",
+    "EncryptionResult",
+    "DecryptionResult",
+    "KeyPair",
+    "create_hybrid_encryption_engine",
+    "verify_hybrid_encryption_works"
+])
+__version__ = "2026.6.20.2"
+
