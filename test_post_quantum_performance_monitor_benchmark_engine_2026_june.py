@@ -1,434 +1,282 @@
+#!/usr/bin/env python3
 """
-Test Suite for QuantumCrypt-AI: Post-Quantum Performance Monitor & Benchmark Engine
-June 2026 Production-Grade Tests
+Test suite for Post-Quantum Performance Monitor & Benchmark Engine
+Production-grade tests with real validation
+June 2026
+"""
 
-Comprehensive tests covering:
-- Simulated PQC operation timing
-- Single and batch benchmark execution
-- Performance baseline establishment
-- Regression detection and alerting
-- Algorithm performance comparison
-- Metrics tracking and export
-- Edge cases and boundary conditions
-"""
 import sys
 import os
 import json
 import time
-import unittest
 
 # Add module path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quantum_crypt'))
 
 from post_quantum_performance_monitor_benchmark_engine_2026_june import (
-    PQPerformanceMonitor,
-    SimulatedPQOperations,
-    PQAlgorithm,
-    OperationType,
-    PerformanceAlertSeverity,
+    PostQuantumPerformanceBenchmarkEngine,
+    AlgorithmBenchmarker,
+    PerformanceMonitor,
+    PerformanceAnalyzer,
     BenchmarkResult,
-    PerformanceBaseline,
-    PerformanceAlert
+    OptimizationRecommendation
 )
 
 
-class TestSimulatedPQOperations(unittest.TestCase):
-    """Test simulated PQC operation timing"""
+def test_algorithm_benchmarker():
+    """Test algorithm benchmarking functionality"""
+    print("=== Testing Algorithm Benchmarker ===")
     
-    def test_kyber_operations_are_fast(self):
-        """Test Kyber KEM operations have realistic fast timings"""
-        for alg in [PQAlgorithm.KYBER_512, PQAlgorithm.KYBER_768, PQAlgorithm.KYBER_1024]:
-            for op in [OperationType.KEY_GENERATION, OperationType.KEM_ENCAPS]:
-                latency = SimulatedPQOperations.simulate_operation(alg, op, add_noise=False)
-                # Kyber operations should be sub-millisecond
-                self.assertLess(latency, 1.0)
+    benchmarker = AlgorithmBenchmarker()
     
-    def test_sphincs_signing_is_slow(self):
-        """Test SPHINCS+ signing is significantly slower (hash-based)"""
-        sphincs_sign = SimulatedPQOperations.simulate_operation(
-            PQAlgorithm.SPHINCS_SHA2_128F,
-            OperationType.SIGNING,
-            add_noise=False
-        )
-        kyber_encaps = SimulatedPQOperations.simulate_operation(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEM_ENCAPS,
-            add_noise=False
-        )
-        
-        # SPHINCS+ signing should be much slower
-        self.assertGreater(sphincs_sign, kyber_encaps * 50)
+    # Test hash algorithm benchmarking
+    hash_results = benchmarker.benchmark_hash_algorithms()
+    print(f"  Hash benchmarks completed: {len(hash_results)} algorithms")
     
-    def test_expected_performance_retrieval(self):
-        """Test expected performance values are available"""
-        mean, std = SimulatedPQOperations.get_expected_performance(
-            PQAlgorithm.KYBER_768,
-            OperationType.KEY_GENERATION
-        )
-        
-        self.assertGreater(mean, 0)
-        self.assertGreater(std, 0)
+    for result in hash_results[:3]:
+        print(f"    - {result.algorithm_name}: {result.operations_per_second:.0f} ops/sec, {result.avg_time_ms:.4f}ms avg")
+    
+    # Test symmetric operations
+    sym_results = benchmarker.benchmark_symmetric_operations()
+    print(f"  Symmetric benchmarks completed: {len(sym_results)} algorithms")
+    
+    # Test post-quantum KEM
+    pq_results = benchmarker.benchmark_post_quantum_kem()
+    print(f"  PQ KEM benchmarks completed: {len(pq_results)} operations")
+    
+    assert len(hash_results) > 0
+    assert len(sym_results) > 0
+    assert len(pq_results) > 0
+    
+    return True
 
 
-class TestPQPerformanceMonitor(unittest.TestCase):
-    """Main performance monitor tests"""
+def test_performance_monitor():
+    """Test performance monitoring functionality"""
+    print("\n=== Testing Performance Monitor ===")
     
-    def setUp(self):
-        """Set up test monitor"""
-        self.monitor = PQPerformanceMonitor(
-            degradation_threshold_pct=20.0,
-            alert_on_degradation=True,
-            min_samples_for_baseline=5
+    monitor = PerformanceMonitor()
+    
+    # Record some metrics
+    for i in range(25):
+        monitor.record_metric(
+            metric_type='latency',
+            value=0.5 + i * 0.01,
+            unit='ms',
+            algorithm='SHA-256',
+            tags={'operation': 'hash'}
         )
     
-    def test_monitor_initialization(self):
-        """Test monitor initializes correctly"""
-        self.assertEqual(self.monitor.degradation_threshold_pct, 20.0)
-        self.assertTrue(self.monitor.alert_on_degradation)
-        self.assertEqual(self.monitor.min_samples_for_baseline, 5)
-        self.assertEqual(self.monitor.stats["total_benchmarks_run"], 0)
+    metrics = monitor.get_current_metrics()
+    print(f"  Metrics recorded: {len(monitor.metrics_history)}")
+    print(f"  Summary entries: {len(metrics['summary'])}")
+    print(f"  Baselines established: {len(metrics['baselines'])}")
     
-    def test_single_benchmark_execution(self):
-        """Test running a single benchmark"""
-        result = self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEY_GENERATION,
-            iterations=50,
-            warmup_iterations=5
-        )
-        
-        self.assertIsInstance(result, BenchmarkResult)
-        self.assertTrue(result.success)
-        self.assertEqual(result.algorithm, PQAlgorithm.KYBER_512.value)
-        self.assertEqual(result.operation, OperationType.KEY_GENERATION.value)
-        self.assertEqual(result.iterations, 50)
-        self.assertGreater(result.avg_time_ms, 0)
-        self.assertGreater(result.throughput_ops_per_sec, 0)
+    assert len(monitor.metrics_history) == 25
     
-    def test_benchmark_statistics(self):
-        """Test benchmark produces correct statistical values"""
-        result = self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_768,
-            OperationType.KEM_ENCAPS,
-            iterations=100
-        )
-        
-        self.assertTrue(result.success)
-        self.assertLessEqual(result.min_time_ms, result.p50_time_ms)
-        self.assertLessEqual(result.p50_time_ms, result.p95_time_ms)
-        self.assertLessEqual(result.p95_time_ms, result.p99_time_ms)
-        self.assertLessEqual(result.p99_time_ms, result.max_time_ms)
-    
-    def test_batch_benchmark(self):
-        """Test batch benchmark across multiple algorithms"""
-        algorithms = [PQAlgorithm.KYBER_512, PQAlgorithm.DILITHIUM_2]
-        operations = [OperationType.KEY_GENERATION, OperationType.SIGNING]
-        
-        results = self.monitor.batch_benchmark(algorithms, operations, iterations=20)
-        
-        self.assertEqual(len(results), 4)  # 2 alg × 2 op
-        for key, result in results.items():
-            self.assertIsInstance(result, BenchmarkResult)
-            self.assertTrue(result.success)
-    
-    def test_baseline_establishment(self):
-        """Test baselines are established after enough samples"""
-        # Run enough benchmarks to establish baseline
-        for _ in range(10):
-            self.monitor.run_benchmark(
-                PQAlgorithm.KYBER_512,
-                OperationType.KEY_GENERATION,
-                iterations=10
-            )
-        
-        key = (PQAlgorithm.KYBER_512.value, OperationType.KEY_GENERATION.value)
-        self.assertIn(key, self.monitor.baselines)
-        
-        baseline = self.monitor.baselines[key]
-        self.assertIsInstance(baseline, PerformanceBaseline)
-        self.assertGreater(baseline.avg_latency_ms, 0)
-        self.assertEqual(baseline.sample_count, 5)  # min_samples
-    
-    def test_algorithm_summary(self):
-        """Test algorithm performance summary"""
-        # Run some benchmarks
-        self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_768,
-            OperationType.KEY_GENERATION,
-            iterations=20
-        )
-        self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_768,
-            OperationType.KEM_ENCAPS,
-            iterations=20
-        )
-        
-        summary = self.monitor.get_algorithm_summary(PQAlgorithm.KYBER_768)
-        
-        self.assertEqual(summary["algorithm"], PQAlgorithm.KYBER_768.value)
-        self.assertGreater(summary["benchmarks_available"], 0)
-        self.assertIn("operations", summary)
-    
-    def test_comparative_report(self):
-        """Test comparative performance report"""
-        # Run benchmarks for multiple algorithms
-        algs = [PQAlgorithm.KYBER_512, PQAlgorithm.DILITHIUM_2]
-        for alg in algs:
-            self.monitor.run_benchmark(alg, OperationType.KEY_GENERATION, iterations=10)
-        
-        report = self.monitor.get_comparative_report(algs)
-        
-        self.assertIn("generated_at", report)
-        self.assertIn("recommendations", report)
-        self.assertIn("detailed_comparison", report)
-        self.assertEqual(len(report["algorithms_compared"]), 2)
-    
-    def test_performance_metrics(self):
-        """Test performance metrics tracking"""
-        # Run some benchmarks
-        for _ in range(3):
-            self.monitor.run_benchmark(
-                PQAlgorithm.KYBER_512,
-                OperationType.KEY_GENERATION,
-                iterations=10
-            )
-        
-        metrics = self.monitor.get_performance_metrics()
-        
-        self.assertEqual(metrics["monitor_version"], "pq_perf_monitor_v1")
-        self.assertEqual(metrics["total_benchmarks_run"], 3)
-        self.assertGreater(metrics["total_operations_simulated"], 0)
-    
-    def test_alert_callback_registration(self):
-        """Test alert callback registration"""
-        callback_called = []
-        
-        def test_callback(alert):
-            callback_called.append(alert)
-        
-        self.monitor.register_alert_callback(test_callback)
-        self.assertEqual(len(self.monitor.alert_callbacks), 1)
-    
-    def test_get_alerts_empty(self):
-        """Test getting alerts when none exist"""
-        alerts = self.monitor.get_alerts()
-        self.assertEqual(len(alerts), 0)
-    
-    def test_export_results(self):
-        """Test benchmark results export"""
-        # Run a benchmark
-        self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEY_GENERATION,
-            iterations=10
-        )
-        
-        export_json = self.monitor.export_benchmark_results()
-        
-        self.assertIsInstance(export_json, str)
-        export_data = json.loads(export_json)
-        
-        self.assertIn("exported_at", export_data)
-        self.assertIn("metrics", export_data)
-        self.assertIn("recent_benchmarks", export_data)
+    return True
 
 
-class TestEdgeCases(unittest.TestCase):
-    """Test edge cases and boundary conditions"""
+def test_performance_analyzer():
+    """Test performance analysis functionality"""
+    print("\n=== Testing Performance Analyzer ===")
     
-    def setUp(self):
-        self.monitor = PQPerformanceMonitor(min_samples_for_baseline=3)
+    analyzer = PerformanceAnalyzer()
+    benchmarker = AlgorithmBenchmarker()
     
-    def test_zero_iterations_benchmark(self):
-        """Test benchmark with minimal iterations"""
-        result = self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEY_GENERATION,
-            iterations=1,
-            warmup_iterations=0
-        )
-        
-        self.assertTrue(result.success)
-        self.assertEqual(result.iterations, 1)
+    # Get some benchmark results
+    results = benchmarker.benchmark_hash_algorithms()
     
-    def test_all_algorithms_benchmarkable(self):
-        """Test all defined algorithms can be benchmarked"""
-        algorithms = list(PQAlgorithm)
-        operations = [OperationType.KEY_GENERATION]
-        
-        for alg in algorithms:
-            # Skip classic algorithms for some operations
-            try:
-                result = self.monitor.run_benchmark(alg, OperationType.KEY_GENERATION, iterations=5)
-                self.assertTrue(result.success, f"Failed for {alg.value}")
-            except Exception:
-                # Some algorithm-operation combinations may not be defined
-                pass
+    # Test baseline comparison
+    comparisons = [analyzer.compare_to_baseline(r) for r in results]
+    print(f"  Baseline comparisons: {len(comparisons)}")
     
-    def test_large_iteration_count(self):
-        """Test benchmark with large iteration count"""
-        result = self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEM_ENCAPS,
-            iterations=200,
-            warmup_iterations=20
-        )
-        
-        self.assertTrue(result.success)
-        self.assertEqual(result.iterations, 200)
-        self.assertGreater(result.total_time_ms, 0)
+    for comp in comparisons[:3]:
+        print(f"    - {comp['algorithm']}: {comp['rating']} ({comp['measured_ops_per_sec']:.0f} ops/sec)")
     
-    def test_noisy_operations(self):
-        """Test operations with noise produce variable timings"""
-        latencies = [
-            SimulatedPQOperations.simulate_operation(
-                PQAlgorithm.KYBER_512,
-                OperationType.KEY_GENERATION,
-                add_noise=True
-            )
-            for _ in range(10)
-        ]
-        
-        # With noise, timings should vary
-        self.assertGreater(len(set(latencies)), 1)
+    # Test recommendations
+    recommendations = analyzer.generate_recommendations(results)
+    print(f"  Recommendations generated: {len(recommendations)}")
     
-    def test_deterministic_without_noise(self):
-        """Test operations without noise are deterministic"""
-        l1 = SimulatedPQOperations.simulate_operation(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEY_GENERATION,
-            add_noise=False
-        )
-        l2 = SimulatedPQOperations.simulate_operation(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEY_GENERATION,
-            add_noise=False
-        )
-        
-        self.assertEqual(l1, l2)
+    for rec in recommendations[:3]:
+        print(f"    - [{rec.severity}] {rec.algorithm}: {rec.recommendation[:50]}...")
     
-    def test_get_alerts_with_severity_filter(self):
-        """Test alert filtering by severity"""
-        # Should work even with no alerts
-        alerts = self.monitor.get_alerts(min_severity=PerformanceAlertSeverity.WARNING)
-        self.assertIsInstance(alerts, list)
+    # Test comparative report
+    report = analyzer.generate_comparative_report(results)
+    print(f"  Report algorithms tested: {report['algorithms_tested']}")
+    print(f"  Fastest algorithm: {report['fastest_by_ops']}")
+    print(f"  Most efficient: {report['most_efficient']}")
+    
+    assert len(comparisons) > 0
+    assert report['algorithms_tested'] > 0
+    
+    return True
 
 
-class TestPerformanceComparison(unittest.TestCase):
-    """Test performance comparisons across algorithms"""
+def test_full_benchmark_suite():
+    """Test the complete benchmark suite"""
+    print("\n=== Testing Full Benchmark Suite ===")
     
-    def setUp(self):
-        self.monitor = PQPerformanceMonitor()
+    engine = PostQuantumPerformanceBenchmarkEngine()
     
-    def test_kyber_faster_than_rsa(self):
-        """Test Kyber key generation is faster than RSA-2048"""
-        kyber_result = self.monitor.run_benchmark(
-            PQAlgorithm.KYBER_512,
-            OperationType.KEY_GENERATION,
-            iterations=20
-        )
-        
-        rsa_result = self.monitor.run_benchmark(
-            PQAlgorithm.CLASSIC_RSA_2048,
-            OperationType.KEY_GENERATION,
-            iterations=20
-        )
-        
-        # Kyber should be much faster than RSA for key generation
-        self.assertLess(kyber_result.avg_time_ms, rsa_result.avg_time_ms)
+    result = engine.run_full_benchmark_suite()
     
-    def test_falcon_fast_signing(self):
-        """Test Falcon has fast signing operation"""
-        falcon_sign = self.monitor.run_benchmark(
-            PQAlgorithm.FALCON_512,
-            OperationType.SIGNING,
-            iterations=20
-        )
-        
-        dilithium_sign = self.monitor.run_benchmark(
-            PQAlgorithm.DILITHIUM_2,
-            OperationType.SIGNING,
-            iterations=20
-        )
-        
-        # Falcon signing should be faster than Dilithium
-        self.assertLess(falcon_sign.avg_time_ms, dilithium_sign.avg_time_ms)
+    print(f"  Suite run ID: {result['run_id']}")
+    print(f"  Duration: {result['duration_seconds']:.2f}s")
+    print(f"  Total benchmarks: {result['total_benchmarks']}")
+    print(f"  Comparisons: {len(result['comparisons'])}")
+    print(f"  Recommendations: {len(result['recommendations'])}")
     
-    def test_sphincs_fast_verification(self):
-        """Test SPHINCS+ has fast verification"""
-        sphincs_verify = self.monitor.run_benchmark(
-            PQAlgorithm.SPHINCS_SHA2_128F,
-            OperationType.VERIFICATION,
-            iterations=20
-        )
-        
-        sphincs_sign = self.monitor.run_benchmark(
-            PQAlgorithm.SPHINCS_SHA2_128F,
-            OperationType.SIGNING,
-            iterations=20
-        )
-        
-        # SPHINCS+ verification should be much faster than signing
-        self.assertLess(sphincs_verify.avg_time_ms, sphincs_sign.avg_time_ms / 10)
+    print("\n  Algorithm Performance Summary:")
+    for algo, summary in result['report']['algorithm_summary'].items():
+        print(f"    - {algo}: {summary['avg_operations_per_second']:.0f} ops/sec")
+    
+    assert result['total_benchmarks'] > 0
+    assert result['duration_seconds'] > 0
+    
+    return True
 
 
-def run_tests():
-    """Run all tests and generate report"""
-    print("=" * 70)
-    print("QuantumCrypt-AI: Post-Quantum Performance Monitor - Test Suite")
-    print("June 2026 Production-Grade Tests")
-    print("=" * 70)
+def test_performance_dashboard():
+    """Test performance dashboard functionality"""
+    print("\n=== Testing Performance Dashboard ===")
+    
+    engine = PostQuantumPerformanceBenchmarkEngine()
+    
+    # Run benchmarks first
+    engine.run_full_benchmark_suite()
+    
+    # Record some monitoring data
+    for i in range(10):
+        engine.monitor_operation('SHA-256', 'hash', 0.45 + i * 0.01)
+    
+    dashboard = engine.get_performance_dashboard()
+    
+    print(f"  Benchmark suites executed: {dashboard['benchmark_history_count']}")
+    print(f"  Total benchmarks executed: {dashboard['total_benchmarks_executed']}")
+    print(f"  Algorithms benchmarked: {dashboard['algorithms_benchmarked']}")
+    print(f"  Monitoring alerts: {len(dashboard['monitoring']['alerts'])}")
+    
+    assert dashboard['total_benchmarks_executed'] > 0
+    
+    return True
+
+
+def test_export_functionality():
+    """Test benchmark result export"""
+    print("\n=== Testing Export Functionality ===")
+    
+    engine = PostQuantumPerformanceBenchmarkEngine()
+    engine.run_full_benchmark_suite()
+    
+    # Test JSON export
+    json_export = engine.export_benchmark_results('json')
+    print(f"  JSON export length: {len(json_export)} chars")
+    
+    # Parse and validate
+    parsed = json.loads(json_export)
+    print(f"  Exported benchmarks: {len(parsed)}")
+    
+    # Test CSV export
+    csv_export = engine.export_benchmark_results('csv')
+    print(f"  CSV export length: {len(csv_export)} chars")
+    print(f"  CSV lines: {len(csv_export.splitlines())}")
+    
+    assert len(parsed) > 0
+    assert len(csv_export.splitlines()) > 1
+    
+    return True
+
+
+def test_engine_statistics():
+    """Test engine statistics tracking"""
+    print("\n=== Testing Engine Statistics ===")
+    
+    engine = PostQuantumPerformanceBenchmarkEngine()
+    
+    # Run multiple suites
+    for i in range(3):
+        engine.run_full_benchmark_suite()
+    
+    stats = engine.get_statistics()
+    print(f"  Total benchmarks run: {stats['total_benchmarks_run']}")
+    print(f"  Benchmark suites executed: {stats['benchmark_suites_executed']}")
+    print(f"  Metrics recorded: {stats['metrics_recorded']}")
+    print(f"  Alerts generated: {stats['alerts_generated']}")
+    
+    assert stats['benchmark_suites_executed'] == 3
+    assert stats['total_benchmarks_run'] > 0
+    
+    return True
+
+
+def run_all_tests():
+    """Run all tests and save results"""
+    print("=" * 60)
+    print("Post-Quantum Performance Monitor & Benchmark Engine Tests")
+    print("=" * 60)
+    print(f"Test started: {time.strftime('%Y-%m-%d %H:%M:%S')}")
     print()
     
-    loader = unittest.TestLoader()
-    suite = unittest.TestSuite()
+    tests = [
+        ("Algorithm Benchmarker", test_algorithm_benchmarker),
+        ("Performance Monitor", test_performance_monitor),
+        ("Performance Analyzer", test_performance_analyzer),
+        ("Full Benchmark Suite", test_full_benchmark_suite),
+        ("Performance Dashboard", test_performance_dashboard),
+        ("Export Functionality", test_export_functionality),
+        ("Engine Statistics", test_engine_statistics),
+    ]
     
-    suite.addTests(loader.loadTestsFromTestCase(TestSimulatedPQOperations))
-    suite.addTests(loader.loadTestsFromTestCase(TestPQPerformanceMonitor))
-    suite.addTests(loader.loadTestsFromTestCase(TestEdgeCases))
-    suite.addTests(loader.loadTestsFromTestCase(TestPerformanceComparison))
+    results = {}
+    passed = 0
+    failed = 0
     
-    runner = unittest.TextTestRunner(verbosity=2)
-    result = runner.run(suite)
+    for test_name, test_func in tests:
+        try:
+            result = test_func()
+            if result:
+                results[test_name] = "PASSED"
+                passed += 1
+            else:
+                results[test_name] = "FAILED"
+                failed += 1
+        except Exception as e:
+            results[test_name] = f"ERROR: {str(e)}"
+            failed += 1
+            print(f"  EXCEPTION: {e}")
     
-    print()
-    print("=" * 70)
+    print("\n" + "=" * 60)
     print("TEST SUMMARY")
-    print("=" * 70)
-    print(f"Tests Run: {result.testsRun}")
-    print(f"Failures: {len(result.failures)}")
-    print(f"Errors: {len(result.errors)}")
-    print(f"Skipped: {len(result.skipped)}")
-    print()
+    print("=" * 60)
     
-    if result.wasSuccessful():
-        print("✅ ALL TESTS PASSED - Production Ready!")
-        status = "PASSED"
-    else:
-        print("❌ SOME TESTS FAILED")
-        status = "FAILED"
+    for test_name, result in results.items():
+        status = "✓" if result == "PASSED" else "✗"
+        print(f"  {status} {test_name}: {result}")
     
-    # Save test results
-    test_results = {
-        "test_timestamp": time.time(),
-        "test_datetime": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "tests_run": result.testsRun,
-        "failures": len(result.failures),
-        "errors": len(result.errors),
-        "skipped": len(result.skipped),
-        "status": status,
-        "monitor_version": "pq_perf_monitor_v1"
+    print(f"\n  Total: {passed} PASSED, {failed} FAILED")
+    print(f"  Success rate: {passed/(passed+failed)*100:.1f}%")
+    
+    # Save results
+    result_data = {
+        "test_timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
+        "module": "post_quantum_performance_monitor_benchmark_engine",
+        "total_tests": len(tests),
+        "passed": passed,
+        "failed": failed,
+        "success_rate": passed/(passed+failed)*100,
+        "results": results
     }
     
-    with open("test_results_pq_performance_monitor.json", "w") as f:
-        json.dump(test_results, f, indent=2)
+    with open("test_results_performance_monitor_benchmark_engine.json", "w") as f:
+        json.dump(result_data, f, indent=2)
     
-    print(f"\nTest results saved to: test_results_pq_performance_monitor.json")
-    print()
+    print(f"\n  Results saved to test_results_performance_monitor_benchmark_engine.json")
+    print("=" * 60)
     
-    return result.wasSuccessful()
+    return passed == len(tests)
 
 
 if __name__ == "__main__":
-    success = run_tests()
+    success = run_all_tests()
     sys.exit(0 if success else 1)

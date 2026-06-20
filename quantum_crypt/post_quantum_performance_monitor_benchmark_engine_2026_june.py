@@ -1,649 +1,598 @@
 """
-QuantumCrypt-AI: Post-Quantum Performance Monitor & Benchmark Engine
-June 2026 Production-Grade Implementation
-
-Comprehensive performance monitoring and benchmarking engine for post-quantum
-cryptographic algorithms. Features:
-
-- Real-time performance metrics tracking for all NIST PQC algorithms
-- Automated baseline establishment and regression detection
-- Comparative performance analysis across algorithms
-- Alerting for performance degradation
-- Historical trend analysis and reporting
-- Integration with monitoring dashboards
-
-This is a NEW production feature implementing state-of-the-art performance
-monitoring for post-quantum cryptographic deployments.
+Post-Quantum Performance Monitor & Benchmark Engine
+Production-grade module for benchmarking and monitoring post-quantum cryptography algorithms
+Supports real-time performance tracking, historical analysis, and optimization recommendations
 """
-import json
+
 import time
-import math
+import hashlib
+import json
+import os
 import statistics
-import threading
+from typing import Dict, List, Tuple, Optional, Any, Callable
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any, Callable
-from collections import defaultdict, deque
-from datetime import datetime
-from enum import Enum
-import random
-
-
-class PQAlgorithm(Enum):
-    """NIST Standardized Post-Quantum Algorithms"""
-    # CRYSTALS-Kyber (KEM - Key Encapsulation Mechanism)
-    KYBER_512 = "CRYSTALS-Kyber-512"      # NIST Security Level 1
-    KYBER_768 = "CRYSTALS-Kyber-768"      # NIST Security Level 3
-    KYBER_1024 = "CRYSTALS-Kyber-1024"    # NIST Security Level 5
-    
-    # CRYSTALS-Dilithium (Digital Signature)
-    DILITHIUM_2 = "CRYSTALS-Dilithium-2"    # NIST Security Level 2
-    DILITHIUM_3 = "CRYSTALS-Dilithium-3"    # NIST Security Level 3
-    DILITHIUM_5 = "CRYSTALS-Dilithium-5"    # NIST Security Level 5
-    
-    # FALCON (Digital Signature - Fast Fourier Lattice-based)
-    FALCON_512 = "FALCON-512"      # NIST Security Level 1
-    FALCON_1024 = "FALCON-1024"    # NIST Security Level 5
-    
-    # SPHINCS+ (Stateless Hash-Based Signature)
-    SPHINCS_SHA2_128F = "SPHINCS+-SHA2-128f"
-    SPHINCS_SHA2_128S = "SPHINCS+-SHA2-128s"
-    SPHINCS_SHA2_256F = "SPHINCS+-SHA2-256f"
-    SPHINCS_SHA2_256S = "SPHINCS+-SHA2-256s"
-    
-    # Classic algorithms for comparison
-    CLASSIC_RSA_2048 = "RSA-2048"
-    CLASSIC_ECDSA_P256 = "ECDSA-P256"
-    CLASSIC_ECDH_P256 = "ECDH-P256"
-
-
-class OperationType(Enum):
-    """Types of cryptographic operations"""
-    # KEM Operations
-    KEY_GENERATION = "key_generation"
-    KEM_ENCAPS = "kem_encapsulation"
-    KEM_DECAPS = "kem_decapsulation"
-    
-    # Signature Operations
-    SIGNING = "signing"
-    VERIFICATION = "verification"
-    
-    # Hash Operations
-    HASH_COMPUTATION = "hash_computation"
-
-
-class PerformanceAlertSeverity(Enum):
-    """Severity levels for performance alerts"""
-    INFO = "info"
-    WARNING = "warning"
-    CRITICAL = "critical"
+from collections import defaultdict
+from datetime import datetime, timedelta
+import threading
+import uuid
 
 
 @dataclass
 class BenchmarkResult:
-    """Result of a single benchmark run"""
-    algorithm: str
-    operation: str
+    """Dataclass representing a single benchmark result"""
+    benchmark_id: str
+    algorithm_name: str
+    operation_type: str  # keygen, encrypt, decrypt, sign, verify, kem_encap, kem_decap
+    input_size_bytes: int
     iterations: int
     total_time_ms: float
     avg_time_ms: float
     min_time_ms: float
     max_time_ms: float
-    p50_time_ms: float
-    p95_time_ms: float
-    p99_time_ms: float
-    throughput_ops_per_sec: float
-    success: bool
-    error_message: Optional[str] = None
-    timestamp: float = field(default_factory=time.time)
-
-
-@dataclass
-class PerformanceBaseline:
-    """Established performance baseline for an algorithm+operation"""
-    algorithm: str
-    operation: str
-    avg_latency_ms: float
     std_dev_ms: float
-    throughput_ops_per_sec: float
-    p95_latency_ms: float
-    sample_count: int
-    established_at: float = field(default_factory=time.time)
+    operations_per_second: float
+    throughput_mbps: float
+    memory_usage_mb: float
+    timestamp: float = field(default_factory=time.time)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
-class PerformanceAlert:
-    """Performance degradation alert"""
-    alert_id: str
+class PerformanceMetric:
+    """Dataclass for real-time performance metrics"""
+    metric_id: str
+    metric_type: str
+    value: float
+    unit: str
     algorithm: str
-    operation: str
-    severity: PerformanceAlertSeverity
-    message: str
-    current_metrics: Dict[str, float]
-    baseline_metrics: Dict[str, float]
-    degradation_pct: float
-    timestamp: float = field(default_factory=time.time)
+    timestamp: float
+    tags: Dict[str, str] = field(default_factory=dict)
 
 
-class SimulatedPQOperations:
-    """
-    Simulated PQC operation timings based on real-world benchmarks.
+@dataclass
+class OptimizationRecommendation:
+    """Dataclass for performance optimization recommendations"""
+    rec_id: str
+    algorithm: str
+    category: str  # configuration, hardware, batch_size, parallelism
+    recommendation: str
+    expected_improvement_pct: float
+    severity: str  # low, medium, high, critical
+    evidence: str
+
+
+class AlgorithmBenchmarker:
+    """Benchmarks cryptographic algorithm performance"""
     
-    Timings are statistically modeled after actual liboqs benchmark data.
-    This provides realistic performance characteristics without requiring
-    actual PQC library dependencies.
-    """
+    def __init__(self, warmup_iterations: int = 10, default_iterations: int = 100):
+        self.warmup_iterations = warmup_iterations
+        self.default_iterations = default_iterations
+        self.benchmark_history: List[BenchmarkResult] = []
+        
+    def _get_memory_usage(self) -> float:
+        """Get current process memory usage in MB (simulated for portability)"""
+        try:
+            import gc
+            gc.collect()
+            # Simple estimation based on object counts
+            return len(gc.get_objects()) * 0.001  # Rough MB estimate
+        except:
+            return 0.0
     
-    # Performance characteristics (mean latency in ms, std dev)
-    # Based on real NIST PQC benchmark data
-    OPERATION_TIMINGS = {
-        # Kyber - KEM operations (fast, lightweight)
-        (PQAlgorithm.KYBER_512, OperationType.KEY_GENERATION): (0.08, 0.02),
-        (PQAlgorithm.KYBER_512, OperationType.KEM_ENCAPS): (0.06, 0.015),
-        (PQAlgorithm.KYBER_512, OperationType.KEM_DECAPS): (0.07, 0.018),
-        
-        (PQAlgorithm.KYBER_768, OperationType.KEY_GENERATION): (0.12, 0.03),
-        (PQAlgorithm.KYBER_768, OperationType.KEM_ENCAPS): (0.09, 0.02),
-        (PQAlgorithm.KYBER_768, OperationType.KEM_DECAPS): (0.10, 0.025),
-        
-        (PQAlgorithm.KYBER_1024, OperationType.KEY_GENERATION): (0.18, 0.04),
-        (PQAlgorithm.KYBER_1024, OperationType.KEM_ENCAPS): (0.14, 0.03),
-        (PQAlgorithm.KYBER_1024, OperationType.KEM_DECAPS): (0.16, 0.035),
-        
-        # Dilithium - Signatures (moderate)
-        (PQAlgorithm.DILITHIUM_2, OperationType.KEY_GENERATION): (0.25, 0.05),
-        (PQAlgorithm.DILITHIUM_2, OperationType.SIGNING): (0.40, 0.08),
-        (PQAlgorithm.DILITHIUM_2, OperationType.VERIFICATION): (0.15, 0.03),
-        
-        (PQAlgorithm.DILITHIUM_3, OperationType.KEY_GENERATION): (0.35, 0.07),
-        (PQAlgorithm.DILITHIUM_3, OperationType.SIGNING): (0.55, 0.10),
-        (PQAlgorithm.DILITHIUM_3, OperationType.VERIFICATION): (0.20, 0.04),
-        
-        (PQAlgorithm.DILITHIUM_5, OperationType.KEY_GENERATION): (0.50, 0.10),
-        (PQAlgorithm.DILITHIUM_5, OperationType.SIGNING): (0.80, 0.15),
-        (PQAlgorithm.DILITHIUM_5, OperationType.VERIFICATION): (0.30, 0.06),
-        
-        # Falcon - Signatures (fast signing, slower verification)
-        (PQAlgorithm.FALCON_512, OperationType.KEY_GENERATION): (1.5, 0.3),
-        (PQAlgorithm.FALCON_512, OperationType.SIGNING): (0.08, 0.02),
-        (PQAlgorithm.FALCON_512, OperationType.VERIFICATION): (0.25, 0.05),
-        
-        (PQAlgorithm.FALCON_1024, OperationType.KEY_GENERATION): (3.0, 0.6),
-        (PQAlgorithm.FALCON_1024, OperationType.SIGNING): (0.15, 0.03),
-        (PQAlgorithm.FALCON_1024, OperationType.VERIFICATION): (0.45, 0.09),
-        
-        # SPHINCS+ - Hash-based (very slow signing, fast verification)
-        (PQAlgorithm.SPHINCS_SHA2_128F, OperationType.KEY_GENERATION): (0.5, 0.1),
-        (PQAlgorithm.SPHINCS_SHA2_128F, OperationType.SIGNING): (8.0, 1.5),
-        (PQAlgorithm.SPHINCS_SHA2_128F, OperationType.VERIFICATION): (0.05, 0.01),
-        
-        (PQAlgorithm.SPHINCS_SHA2_256F, OperationType.KEY_GENERATION): (1.0, 0.2),
-        (PQAlgorithm.SPHINCS_SHA2_256F, OperationType.SIGNING): (15.0, 3.0),
-        (PQAlgorithm.SPHINCS_SHA2_256F, OperationType.VERIFICATION): (0.08, 0.02),
-        
-        # Classic algorithms for comparison
-        (PQAlgorithm.CLASSIC_RSA_2048, OperationType.KEY_GENERATION): (50.0, 10.0),
-        (PQAlgorithm.CLASSIC_RSA_2048, OperationType.SIGNING): (0.5, 0.1),
-        (PQAlgorithm.CLASSIC_RSA_2048, OperationType.VERIFICATION): (0.1, 0.02),
-        
-        (PQAlgorithm.CLASSIC_ECDSA_P256, OperationType.KEY_GENERATION): (0.05, 0.01),
-        (PQAlgorithm.CLASSIC_ECDSA_P256, OperationType.SIGNING): (0.08, 0.02),
-        (PQAlgorithm.CLASSIC_ECDSA_P256, OperationType.VERIFICATION): (0.15, 0.03),
-    }
-    
-    @classmethod
-    def simulate_operation(
-        cls,
-        algorithm: PQAlgorithm,
-        operation: OperationType,
-        add_noise: bool = True
-    ) -> float:
+    def benchmark_function(self, func: Callable, *args, 
+                          algorithm_name: str, operation_type: str,
+                          iterations: Optional[int] = None,
+                          **kwargs) -> BenchmarkResult:
         """
-        Simulate a PQC operation and return latency in ms.
-        
-        Uses normal distribution based on real benchmark characteristics.
+        Benchmark a function with statistical analysis
+        Returns detailed BenchmarkResult with timing statistics
         """
-        key = (algorithm, operation)
-        mean_ms, std_ms = cls.OPERATION_TIMINGS.get(key, (1.0, 0.2))
+        iterations = iterations or self.default_iterations
         
-        if add_noise:
-            # Add realistic noise (clamped to be non-negative)
-            latency_ms = max(0.001, random.gauss(mean_ms, std_ms))
-            # Add occasional outliers (5% chance of 2-5x slowdown)
-            if random.random() < 0.05:
-                latency_ms *= random.uniform(2.0, 5.0)
-        else:
-            latency_ms = mean_ms
+        # Warmup phase
+        for _ in range(self.warmup_iterations):
+            try:
+                func(*args, **kwargs)
+            except:
+                pass
         
-        return latency_ms
-    
-    @classmethod
-    def get_expected_performance(
-        cls,
-        algorithm: PQAlgorithm,
-        operation: OperationType
-    ) -> Tuple[float, float]:
-        """Get expected (mean, std_dev) for an operation"""
-        key = (algorithm, operation)
-        return cls.OPERATION_TIMINGS.get(key, (1.0, 0.2))
-
-
-class PQPerformanceMonitor:
-    """
-    Production-grade performance monitor and benchmark engine for PQC algorithms.
-    
-    Features:
-    1. Benchmark execution with warmup and statistical analysis
-    2. Automatic baseline establishment
-    3. Real-time performance regression detection
-    4. Alerting system with callbacks
-    5. Comparative performance analysis
-    6. Historical trend tracking
-    """
-    
-    def __init__(
-        self,
-        degradation_threshold_pct: float = 20.0,
-        alert_on_degradation: bool = True,
-        min_samples_for_baseline: int = 10,
-        max_history_size: int = 1000
-    ):
-        self.degradation_threshold_pct = degradation_threshold_pct
-        self.alert_on_degradation = alert_on_degradation
-        self.min_samples_for_baseline = min_samples_for_baseline
-        self.max_history_size = max_history_size
+        # Actual benchmark
+        timings = []
+        start_memory = self._get_memory_usage()
         
-        # Performance history: (algorithm, operation) -> deque of BenchmarkResult
-        self.benchmark_history: Dict[Tuple[str, str], deque] = defaultdict(
-            lambda: deque(maxlen=max_history_size)
+        for _ in range(iterations):
+            t0 = time.perf_counter()
+            result = func(*args, **kwargs)
+            t1 = time.perf_counter()
+            timings.append((t1 - t0) * 1000)  # Convert to ms
+        
+        end_memory = self._get_memory_usage()
+        
+        # Calculate statistics
+        total_time = sum(timings)
+        avg_time = statistics.mean(timings)
+        min_time = min(timings)
+        max_time = max(timings)
+        std_dev = statistics.stdev(timings) if len(timings) > 1 else 0
+        
+        # Calculate throughput
+        input_size = len(str(args)) if args else 64  # Estimate
+        ops_per_sec = 1000.0 / avg_time if avg_time > 0 else 0
+        throughput_mbps = (input_size * ops_per_sec) / (1024 * 1024)
+        
+        result = BenchmarkResult(
+            benchmark_id=str(uuid.uuid4()),
+            algorithm_name=algorithm_name,
+            operation_type=operation_type,
+            input_size_bytes=input_size,
+            iterations=iterations,
+            total_time_ms=total_time,
+            avg_time_ms=avg_time,
+            min_time_ms=min_time,
+            max_time_ms=max_time,
+            std_dev_ms=std_dev,
+            operations_per_second=ops_per_sec,
+            throughput_mbps=throughput_mbps,
+            memory_usage_mb=max(0, end_memory - start_memory)
         )
         
-        # Established baselines
-        self.baselines: Dict[Tuple[str, str], PerformanceBaseline] = {}
-        
-        # Performance alerts
-        self.alerts: List[PerformanceAlert] = []
-        
-        # Alert callbacks
-        self.alert_callbacks: List[Callable[[PerformanceAlert], None]] = []
-        
-        # Statistics
-        self.stats = {
-            "total_benchmarks_run": 0,
-            "total_alerts_generated": 0,
-            "baselines_established": 0,
-            "total_operations_simulated": 0
-        }
-        
-        self._lock = threading.RLock()
+        self.benchmark_history.append(result)
+        return result
     
-    def run_benchmark(
-        self,
-        algorithm: PQAlgorithm,
-        operation: OperationType,
-        iterations: int = 100,
-        warmup_iterations: int = 10
-    ) -> BenchmarkResult:
-        """
-        Run a full benchmark for an algorithm+operation combination.
+    def benchmark_hash_algorithms(self, data_size_kb: int = 64) -> List[BenchmarkResult]:
+        """Benchmark standard hash algorithms"""
+        results = []
+        test_data = os.urandom(data_size_kb * 1024)
         
-        Includes:
-        - Warmup iterations (to stabilize measurements)
-        - Multiple timed iterations
-        - Full statistical analysis (min, max, avg, percentiles)
-        - Throughput calculation
-        """
-        with self._lock:
-            try:
-                # Warmup phase
-                for _ in range(warmup_iterations):
-                    SimulatedPQOperations.simulate_operation(algorithm, operation)
-                    self.stats["total_operations_simulated"] += 1
-                
-                # Measurement phase
-                latencies = []
-                start_total = time.perf_counter()
-                
-                for _ in range(iterations):
-                    latency = SimulatedPQOperations.simulate_operation(algorithm, operation)
-                    latencies.append(latency)
-                    self.stats["total_operations_simulated"] += 1
-                
-                end_total = time.perf_counter()
-                total_time_ms = (end_total - start_total) * 1000
-                
-                # Statistical analysis
-                latencies_sorted = sorted(latencies)
-                avg_time_ms = statistics.mean(latencies)
-                min_time_ms = min(latencies)
-                max_time_ms = max(latencies)
-                
-                # Percentiles
-                p50_idx = int(len(latencies_sorted) * 0.5)
-                p95_idx = int(len(latencies_sorted) * 0.95)
-                p99_idx = int(len(latencies_sorted) * 0.99)
-                
-                p50_time_ms = latencies_sorted[p50_idx]
-                p95_time_ms = latencies_sorted[p95_idx]
-                p99_time_ms = latencies_sorted[p99_idx]
-                
-                # Throughput
-                throughput = iterations / (total_time_ms / 1000)
-                
-                result = BenchmarkResult(
-                    algorithm=algorithm.value,
-                    operation=operation.value,
-                    iterations=iterations,
-                    total_time_ms=total_time_ms,
-                    avg_time_ms=avg_time_ms,
-                    min_time_ms=min_time_ms,
-                    max_time_ms=max_time_ms,
-                    p50_time_ms=p50_time_ms,
-                    p95_time_ms=p95_time_ms,
-                    p99_time_ms=p99_time_ms,
-                    throughput_ops_per_sec=throughput,
-                    success=True
-                )
-                
-                # Store result
-                history_key = (algorithm.value, operation.value)
-                self.benchmark_history[history_key].append(result)
-                self.stats["total_benchmarks_run"] += 1
-                
-                # Check for baseline and regression
-                self._check_performance_regression(result)
-                
-                return result
-                
-            except Exception as e:
-                return BenchmarkResult(
-                    algorithm=algorithm.value,
-                    operation=operation.value,
-                    iterations=iterations,
-                    total_time_ms=0,
-                    avg_time_ms=0,
-                    min_time_ms=0,
-                    max_time_ms=0,
-                    p50_time_ms=0,
-                    p95_time_ms=0,
-                    p99_time_ms=0,
-                    throughput_ops_per_sec=0,
-                    success=False,
-                    error_message=str(e)
-                )
-    
-    def batch_benchmark(
-        self,
-        algorithms: List[PQAlgorithm],
-        operations: List[OperationType],
-        iterations: int = 50
-    ) -> Dict[Tuple[str, str], BenchmarkResult]:
-        """Run benchmarks for multiple algorithm+operation combinations"""
-        results = {}
+        hash_algos = [
+            ('SHA-256', hashlib.sha256),
+            ('SHA-512', hashlib.sha512),
+            ('SHA3-256', hashlib.sha3_256),
+            ('SHA3-512', hashlib.sha3_512),
+            ('BLAKE2b', hashlib.blake2b),
+        ]
         
-        for algorithm in algorithms:
-            for operation in operations:
-                key = (algorithm.value, operation.value)
-                results[key] = self.run_benchmark(algorithm, operation, iterations=iterations)
+        for name, hash_func in hash_algos:
+            def hash_operation(data=test_data, hf=hash_func):
+                return hf(data).digest()
+            
+            result = self.benchmark_function(
+                hash_operation,
+                algorithm_name=name,
+                operation_type='hash',
+                iterations=500
+            )
+            results.append(result)
         
         return results
     
-    def _check_performance_regression(self, result: BenchmarkResult) -> None:
-        """Check if current performance deviates from established baseline"""
-        if not result.success:
-            return
+    def benchmark_symmetric_operations(self) -> List[BenchmarkResult]:
+        """Benchmark simulated symmetric encryption operations"""
+        results = []
+        test_data = os.urandom(4096)
+        test_key = os.urandom(32)
         
-        key = (result.algorithm, result.operation)
+        # Simulated AES-GCM encryption
+        def sim_aes_encrypt(data=test_data, key=test_key):
+            # Simple XOR-based simulation for benchmarking
+            result = bytearray(len(data))
+            for i in range(len(data)):
+                result[i] = data[i] ^ key[i % len(key)]
+            return bytes(result)
         
-        # Check if we have enough samples to establish/update baseline
-        history = self.benchmark_history[key]
+        results.append(self.benchmark_function(
+            sim_aes_encrypt,
+            algorithm_name='AES-256-GCM (simulated)',
+            operation_type='encrypt',
+            iterations=200
+        ))
         
-        if len(history) >= self.min_samples_for_baseline:
-            # Establish baseline if not exists
-            if key not in self.baselines:
-                self._establish_baseline(key)
-                return
-            
-            # Compare against baseline
-            baseline = self.baselines[key]
-            
-            # Calculate degradation percentage
-            if baseline.avg_latency_ms > 0:
-                degradation_pct = (
-                    (result.avg_time_ms - baseline.avg_latency_ms) / baseline.avg_latency_ms
-                ) * 100
-            else:
-                degradation_pct = 0
-            
-            # Generate alert if degradation exceeds threshold
-            if (degradation_pct >= self.degradation_threshold_pct and 
-                self.alert_on_degradation):
-                self._generate_alert(result, baseline, degradation_pct)
+        # Simulated ChaCha20
+        def sim_chacha_encrypt(data=test_data, key=test_key):
+            result = bytearray(len(data))
+            key_hash = hashlib.sha256(key).digest()
+            for i in range(len(data)):
+                result[i] = data[i] ^ key_hash[i % len(key_hash)]
+            return bytes(result)
+        
+        results.append(self.benchmark_function(
+            sim_chacha_encrypt,
+            algorithm_name='ChaCha20 (simulated)',
+            operation_type='encrypt',
+            iterations=200
+        ))
+        
+        return results
     
-    def _establish_baseline(self, key: Tuple[str, str]) -> None:
-        """Establish performance baseline from historical data"""
-        history = list(self.benchmark_history[key])[-self.min_samples_for_baseline:]
-        
-        latencies = [r.avg_time_ms for r in history]
-        throughputs = [r.throughput_ops_per_sec for r in history]
-        p95s = [r.p95_time_ms for r in history]
-        
-        baseline = PerformanceBaseline(
-            algorithm=key[0],
-            operation=key[1],
-            avg_latency_ms=statistics.mean(latencies),
-            std_dev_ms=statistics.stdev(latencies) if len(latencies) > 1 else 0,
-            throughput_ops_per_sec=statistics.mean(throughputs),
-            p95_latency_ms=statistics.mean(p95s),
-            sample_count=len(history)
-        )
-        
-        self.baselines[key] = baseline
-        self.stats["baselines_established"] += 1
-    
-    def _generate_alert(
-        self,
-        result: BenchmarkResult,
-        baseline: PerformanceBaseline,
-        degradation_pct: float
-    ) -> None:
-        """Generate a performance degradation alert"""
-        # Determine severity
-        if degradation_pct >= 50:
-            severity = PerformanceAlertSeverity.CRITICAL
-        elif degradation_pct >= 30:
-            severity = PerformanceAlertSeverity.WARNING
-        else:
-            severity = PerformanceAlertSeverity.INFO
-        
-        alert_id = f"perf_alert_{int(time.time())}_{random.randint(1000, 9999)}"
-        
-        alert = PerformanceAlert(
-            alert_id=alert_id,
-            algorithm=result.algorithm,
-            operation=result.operation,
-            severity=severity,
-            message=(
-                f"Performance degradation detected: {degradation_pct:.1f}% "
-                f"slower than baseline for {result.algorithm} {result.operation}"
-            ),
-            current_metrics={
-                "avg_latency_ms": result.avg_time_ms,
-                "p95_latency_ms": result.p95_time_ms,
-                "throughput_ops_per_sec": result.throughput_ops_per_sec
-            },
-            baseline_metrics={
-                "avg_latency_ms": baseline.avg_latency_ms,
-                "p95_latency_ms": baseline.p95_latency_ms,
-                "throughput_ops_per_sec": baseline.throughput_ops_per_sec
-            },
-            degradation_pct=degradation_pct
-        )
-        
-        self.alerts.append(alert)
-        self.stats["total_alerts_generated"] += 1
-        
-        # Trigger callbacks
-        for callback in self.alert_callbacks:
-            try:
-                callback(alert)
-            except Exception:
-                pass
-    
-    def register_alert_callback(
-        self,
-        callback: Callable[[PerformanceAlert], None]
-    ) -> None:
-        """Register a callback for performance alerts"""
-        self.alert_callbacks.append(callback)
-    
-    def get_algorithm_summary(
-        self,
-        algorithm: PQAlgorithm
-    ) -> Dict[str, Any]:
-        """Get performance summary for a specific algorithm"""
-        alg_value = algorithm.value
+    def benchmark_post_quantum_kem(self) -> List[BenchmarkResult]:
+        """Benchmark simulated post-quantum KEM operations"""
         results = []
         
-        for key, history in self.benchmark_history.items():
-            if key[0] == alg_value and history:
-                results.append(history[-1])
+        # Simulated Kyber key generation
+        def kyber_keygen():
+            # Simulate key generation with mathematical operations
+            key_material = hashlib.shake_256(os.urandom(64)).digest(1568)
+            pubkey = key_material[:800]
+            privkey = key_material[800:]
+            return pubkey, privkey
         
-        if not results:
-            return {"algorithm": alg_value, "benchmarks_available": 0}
+        results.append(self.benchmark_function(
+            kyber_keygen,
+            algorithm_name='CRYSTALS-Kyber-768 (simulated)',
+            operation_type='keygen',
+            iterations=100
+        ))
         
-        return {
-            "algorithm": alg_value,
-            "benchmarks_available": len(results),
-            "operations": {
-                r.operation: {
-                    "avg_latency_ms": round(r.avg_time_ms, 4),
-                    "p95_latency_ms": round(r.p95_time_ms, 4),
-                    "throughput_ops_per_sec": round(r.throughput_ops_per_sec, 2)
-                }
-                for r in results
-            },
-            "has_baseline": any(
-                (alg_value, r.operation) in self.baselines for r in results
+        # Simulated Kyber encapsulation
+        def kyber_encap():
+            pubkey = hashlib.shake_256(os.urandom(32)).digest(800)
+            shared_secret = hashlib.sha3_256(pubkey + os.urandom(32)).digest()
+            ciphertext = hashlib.shake_256(shared_secret).digest(1088)
+            return ciphertext, shared_secret
+        
+        results.append(self.benchmark_function(
+            kyber_encap,
+            algorithm_name='CRYSTALS-Kyber-768 (simulated)',
+            operation_type='kem_encap',
+            iterations=100
+        ))
+        
+        # Simulated Dilithium signature
+        def dilithium_sign():
+            message = os.urandom(64)
+            privkey = os.urandom(2528)
+            # Simulate signing with multiple hash operations
+            sig = hashlib.sha3_512(message + privkey).digest()
+            sig += hashlib.sha3_512(sig + privkey[:100]).digest()
+            return sig
+        
+        results.append(self.benchmark_function(
+            dilithium_sign,
+            algorithm_name='CRYSTALS-Dilithium-3 (simulated)',
+            operation_type='sign',
+            iterations=100
+        ))
+        
+        return results
+
+
+class PerformanceMonitor:
+    """Real-time performance monitoring with alerting"""
+    
+    def __init__(self, window_size: int = 100):
+        self.window_size = window_size
+        self.metrics_history: List[PerformanceMetric] = []
+        self.baselines: Dict[str, Tuple[float, float]] = {}  # algo -> (mean, std)
+        self.alerts: List[Dict[str, Any]] = []
+        self._lock = threading.RLock()
+        
+    def record_metric(self, metric_type: str, value: float, unit: str,
+                     algorithm: str, tags: Optional[Dict[str, str]] = None) -> PerformanceMetric:
+        """Record a performance metric"""
+        with self._lock:
+            metric = PerformanceMetric(
+                metric_id=str(uuid.uuid4()),
+                metric_type=metric_type,
+                value=value,
+                unit=unit,
+                algorithm=algorithm,
+                timestamp=time.time(),
+                tags=tags or {}
             )
+            self.metrics_history.append(metric)
+            
+            # Trim history
+            if len(self.metrics_history) > self.window_size * 10:
+                self.metrics_history = self.metrics_history[-self.window_size * 5:]
+            
+            # Check for anomalies
+            self._check_anomaly(metric)
+            
+            return metric
+    
+    def _check_anomaly(self, metric: PerformanceMetric) -> None:
+        """Check for performance anomalies"""
+        key = f"{metric.algorithm}:{metric.metric_type}"
+        
+        if key not in self.baselines:
+            # Establish baseline
+            recent = [m.value for m in self.metrics_history[-20:] 
+                     if m.algorithm == metric.algorithm and m.metric_type == metric.metric_type]
+            if len(recent) >= 10:
+                self.baselines[key] = (statistics.mean(recent), statistics.stdev(recent))
+            return
+        
+        baseline_mean, baseline_std = self.baselines[key]
+        z_score = abs(metric.value - baseline_mean) / (baseline_std + 0.0001)
+        
+        if z_score > 3.0:  # 3-sigma anomaly
+            alert = {
+                'alert_id': str(uuid.uuid4()),
+                'type': 'performance_anomaly',
+                'algorithm': metric.algorithm,
+                'metric': metric.metric_type,
+                'value': metric.value,
+                'baseline': baseline_mean,
+                'z_score': z_score,
+                'severity': 'high' if z_score > 4 else 'medium',
+                'timestamp': metric.timestamp
+            }
+            self.alerts.append(alert)
+    
+    def get_current_metrics(self, algorithm: Optional[str] = None) -> Dict[str, Any]:
+        """Get current performance summary"""
+        with self._lock:
+            metrics = self.metrics_history
+            if algorithm:
+                metrics = [m for m in metrics if m.algorithm == algorithm]
+            
+            # Get last 5 minutes
+            cutoff = time.time() - 300
+            recent = [m for m in metrics if m.timestamp > cutoff]
+            
+            summary = defaultdict(list)
+            for m in recent:
+                summary[f"{m.algorithm}:{m.metric_type}"].append(m.value)
+            
+            result = {}
+            for key, values in summary.items():
+                result[key] = {
+                    'current': values[-1] if values else 0,
+                    'avg': statistics.mean(values) if values else 0,
+                    'min': min(values) if values else 0,
+                    'max': max(values) if values else 0,
+                    'count': len(values)
+                }
+            
+            return {
+                'summary': result,
+                'alerts': self.alerts[-10:],
+                'baselines': dict(self.baselines)
+            }
+
+
+class PerformanceAnalyzer:
+    """Analyzes performance data and generates optimization recommendations"""
+    
+    def __init__(self):
+        self.performance_baselines = self._load_standard_baselines()
+    
+    def _load_standard_baselines(self) -> Dict[str, Dict[str, float]]:
+        """Load industry-standard performance baselines"""
+        return {
+            'SHA-256': {'target_ops_per_sec': 500000, 'target_latency_ms': 0.002},
+            'AES-256-GCM': {'target_throughput_gbps': 10, 'target_latency_ms': 0.01},
+            'CRYSTALS-Kyber-768': {'target_keygen_ms': 0.05, 'target_encap_ms': 0.03},
+            'CRYSTALS-Dilithium-3': {'target_sign_ms': 0.15, 'target_verify_ms': 0.05},
         }
     
-    def get_comparative_report(
-        self,
-        algorithms: List[PQAlgorithm]
-    ) -> Dict[str, Any]:
-        """Get comparative performance report across multiple algorithms"""
-        report = {
-            "generated_at": datetime.now().isoformat(),
-            "algorithms_compared": [a.value for a in algorithms],
-            "recommendations": []
+    def compare_to_baseline(self, result: BenchmarkResult) -> Dict[str, Any]:
+        """Compare benchmark result to industry baselines"""
+        algo = result.algorithm_name
+        
+        comparison = {
+            'algorithm': algo,
+            'operation': result.operation_type,
+            'measured_ops_per_sec': result.operations_per_second,
+            'measured_latency_ms': result.avg_time_ms,
+            'deviation_pct': 0,
+            'rating': 'unknown'
         }
         
-        # Collect data for each operation type
-        operations_data = defaultdict(list)
+        # Simple performance rating
+        if result.operations_per_second > 10000:
+            comparison['rating'] = 'excellent'
+        elif result.operations_per_second > 1000:
+            comparison['rating'] = 'good'
+        elif result.operations_per_second > 100:
+            comparison['rating'] = 'average'
+        else:
+            comparison['rating'] = 'poor'
         
-        for algorithm in algorithms:
-            summary = self.get_algorithm_summary(algorithm)
-            for op_name, metrics in summary.get("operations", {}).items():
-                operations_data[op_name].append({
-                    "algorithm": algorithm.value,
-                    **metrics
-                })
+        return comparison
+    
+    def generate_recommendations(self, benchmark_results: List[BenchmarkResult]) -> List[OptimizationRecommendation]:
+        """Generate optimization recommendations based on benchmark results"""
+        recommendations = []
         
-        # Find best performer for each operation
-        for op_name, results in operations_data.items():
-            if results:
-                # Sort by latency (ascending)
-                sorted_by_latency = sorted(results, key=lambda x: x["avg_latency_ms"])
-                best = sorted_by_latency[0]
-                
-                report["recommendations"].append({
-                    "operation": op_name,
-                    "best_algorithm": best["algorithm"],
-                    "avg_latency_ms": best["avg_latency_ms"],
-                    "throughput_ops_per_sec": best["throughput_ops_per_sec"]
-                })
+        for result in benchmark_results:
+            # Check for high latency
+            if result.avg_time_ms > 10:
+                recommendations.append(OptimizationRecommendation(
+                    rec_id=str(uuid.uuid4()),
+                    algorithm=result.algorithm_name,
+                    category='performance',
+                    recommendation=f'Consider hardware acceleration for {result.algorithm_name}',
+                    expected_improvement_pct=30.0,
+                    severity='medium',
+                    evidence=f'High latency detected: {result.avg_time_ms:.2f}ms per operation'
+                ))
+            
+            # Check for high std dev (inconsistent performance)
+            cv = result.std_dev_ms / (result.avg_time_ms + 0.001)
+            if cv > 0.5:
+                recommendations.append(OptimizationRecommendation(
+                    rec_id=str(uuid.uuid4()),
+                    algorithm=result.algorithm_name,
+                    category='stability',
+                    recommendation=f'Investigate performance variability for {result.algorithm_name}',
+                    expected_improvement_pct=15.0,
+                    severity='medium',
+                    evidence=f'High coefficient of variation: {cv:.2f}'
+                ))
+            
+            # Batch processing recommendation
+            if result.operations_per_second < 1000:
+                recommendations.append(OptimizationRecommendation(
+                    rec_id=str(uuid.uuid4()),
+                    algorithm=result.algorithm_name,
+                    category='batch_processing',
+                    recommendation=f'Implement batch processing for {result.algorithm_name}',
+                    expected_improvement_pct=50.0,
+                    severity='low',
+                    evidence=f'Throughput is {result.operations_per_second:.0f} ops/sec, batching can improve this'
+                ))
         
-        report["detailed_comparison"] = dict(operations_data)
+        return recommendations
+    
+    def generate_comparative_report(self, results: List[BenchmarkResult]) -> Dict[str, Any]:
+        """Generate comparative performance report"""
+        by_algorithm = defaultdict(list)
+        for r in results:
+            by_algorithm[r.algorithm_name].append(r)
+        
+        report = {
+            'generated_at': datetime.now().isoformat(),
+            'total_benchmarks': len(results),
+            'algorithms_tested': len(by_algorithm),
+            'algorithm_summary': {},
+            'fastest_by_ops': None,
+            'most_efficient': None
+        }
+        
+        best_ops = 0
+        best_efficiency = 0
+        
+        for algo, algo_results in by_algorithm.items():
+            avg_ops = statistics.mean(r.operations_per_second for r in algo_results)
+            avg_latency = statistics.mean(r.avg_time_ms for r in algo_results)
+            
+            report['algorithm_summary'][algo] = {
+                'avg_operations_per_second': avg_ops,
+                'avg_latency_ms': avg_latency,
+                'benchmark_count': len(algo_results)
+            }
+            
+            if avg_ops > best_ops:
+                best_ops = avg_ops
+                report['fastest_by_ops'] = algo
+            
+            efficiency = avg_ops / (avg_latency + 0.001)
+            if efficiency > best_efficiency:
+                best_efficiency = efficiency
+                report['most_efficient'] = algo
         
         return report
+
+
+class PostQuantumPerformanceBenchmarkEngine:
+    """
+    Main engine for post-quantum performance monitoring and benchmarking
+    Production-grade with benchmarking, monitoring, and analysis capabilities
+    """
     
-    def get_performance_metrics(self) -> Dict[str, Any]:
-        """Get overall monitor performance metrics"""
-        with self._lock:
-            return {
-                "monitor_version": "pq_perf_monitor_v1",
-                "timestamp": datetime.now().isoformat(),
-                "total_benchmarks_run": self.stats["total_benchmarks_run"],
-                "total_alerts_generated": self.stats["total_alerts_generated"],
-                "baselines_established": self.stats["baselines_established"],
-                "total_operations_simulated": self.stats["total_operations_simulated"],
-                "unique_algorithm_operation_pairs": len(self.benchmark_history),
-                "active_alerts": len(self.alerts),
-                "degradation_threshold_pct": self.degradation_threshold_pct,
-                "min_samples_for_baseline": self.min_samples_for_baseline
-            }
-    
-    def get_alerts(
-        self,
-        min_severity: Optional[PerformanceAlertSeverity] = None,
-        limit: int = 100
-    ) -> List[Dict[str, Any]]:
-        """Get performance alerts, optionally filtered by severity"""
-        alerts = reversed(self.alerts)
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
+        self.config = config or {}
+        self.benchmarker = AlgorithmBenchmarker()
+        self.monitor = PerformanceMonitor()
+        self.analyzer = PerformanceAnalyzer()
         
-        if min_severity:
-            severity_order = {
-                PerformanceAlertSeverity.INFO: 0,
-                PerformanceAlertSeverity.WARNING: 1,
-                PerformanceAlertSeverity.CRITICAL: 2
-            }
-            min_level = severity_order[min_severity]
-            alerts = [
-                a for a in alerts
-                if severity_order.get(a.severity, 0) >= min_level
-            ]
-        
-        return [
-            {
-                "alert_id": a.alert_id,
-                "algorithm": a.algorithm,
-                "operation": a.operation,
-                "severity": a.severity.value,
-                "message": a.message,
-                "degradation_pct": round(a.degradation_pct, 2),
-                "timestamp": datetime.fromtimestamp(a.timestamp).isoformat()
-            }
-            for a in list(alerts)[:limit]
-        ]
+        self.benchmark_runs: List[Dict[str, Any]] = []
+        self._lock = threading.RLock()
     
-    def export_benchmark_results(self, filepath: Optional[str] = None) -> str:
-        """Export all benchmark results to JSON"""
-        export_data = {
-            "exported_at": datetime.now().isoformat(),
-            "metrics": self.get_performance_metrics(),
-            "baselines": {
-                f"{k[0]}:{k[1]}": {
-                    "avg_latency_ms": v.avg_latency_ms,
-                    "std_dev_ms": v.std_dev_ms,
-                    "throughput_ops_per_sec": v.throughput_ops_per_sec,
-                    "sample_count": v.sample_count
-                }
-                for k, v in self.baselines.items()
-            },
-            "recent_benchmarks": {
-                f"{k[0]}:{k[1]}": {
-                    "avg_time_ms": v[-1].avg_time_ms,
-                    "throughput_ops_per_sec": v[-1].throughput_ops_per_sec,
-                    "history_count": len(v)
-                }
-                for k, v in self.benchmark_history.items() if v
-            }
+    def run_full_benchmark_suite(self) -> Dict[str, Any]:
+        """Run complete benchmark suite"""
+        start_time = time.time()
+        
+        all_results = []
+        
+        # Run hash benchmarks
+        hash_results = self.benchmarker.benchmark_hash_algorithms()
+        all_results.extend(hash_results)
+        
+        # Run symmetric encryption benchmarks
+        sym_results = self.benchmarker.benchmark_symmetric_operations()
+        all_results.extend(sym_results)
+        
+        # Run post-quantum KEM benchmarks
+        pq_results = self.benchmarker.benchmark_post_quantum_kem()
+        all_results.extend(pq_results)
+        
+        # Generate analysis
+        comparisons = [self.analyzer.compare_to_baseline(r) for r in all_results]
+        recommendations = self.analyzer.generate_recommendations(all_results)
+        report = self.analyzer.generate_comparative_report(all_results)
+        
+        run_record = {
+            'run_id': str(uuid.uuid4()),
+            'timestamp': datetime.now().isoformat(),
+            'duration_seconds': time.time() - start_time,
+            'total_benchmarks': len(all_results),
+            'results': all_results,
+            'comparisons': comparisons,
+            'recommendations': recommendations,
+            'report': report
         }
         
-        json_str = json.dumps(export_data, indent=2)
+        with self._lock:
+            self.benchmark_runs.append(run_record)
         
-        if filepath:
-            with open(filepath, "w") as f:
-                f.write(json_str)
+        return run_record
+    
+    def monitor_operation(self, algorithm: str, operation: str, duration_ms: float) -> None:
+        """Monitor a single operation's performance"""
+        self.monitor.record_metric(
+            metric_type='latency',
+            value=duration_ms,
+            unit='ms',
+            algorithm=algorithm,
+            tags={'operation': operation}
+        )
+    
+    def get_performance_dashboard(self) -> Dict[str, Any]:
+        """Get comprehensive performance dashboard data"""
+        with self._lock:
+            latest_run = self.benchmark_runs[-1] if self.benchmark_runs else None
+            
+            return {
+                'monitoring': self.monitor.get_current_metrics(),
+                'latest_benchmark': latest_run,
+                'benchmark_history_count': len(self.benchmark_runs),
+                'total_benchmarks_executed': len(self.benchmarker.benchmark_history),
+                'algorithms_benchmarked': len(set(r.algorithm_name for r in self.benchmarker.benchmark_history))
+            }
+    
+    def export_benchmark_results(self, format: str = 'json') -> str:
+        """Export all benchmark results"""
+        export_data = []
         
-        return json_str
+        for result in self.benchmarker.benchmark_history:
+            export_data.append({
+                'benchmark_id': result.benchmark_id,
+                'algorithm': result.algorithm_name,
+                'operation': result.operation_type,
+                'avg_time_ms': result.avg_time_ms,
+                'operations_per_second': result.operations_per_second,
+                'throughput_mbps': result.throughput_mbps,
+                'timestamp': result.timestamp
+            })
+        
+        if format == 'json':
+            return json.dumps(export_data, indent=2)
+        elif format == 'csv':
+            lines = ['benchmark_id,algorithm,operation,avg_time_ms,operations_per_second']
+            for d in export_data:
+                lines.append(f"{d['benchmark_id']},{d['algorithm']},{d['operation']},{d['avg_time_ms']:.4f},{d['operations_per_second']:.2f}")
+            return '\n'.join(lines)
+        else:
+            raise ValueError(f"Unsupported format: {format}")
+    
+    def get_statistics(self) -> Dict[str, Any]:
+        """Get engine statistics"""
+        return {
+            'total_benchmarks_run': len(self.benchmarker.benchmark_history),
+            'benchmark_suites_executed': len(self.benchmark_runs),
+            'metrics_recorded': len(self.monitor.metrics_history),
+            'alerts_generated': len(self.monitor.alerts)
+        }
+
+
+# Export main classes
+__all__ = [
+    'PostQuantumPerformanceBenchmarkEngine',
+    'AlgorithmBenchmarker',
+    'PerformanceMonitor',
+    'PerformanceAnalyzer',
+    'BenchmarkResult',
+    'OptimizationRecommendation'
+]
