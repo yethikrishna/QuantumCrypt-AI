@@ -200,3 +200,26 @@ __all__.extend([
     "verify_batch_verifier_works",
     "run_batch_verification_benchmark"
 ])
+
+# Post-Quantum Secure Session Manager Enhanced (June 21, 2026)
+from .post_quantum_secure_session_manager_enhanced_2026_june import (
+    PostQuantumSecureSessionManagerEnhanced,
+    PostQuantumKeyExchange,
+    HKDFKeyDerivation,
+    Session,
+    SessionKeys,
+    SessionState,
+    SecurityLevel,
+    SessionEvent
+)
+__all__.extend([
+    "PostQuantumSecureSessionManagerEnhanced",
+    "PostQuantumKeyExchange",
+    "HKDFKeyDerivation",
+    "Session",
+    "SessionKeys",
+    "SessionState",
+    "SecurityLevel",
+    "SessionEvent"
+])
+__version__ = "2026.6.21.0"
