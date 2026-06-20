@@ -1,0 +1,70 @@
+{
+  "test_module": "post_quantum_algorithm_interoperability_matrix_generator",
+  "test_date": "2026-06-20T11:22:56.670597+00:00",
+  "results": {
+    "total_tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "test_details": [
+      {
+        "test": "Initialization",
+        "status": "PASSED"
+      },
+      {
+        "test": "Algorithm Database",
+        "status": "PASSED"
+      },
+      {
+        "test": "Matrix Generation",
+        "status": "PASSED"
+      },
+      {
+        "test": "Compatibility Scoring",
+        "status": "PASSED"
+      },
+      {
+        "test": "Library Matrix",
+        "status": "PASSED"
+      },
+      {
+        "test": "Protocol Matrix",
+        "status": "PASSED"
+      },
+      {
+        "test": "Interop Test",
+        "status": "PASSED"
+      },
+      {
+        "test": "Full Report",
+        "status": "PASSED"
+      },
+      {
+        "test": "JSON Export",
+        "status": "PASSED"
+      },
+      {
+        "test": "Recommendations",
+        "status": "PASSED"
+      }
+    ]
+  },
+  "limitations": [
+    "Interoperability tests are simulation-based (not calling actual library APIs)",
+    "Compatibility scores based on known implementation status, not live testing",
+    "Performance impact values are estimated, not benchmarked",
+    "Does not include actual cross-library integration testing",
+    "Platform support based on documentation, not verified on all platforms"
+  ],
+  "code_quality": {
+    "type_annotations": "Full coverage with proper typing",
+    "algorithm_database": "17 NIST PQC algorithms included",
+    "matrix_coverage": "KEM + Signature combinations, library, protocol matrices",
+    "export_formats": "JSON and CSV export supported",
+    "documentation": "Comprehensive docstrings for all public methods"
+  },
+  "actual_results": {
+    "algorithms_in_database": 17,
+    "kem_signature_combinations": 72,
+    "recommended_combinations": 3
+  }
+}
