@@ -1,0 +1,82 @@
+{
+  "test_suite": "Post-Quantum Key Generation Entropy Health Validator",
+  "timestamp": 1781996152.7444491,
+  "tests_passed": 14,
+  "tests_failed": 0,
+  "test_cases": {
+    "monobit_test": "PASSED",
+    "runs_test": "PASSED",
+    "chi_square_test": "PASSED",
+    "autocorrelation_test": "PASSED",
+    "entropy_estimation": "PASSED",
+    "pool_initialization": "PASSED",
+    "kyber768_validation": "PASSED",
+    "dilithium5_validation": "PASSED",
+    "random_bytes_generation": "PASSED",
+    "custom_entropy_collection": "PASSED",
+    "full_randomness_suite": "PASSED",
+    "health_status_classification": "PASSED",
+    "statistics_tracking": "PASSED",
+    "performance_benchmark": "PASSED"
+  },
+  "performance_metrics": {
+    "random_entropy_bpb": 7.819,
+    "avg_validation_ms": 0.213,
+    "validation_throughput": 4699.3
+  },
+  "randomness_test_results": {
+    "tests_run": 5,
+    "all_passed": true,
+    "overall_score": 0.8522,
+    "entropy_estimate_bpb": 7.825,
+    "individual_results": {
+      "monobit": {
+        "passed": true,
+        "score": 0.992431640625,
+        "p_value": 0.953076171875,
+        "details": {
+          "ones": 4065,
+          "zeros": 4127,
+          "chi_squared": 0.46923828125
+        }
+      },
+      "runs": {
+        "passed": true,
+        "score": 0.7491301959348104,
+        "p_value": 0.7491301959348104,
+        "details": {
+          "observed_runs": 4091,
+          "expected_runs": 5461.0
+        }
+      },
+      "chi_square": {
+        "passed": true,
+        "score": 0.526,
+        "p_value": 0.526,
+        "details": {
+          "chi_squared": 237.0,
+          "expected_per_byte": 4.0
+        }
+      },
+      "autocorrelation_lag1": {
+        "passed": true,
+        "score": 0.9986570626297155,
+        "p_value": 0.9986570626297155,
+        "details": {
+          "match_ratio": 0.5006714686851422,
+          "lag": 1
+        }
+      },
+      "autocorrelation_lag8": {
+        "passed": true,
+        "score": 0.9946236559139785,
+        "p_value": 0.9946236559139785,
+        "details": {
+          "match_ratio": 0.5026881720430108,
+          "lag": 8
+        }
+      }
+    }
+  },
+  "pass_rate_percent": 100.0
+}
