@@ -165,16 +165,16 @@ class PostQuantumSideChannelValidator:
         self,
         group1: List[float],
         group2: List[float]
-    ) -> Tuple[float, float]:
+    ) -> Tuple[float, float, float]:
         """
         REAL t-test implementation.
         Actually computes statistical significance.
         
-        Returns: (t_statistic, p_value_estimate)
+        Returns: (t_statistic, p_value_estimate, effect_size)
         """
         n1, n2 = len(group1), len(group2)
         if n1 < 2 or n2 < 2:
-            return 0.0, 1.0
+            return 0.0, 1.0, 0.0
         
         mean1 = statistics.mean(group1)
         mean2 = statistics.mean(group2)
@@ -184,7 +184,7 @@ class PostQuantumSideChannelValidator:
         # Welch's t-test
         pooled_se = math.sqrt(var1/n1 + var2/n2)
         if pooled_se == 0:
-            return 0.0, 1.0
+            return 0.0, 1.0, 0.0
         
         t_stat = abs(mean1 - mean2) / pooled_se
         
@@ -347,6 +347,261 @@ class PostQuantumSideChannelValidator:
         return [self.validate_function(func, name) for func, name in functions]
 
 
+class CacheSideChannelAnalyzer:
+    """
+    Enhanced cache side-channel analysis module.
+    Detects cache-timing vulnerabilities through memory access pattern analysis.
+    """
+    
+    def __init__(self, num_iterations: int = 100):
+        self.num_iterations = num_iterations
+    
+    def analyze_cache_access_patterns(
+        self,
+        func: Callable,
+        secret_inputs: List[bytes],
+        public_inputs: List[bytes]
+    ) -> Dict[str, Any]:
+        """
+        Analyze cache access patterns for secret-dependent behavior.
+        Uses timing variance as proxy for cache hits/misses.
+        """
+        timing_distributions = defaultdict(list)
+        
+        for secret in secret_inputs:
+            for public in public_inputs:
+                # Multiple measurements per input pair
+                for _ in range(5):
+                    start = time.perf_counter_ns()
+                    func(secret, public)
+                    elapsed = time.perf_counter_ns() - start
+                    timing_distributions[secret[:4].hex()].append(elapsed)
+        
+        # Calculate ANOVA-like analysis
+        group_means = {k: statistics.mean(v) for k, v in timing_distributions.items()}
+        group_vars = {k: statistics.variance(v) if len(v) > 1 else 0 for k, v in timing_distributions.items()}
+        
+        all_times = []
+        for times in timing_distributions.values():
+            all_times.extend(times)
+        
+        grand_mean = statistics.mean(all_times) if all_times else 0
+        
+        # Between-group variance as leakage indicator
+        between_group_var = statistics.variance(list(group_means.values())) if len(group_means) > 1 else 0
+        within_group_var = statistics.mean(list(group_vars.values())) if group_vars else 0
+        
+        f_ratio = between_group_var / within_group_var if within_group_var > 0 else 0
+        
+        return {
+            "test_name": "Cache Access Pattern Analysis",
+            "groups_analyzed": len(timing_distributions),
+            "total_measurements": len(all_times),
+            "between_group_variance": between_group_var,
+            "within_group_variance": within_group_var,
+            "f_ratio": f_ratio,
+            "leakage_score": min(1.0, f_ratio / 10.0),
+            "significant_leakage": f_ratio > 3.0,
+            "group_means": {k: round(v, 1) for k, v in group_means.items()}
+        }
+
+
+class SideChannelValidationSuite:
+    """
+    Comprehensive side-channel validation suite combining multiple analyzers.
+    Provides end-to-end validation for post-quantum implementations.
+    """
+    
+    def __init__(self, validation_level: str = "standard"):
+        level_map = {
+            "basic": ValidationLevel.BASIC,
+            "standard": ValidationLevel.STANDARD,
+            "strict": ValidationLevel.STRICT,
+            "fips_140_3": ValidationLevel.FIPS_140_3
+        }
+        self.timing_validator = PostQuantumSideChannelValidator(
+            validation_level=level_map.get(validation_level, ValidationLevel.STANDARD)
+        )
+        self.cache_analyzer = CacheSideChannelAnalyzer()
+        self.validation_reports: List[Dict] = []
+    
+    def validate_kem_implementation(
+        self,
+        kem_encrypt: Callable,
+        kem_decrypt: Callable,
+        pk: bytes,
+        sk: bytes,
+        algorithm_name: str = "Generic-KEM"
+    ) -> Dict[str, Any]:
+        """
+        Full validation of a Key Encapsulation Mechanism.
+        Tests both encryption and decryption operations.
+        """
+        start_time = time.time()
+        
+        # Test 1: Encapsulation timing
+        enc_result = self.timing_validator.validate_function(
+            lambda _: kem_encrypt(pk),
+            f"{algorithm_name}_encapsulate"
+        )
+        
+        # Generate test ciphertexts
+        test_cts = []
+        for _ in range(20):
+            ct, _ = kem_encrypt(pk)
+            test_cts.append(ct)
+        
+        # Test 2: Decapsulation timing
+        dec_result = self.timing_validator.validate_function(
+            lambda ct: kem_decrypt(ct, sk),
+            f"{algorithm_name}_decapsulate"
+        )
+        
+        # Test 3: Cache pattern analysis
+        cache_result = self.cache_analyzer.analyze_cache_access_patterns(
+            lambda s, p: kem_decrypt(kem_encrypt(p)[0], s),
+            [sk[i:i+16] for i in range(0, min(48, len(sk)-15), 16)] if len(sk) >= 16 else [sk],
+            [pk]
+        )
+        
+        # Compute overall score
+        scores = [
+            enc_result.timing_resistance_score,
+            dec_result.timing_resistance_score,
+            1.0 - cache_result["leakage_score"]
+        ]
+        overall_score = sum(scores) / len(scores)
+        
+        # Determine rating
+        if overall_score >= 0.95:
+            rating = "A+"
+        elif overall_score >= 0.90:
+            rating = "A"
+        elif overall_score >= 0.80:
+            rating = "B"
+        elif overall_score >= 0.70:
+            rating = "C"
+        elif overall_score >= 0.60:
+            rating = "D"
+        else:
+            rating = "F"
+        
+        report = {
+            "algorithm": algorithm_name,
+            "validation_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "duration_seconds": round(time.time() - start_time, 2),
+            "overall_score": round(overall_score, 4),
+            "overall_rating": rating,
+            "encapsulation_validation": enc_result.to_dict(),
+            "decapsulation_validation": dec_result.to_dict(),
+            "cache_analysis": cache_result,
+            "total_vulnerabilities": (
+                enc_result.total_vulnerabilities + 
+                dec_result.total_vulnerabilities +
+                (1 if cache_result["significant_leakage"] else 0)
+            ),
+            "all_tests_passed": (
+                enc_result.passed and 
+                dec_result.passed and 
+                not cache_result["significant_leakage"]
+            )
+        }
+        
+        self.validation_reports.append(report)
+        return report
+    
+    def validate_signature_implementation(
+        self,
+        sign_func: Callable,
+        verify_func: Callable,
+        sk: bytes,
+        pk: bytes,
+        algorithm_name: str = "Generic-Signature"
+    ) -> Dict[str, Any]:
+        """
+        Full validation of a digital signature algorithm.
+        Tests both signing and verification operations.
+        """
+        start_time = time.time()
+        
+        test_messages = [bytes([i % 256 for i in range(64)]) for _ in range(20)]
+        
+        # Test 1: Sign operation
+        sign_result = self.timing_validator.validate_function(
+            lambda msg: sign_func(msg, sk),
+            f"{algorithm_name}_sign"
+        )
+        
+        # Test 2: Verify operation
+        sigs = [sign_func(m, sk) for m in test_messages]
+        verify_result = self.timing_validator.validate_function(
+            lambda args: verify_func(args[0], args[1], pk),
+            f"{algorithm_name}_verify"
+        )
+        
+        # Compute overall score
+        overall_score = (
+            sign_result.timing_resistance_score + 
+            verify_result.timing_resistance_score
+        ) / 2
+        
+        # Determine rating
+        if overall_score >= 0.95:
+            rating = "A+"
+        elif overall_score >= 0.90:
+            rating = "A"
+        elif overall_score >= 0.80:
+            rating = "B"
+        elif overall_score >= 0.70:
+            rating = "C"
+        elif overall_score >= 0.60:
+            rating = "D"
+        else:
+            rating = "F"
+        
+        report = {
+            "algorithm": algorithm_name,
+            "validation_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "duration_seconds": round(time.time() - start_time, 2),
+            "overall_score": round(overall_score, 4),
+            "overall_rating": rating,
+            "sign_validation": sign_result.to_dict(),
+            "verify_validation": verify_result.to_dict(),
+            "total_vulnerabilities": (
+                sign_result.total_vulnerabilities + 
+                verify_result.total_vulnerabilities
+            ),
+            "all_tests_passed": sign_result.passed and verify_result.passed
+        }
+        
+        self.validation_reports.append(report)
+        return report
+    
+    def print_comprehensive_report(self, report: Dict) -> None:
+        """Pretty print validation report"""
+        print(f"\n{'='*70}")
+        print(f"POST-QUANTUM SIDE-CHANNEL VALIDATION REPORT")
+        print(f"{'='*70}")
+        print(f"Algorithm: {report['algorithm']}")
+        print(f"Overall Score: {report['overall_score']:.2%}")
+        print(f"Overall Rating: {report['overall_rating']}")
+        print(f"Duration: {report['duration_seconds']}s")
+        print(f"Total Vulnerabilities: {report['total_vulnerabilities']}")
+        print(f"All Tests Passed: {'✓ YES' if report['all_tests_passed'] else '✗ NO'}")
+        print(f"\n--- Detailed Results ---")
+        
+        for key, val in report.items():
+            if "validation" in key and isinstance(val, dict):
+                print(f"\n{key.replace('_', ' ').title()}:")
+                print(f"  Passed: {'✓' if val.get('passed') else '✗'}")
+                print(f"  Resistance Score: {val.get('resistance_score', 0):.4f}")
+                print(f"  CV: {val.get('cv', 0):.6f}")
+                if val.get('findings'):
+                    print(f"  Findings: {len(val['findings'])}")
+        
+        print(f"\n{'='*70}\n")
+
+
 def create_side_channel_validator(
     level: str = "standard",
     samples: int = 200
@@ -362,3 +617,8 @@ def create_side_channel_validator(
         validation_level=level_map.get(level, ValidationLevel.STANDARD),
         num_samples=samples
     )
+
+
+def create_validation_suite(level: str = "standard") -> SideChannelValidationSuite:
+    """Create comprehensive validation suite."""
+    return SideChannelValidationSuite(validation_level=level)
