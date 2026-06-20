@@ -1,0 +1,11 @@
+{
+  "test_timestamp": "2026-06-20T19:38:53.109377Z",
+  "module": "post_quantum_cryptographic_randomness_health_monitor",
+  "tests_passed": 15,
+  "tests_failed": 0,
+  "execution_time_ms": 26.72,
+  "good_random_score": 52.84,
+  "bad_random_score": 0.0,
+  "shannon_entropy": 7.8101,
+  "bug_fix": "variance_runs <= 0 check added to prevent math domain error"
+}

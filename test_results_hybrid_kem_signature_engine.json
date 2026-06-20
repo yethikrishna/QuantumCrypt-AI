@@ -1,0 +1,68 @@
+{
+  "test_date": "2026-06-21",
+  "total_tests": 12,
+  "passed": 0,
+  "failed": 12,
+  "results": [
+    {
+      "test": "test_entropy_validation",
+      "status": "ERROR",
+      "error": "System entropy should pass validation"
+    },
+    {
+      "test": "test_kyber_key_generation",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_kyber_encapsulation",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_dilithium_key_generation",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_dilithium_sign_verify",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_hybrid_key_generation",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_hybrid_encapsulate_sign",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_hybrid_decapsulate_verify",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_hybrid_verification_failure",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_public_key_export",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_key_rotation",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    },
+    {
+      "test": "test_all_security_levels",
+      "status": "ERROR",
+      "error": "Insufficient entropy quality for key generation"
+    }
+  ]
+}
