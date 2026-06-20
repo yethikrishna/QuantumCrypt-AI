@@ -63,18 +63,18 @@ __all__.extend([
 
 # Post-Quantum Secure Session Manager (June 20, 2026)
 from .post_quantum_secure_session_manager_2026_june import (
-    PostQuantumSessionManager,
-    SecureSession,
-    SessionToken,
-    SessionStatus,
-    SessionSecurityLevel
+    PostQuantumSecureSessionManager,
+    SessionData,
+    SessionState,
+    create_secure_session,
+    get_secure_session
 )
 __all__.extend([
-    "PostQuantumSessionManager",
-    "SecureSession",
-    "SessionToken",
-    "SessionStatus",
-    "SessionSecurityLevel"
+    "PostQuantumSecureSessionManager",
+    "SessionData",
+    "SessionState",
+    "create_secure_session",
+    "get_secure_session"
 ])
 
 # Post-Quantum Memory-Hard PBKDF Engine (June 20, 2026)
@@ -254,4 +254,35 @@ __all__.extend([
     "HybridEncapsulationResult",
     "HybridVerificationResult"
 ])
-__version__ = "2026.6.21.1"
+# Post-Quantum Hybrid KEM Signature Session Manager Enhanced (June 21, 2026)
+from .post_quantum_hybrid_kem_signature_session_manager_enhanced_2026_june import (
+    AlgorithmType,
+    KEMAlgorithm,
+    SignatureAlgorithm,
+    SessionStatus,
+    SecurityLevel,
+    KeyPair,
+    SessionKey,
+    EncapsulationResult,
+    SignatureResult,
+    HybridCryptoProvider,
+    SessionRotationPolicy,
+    SecurityValidator,
+    HybridKEMSignatureSessionManager
+)
+__all__.extend([
+    "AlgorithmType",
+    "KEMAlgorithm",
+    "SignatureAlgorithm",
+    "SessionStatus",
+    "SecurityLevel",
+    "KeyPair",
+    "SessionKey",
+    "EncapsulationResult",
+    "SignatureResult",
+    "HybridCryptoProvider",
+    "SessionRotationPolicy",
+    "SecurityValidator",
+    "HybridKEMSignatureSessionManager"
+])
+__version__ = "2026.6.21.2"
