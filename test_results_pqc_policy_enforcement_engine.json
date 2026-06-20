@@ -1,0 +1,109 @@
+{
+  "test_timestamp": 1781932296.386196,
+  "total_tests": 25,
+  "passed": 25,
+  "failed": 0,
+  "pass_rate": 1.0,
+  "tests": [
+    {
+      "name": "Engine initialization with NIST policies",
+      "status": "PASS"
+    },
+    {
+      "name": "Post-quantum algorithm policies loaded",
+      "status": "PASS"
+    },
+    {
+      "name": "MD5 prohibited algorithm detection",
+      "status": "PASS"
+    },
+    {
+      "name": "SHA-1 prohibited algorithm detection",
+      "status": "PASS"
+    },
+    {
+      "name": "RSA phase-out (quantum vulnerable) detection",
+      "status": "PASS"
+    },
+    {
+      "name": "AES approved algorithm - no violations",
+      "status": "PASS"
+    },
+    {
+      "name": "CRYSTALS-Kyber PQC algorithm - no violations",
+      "status": "PASS"
+    },
+    {
+      "name": "Insufficient key size detection for RSA",
+      "status": "PASS"
+    },
+    {
+      "name": "Sufficient key size (RSA 4096) - no key size violation",
+      "status": "PASS"
+    },
+    {
+      "name": "Unknown algorithm handling",
+      "status": "PASS"
+    },
+    {
+      "name": "Batch inventory scanning",
+      "status": "PASS"
+    },
+    {
+      "name": "100% compliance score for all approved",
+      "status": "PASS"
+    },
+    {
+      "name": "Risk level distribution in scan results",
+      "status": "PASS"
+    },
+    {
+      "name": "Automated recommendations generation",
+      "status": "PASS"
+    },
+    {
+      "name": "Policy exception request",
+      "status": "PASS"
+    },
+    {
+      "name": "Add custom algorithm policy",
+      "status": "PASS"
+    },
+    {
+      "name": "Remove algorithm policy",
+      "status": "PASS"
+    },
+    {
+      "name": "List all policies",
+      "status": "PASS"
+    },
+    {
+      "name": "Engine statistics",
+      "status": "PASS"
+    },
+    {
+      "name": "Compliance report generation",
+      "status": "PASS"
+    },
+    {
+      "name": "Violation ID format",
+      "status": "PASS"
+    },
+    {
+      "name": "Policy export to JSON",
+      "status": "PASS"
+    },
+    {
+      "name": "3DES deprecated algorithm detection",
+      "status": "PASS"
+    },
+    {
+      "name": "Violation includes remediation guidance",
+      "status": "PASS"
+    },
+    {
+      "name": "Scan history tracking",
+      "status": "PASS"
+    }
+  ]
+}
