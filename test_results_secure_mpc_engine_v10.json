@@ -1,0 +1,72 @@
+{
+  "test_suite": "post_quantum_mpc_engine_v10",
+  "test_time": "2026-06-20T21:25:47.603064",
+  "engine_version": "v10-mpc-2026-june",
+  "tests_passed": 10,
+  "tests_failed": 0,
+  "test_cases": [
+    {
+      "test_id": 1,
+      "name": "basic_secret_splitting",
+      "passed": true,
+      "shares_created": 5,
+      "success": true
+    },
+    {
+      "test_id": 2,
+      "name": "threshold_reconstruction",
+      "passed": true,
+      "secret_match": true,
+      "verification_passed": true
+    },
+    {
+      "test_id": 3,
+      "name": "extra_shares_reconstruction",
+      "passed": true,
+      "secret_match": true
+    },
+    {
+      "test_id": 4,
+      "name": "insufficient_shares_rejection",
+      "passed": true,
+      "success_was_false": true
+    },
+    {
+      "test_id": 5,
+      "name": "share_combination_consistency",
+      "passed": true,
+      "all_match": true
+    },
+    {
+      "test_id": 6,
+      "name": "share_verification",
+      "passed": true,
+      "all_valid": true
+    },
+    {
+      "test_id": 7,
+      "name": "text_secret_splitting",
+      "passed": true,
+      "success": true
+    },
+    {
+      "test_id": 8,
+      "name": "invalid_threshold_validation",
+      "passed": true,
+      "success_was_false": true
+    },
+    {
+      "test_id": 9,
+      "name": "engine_statistics",
+      "passed": true,
+      "total_operations": 7
+    },
+    {
+      "test_id": 10,
+      "name": "security_audit",
+      "passed": true,
+      "hash_algorithm": "SHA3-256",
+      "post_quantum": true
+    }
+  ]
+}
