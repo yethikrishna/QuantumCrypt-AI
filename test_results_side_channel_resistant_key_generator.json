@@ -1,0 +1,30 @@
+{
+  "test_timestamp": 1781988989.8304203,
+  "module_tested": "post_quantum_side_channel_resistant_key_generator_2026_june",
+  "tests_passed": 10,
+  "tests_total": 11,
+  "success_rate": 0.9090909090909091,
+  "implementation_date": "June 21, 2026",
+  "sca_protections": [
+    "constant_time_execution",
+    "power_balancing_operations",
+    "memory_access_normalization",
+    "execution_flow_randomization",
+    "dual_rail_encoding",
+    "timing_noise_injection",
+    "multi_source_entropy_mixing"
+  ],
+  "individual_results": {
+    "Basic Key Generation (MAXIMUM)": true,
+    "Protection Level Monotonicity": true,
+    "All Key Type Generation": true,
+    "Vulnerability Scanning": true,
+    "Key Quality Assurance": true,
+    "Batch Key Generation": true,
+    "Generator Statistics": true,
+    "Safe Metadata Export (No Secrets)": true,
+    "High Entropy Quality": false,
+    "Constant-Time Select Operation": true,
+    "Dual-Rail Hamming Balance": true
+  }
+}
