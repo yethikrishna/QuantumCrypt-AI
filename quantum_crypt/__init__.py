@@ -223,3 +223,35 @@ __all__.extend([
     "SessionEvent"
 ])
 __version__ = "2026.6.21.0"
+
+
+# Post-Quantum Hybrid KEM + Signature Composite Engine (June 21, 2026)
+from .post_quantum_hybrid_kem_signature_composite_engine_2026_june import (
+    HybridKemSignatureEngine,
+    CrystalsKyberSimulator,
+    CrystalsDilithiumSimulator,
+    EntropyValidator,
+    KemSecurityLevel,
+    SignatureSecurityLevel,
+    HybridMode,
+    KemKeyPair,
+    SignatureKeyPair,
+    HybridKeyPair,
+    HybridEncapsulationResult,
+    HybridVerificationResult
+)
+__all__.extend([
+    "HybridKemSignatureEngine",
+    "CrystalsKyberSimulator",
+    "CrystalsDilithiumSimulator",
+    "EntropyValidator",
+    "KemSecurityLevel",
+    "SignatureSecurityLevel",
+    "HybridMode",
+    "KemKeyPair",
+    "SignatureKeyPair",
+    "HybridKeyPair",
+    "HybridEncapsulationResult",
+    "HybridVerificationResult"
+])
+__version__ = "2026.6.21.1"
