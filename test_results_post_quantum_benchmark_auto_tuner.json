@@ -1,0 +1,826 @@
+{
+  "benchmark_timestamp": 1781992490.4484575,
+  "algorithms_benchmarked": 7,
+  "comparison": {
+    "timestamp": 1781992490.4483216,
+    "algorithms_compared": 7,
+    "fastest_keygen": "dilithium_3",
+    "fastest_sign": "dilithium_2",
+    "fastest_verify": "dilithium_3",
+    "smallest_signature": "falcon_512",
+    "smallest_public_key": "kyber_512",
+    "matrix": {
+      "kyber_512": {
+        "algorithm": "kyber_512",
+        "category": "key_encapsulation_mechanism",
+        "security_level": 1,
+        "public_key_size": 800,
+        "secret_key_size": 1632,
+        "ciphertext_size": 768,
+        "signature_size": 0,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "kyber_512",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2227,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0111,
+            "throughput_ops_per_sec": 89820.63,
+            "memory_usage_bytes": 0
+          },
+          "encap": {
+            "algorithm": "kyber_512",
+            "operation": "encap",
+            "iterations": 20,
+            "total_time_ms": 0.2287,
+            "avg_time_ms": 0.0112,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0163,
+            "throughput_ops_per_sec": 87450.04,
+            "memory_usage_bytes": 0
+          },
+          "decap": {
+            "algorithm": "kyber_512",
+            "operation": "decap",
+            "iterations": 20,
+            "total_time_ms": 0.2298,
+            "avg_time_ms": 0.0113,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0179,
+            "throughput_ops_per_sec": 87020.08,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "kyber_768": {
+        "algorithm": "kyber_768",
+        "category": "key_encapsulation_mechanism",
+        "security_level": 3,
+        "public_key_size": 1184,
+        "secret_key_size": 2400,
+        "ciphertext_size": 1088,
+        "signature_size": 0,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "kyber_768",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2217,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90225.43,
+            "memory_usage_bytes": 0
+          },
+          "encap": {
+            "algorithm": "kyber_768",
+            "operation": "encap",
+            "iterations": 20,
+            "total_time_ms": 0.3228,
+            "avg_time_ms": 0.0159,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0657,
+            "throughput_ops_per_sec": 61964.01,
+            "memory_usage_bytes": 0
+          },
+          "decap": {
+            "algorithm": "kyber_768",
+            "operation": "decap",
+            "iterations": 20,
+            "total_time_ms": 0.264,
+            "avg_time_ms": 0.013,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0435,
+            "throughput_ops_per_sec": 75771.35,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "kyber_1024": {
+        "algorithm": "kyber_1024",
+        "category": "key_encapsulation_mechanism",
+        "security_level": 5,
+        "public_key_size": 1568,
+        "secret_key_size": 3168,
+        "ciphertext_size": 1568,
+        "signature_size": 0,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "kyber_1024",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2215,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0111,
+            "throughput_ops_per_sec": 90278.37,
+            "memory_usage_bytes": 0
+          },
+          "encap": {
+            "algorithm": "kyber_1024",
+            "operation": "encap",
+            "iterations": 20,
+            "total_time_ms": 0.2281,
+            "avg_time_ms": 0.0112,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0169,
+            "throughput_ops_per_sec": 87696.99,
+            "memory_usage_bytes": 0
+          },
+          "decap": {
+            "algorithm": "kyber_1024",
+            "operation": "decap",
+            "iterations": 20,
+            "total_time_ms": 0.2217,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0107,
+            "max_time_ms": 0.0111,
+            "throughput_ops_per_sec": 90209.56,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "dilithium_2": {
+        "algorithm": "dilithium_2",
+        "category": "digital_signature",
+        "security_level": 1,
+        "public_key_size": 1312,
+        "secret_key_size": 2528,
+        "ciphertext_size": 0,
+        "signature_size": 2420,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "dilithium_2",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2362,
+            "avg_time_ms": 0.0116,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0235,
+            "throughput_ops_per_sec": 84668.27,
+            "memory_usage_bytes": 0
+          },
+          "sign": {
+            "algorithm": "dilithium_2",
+            "operation": "sign",
+            "iterations": 20,
+            "total_time_ms": 0.221,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0107,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90486.27,
+            "memory_usage_bytes": 0
+          },
+          "verify": {
+            "algorithm": "dilithium_2",
+            "operation": "verify",
+            "iterations": 20,
+            "total_time_ms": 0.226,
+            "avg_time_ms": 0.0111,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0151,
+            "throughput_ops_per_sec": 88497.53,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "dilithium_3": {
+        "algorithm": "dilithium_3",
+        "category": "digital_signature",
+        "security_level": 3,
+        "public_key_size": 1952,
+        "secret_key_size": 4000,
+        "ciphertext_size": 0,
+        "signature_size": 3293,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "dilithium_3",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2206,
+            "avg_time_ms": 0.0108,
+            "min_time_ms": 0.0107,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90653.61,
+            "memory_usage_bytes": 0
+          },
+          "sign": {
+            "algorithm": "dilithium_3",
+            "operation": "sign",
+            "iterations": 20,
+            "total_time_ms": 0.2213,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0111,
+            "throughput_ops_per_sec": 90386.49,
+            "memory_usage_bytes": 0
+          },
+          "verify": {
+            "algorithm": "dilithium_3",
+            "operation": "verify",
+            "iterations": 20,
+            "total_time_ms": 0.2212,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90426.54,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "dilithium_5": {
+        "algorithm": "dilithium_5",
+        "category": "digital_signature",
+        "security_level": 5,
+        "public_key_size": 2592,
+        "secret_key_size": 4864,
+        "ciphertext_size": 0,
+        "signature_size": 4595,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "dilithium_5",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2306,
+            "avg_time_ms": 0.0113,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0181,
+            "throughput_ops_per_sec": 86734.41,
+            "memory_usage_bytes": 0
+          },
+          "sign": {
+            "algorithm": "dilithium_5",
+            "operation": "sign",
+            "iterations": 20,
+            "total_time_ms": 0.2303,
+            "avg_time_ms": 0.0113,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0182,
+            "throughput_ops_per_sec": 86851.92,
+            "memory_usage_bytes": 0
+          },
+          "verify": {
+            "algorithm": "dilithium_5",
+            "operation": "verify",
+            "iterations": 20,
+            "total_time_ms": 0.2215,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90312.62,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "falcon_512": {
+        "algorithm": "falcon_512",
+        "category": "digital_signature",
+        "security_level": 1,
+        "public_key_size": 897,
+        "secret_key_size": 1281,
+        "ciphertext_size": 0,
+        "signature_size": 666,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "falcon_512",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2257,
+            "avg_time_ms": 0.0111,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0152,
+            "throughput_ops_per_sec": 88595.15,
+            "memory_usage_bytes": 0
+          },
+          "sign": {
+            "algorithm": "falcon_512",
+            "operation": "sign",
+            "iterations": 20,
+            "total_time_ms": 0.2209,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0107,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90534.2,
+            "memory_usage_bytes": 0
+          },
+          "verify": {
+            "algorithm": "falcon_512",
+            "operation": "verify",
+            "iterations": 20,
+            "total_time_ms": 0.2293,
+            "avg_time_ms": 0.0113,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0183,
+            "throughput_ops_per_sec": 87228.07,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      }
+    }
+  },
+  "recommendations": {
+    "tls_handshake": {
+      "use_case": "tls_handshake",
+      "security_requirement": 3,
+      "performance_priority": "latency",
+      "recommended_algorithm": "kyber_768",
+      "algorithm_score": 54.08,
+      "profile": {
+        "algorithm": "kyber_768",
+        "category": "key_encapsulation_mechanism",
+        "security_level": 3,
+        "public_key_size": 1184,
+        "secret_key_size": 2400,
+        "ciphertext_size": 1088,
+        "signature_size": 0,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "kyber_768",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2217,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90225.43,
+            "memory_usage_bytes": 0
+          },
+          "encap": {
+            "algorithm": "kyber_768",
+            "operation": "encap",
+            "iterations": 20,
+            "total_time_ms": 0.3228,
+            "avg_time_ms": 0.0159,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0657,
+            "throughput_ops_per_sec": 61964.01,
+            "memory_usage_bytes": 0
+          },
+          "decap": {
+            "algorithm": "kyber_768",
+            "operation": "decap",
+            "iterations": 20,
+            "total_time_ms": 0.264,
+            "avg_time_ms": 0.013,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0435,
+            "throughput_ops_per_sec": 75771.35,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "alternatives": [],
+      "analysis": [
+        "Excellent key generation performance (0.01ms).",
+        "Encapsulation: 0.02ms average."
+      ]
+    },
+    "code_signing": {
+      "use_case": "code_signing",
+      "security_requirement": 3,
+      "performance_priority": "balanced",
+      "recommended_algorithm": "dilithium_3",
+      "algorithm_score": 72.06,
+      "profile": {
+        "algorithm": "dilithium_3",
+        "category": "digital_signature",
+        "security_level": 3,
+        "public_key_size": 1952,
+        "secret_key_size": 4000,
+        "ciphertext_size": 0,
+        "signature_size": 3293,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "dilithium_3",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2206,
+            "avg_time_ms": 0.0108,
+            "min_time_ms": 0.0107,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90653.61,
+            "memory_usage_bytes": 0
+          },
+          "sign": {
+            "algorithm": "dilithium_3",
+            "operation": "sign",
+            "iterations": 20,
+            "total_time_ms": 0.2213,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0111,
+            "throughput_ops_per_sec": 90386.49,
+            "memory_usage_bytes": 0
+          },
+          "verify": {
+            "algorithm": "dilithium_3",
+            "operation": "verify",
+            "iterations": 20,
+            "total_time_ms": 0.2212,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90426.54,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "alternatives": [],
+      "analysis": [
+        "Excellent key generation performance (0.01ms)."
+      ]
+    },
+    "embedded": {
+      "use_case": "document_signing",
+      "security_requirement": 1,
+      "performance_priority": "size",
+      "recommended_algorithm": "falcon_512",
+      "algorithm_score": 100,
+      "profile": {
+        "algorithm": "falcon_512",
+        "category": "digital_signature",
+        "security_level": 1,
+        "public_key_size": 897,
+        "secret_key_size": 1281,
+        "ciphertext_size": 0,
+        "signature_size": 666,
+        "benchmarks": {
+          "keygen": {
+            "algorithm": "falcon_512",
+            "operation": "keygen",
+            "iterations": 20,
+            "total_time_ms": 0.2257,
+            "avg_time_ms": 0.0111,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0152,
+            "throughput_ops_per_sec": 88595.15,
+            "memory_usage_bytes": 0
+          },
+          "sign": {
+            "algorithm": "falcon_512",
+            "operation": "sign",
+            "iterations": 20,
+            "total_time_ms": 0.2209,
+            "avg_time_ms": 0.0109,
+            "min_time_ms": 0.0107,
+            "max_time_ms": 0.011,
+            "throughput_ops_per_sec": 90534.2,
+            "memory_usage_bytes": 0
+          },
+          "verify": {
+            "algorithm": "falcon_512",
+            "operation": "verify",
+            "iterations": 20,
+            "total_time_ms": 0.2293,
+            "avg_time_ms": 0.0113,
+            "min_time_ms": 0.0108,
+            "max_time_ms": 0.0183,
+            "throughput_ops_per_sec": 87228.07,
+            "memory_usage_bytes": 0
+          }
+        },
+        "recommendations": []
+      },
+      "alternatives": [
+        {
+          "algorithm": "dilithium_2",
+          "score": 70.64,
+          "category": "digital_signature"
+        }
+      ],
+      "analysis": [
+        "Excellent key generation performance (0.01ms).",
+        "Compact signature size (666 bytes) ideal for high-volume."
+      ]
+    }
+  },
+  "profiles": [
+    {
+      "algorithm": "kyber_512",
+      "category": "key_encapsulation_mechanism",
+      "security_level": 1,
+      "public_key_size": 800,
+      "secret_key_size": 1632,
+      "ciphertext_size": 768,
+      "signature_size": 0,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "kyber_512",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2227,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0111,
+          "throughput_ops_per_sec": 89820.63,
+          "memory_usage_bytes": 0
+        },
+        "encap": {
+          "algorithm": "kyber_512",
+          "operation": "encap",
+          "iterations": 20,
+          "total_time_ms": 0.2287,
+          "avg_time_ms": 0.0112,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0163,
+          "throughput_ops_per_sec": 87450.04,
+          "memory_usage_bytes": 0
+        },
+        "decap": {
+          "algorithm": "kyber_512",
+          "operation": "decap",
+          "iterations": 20,
+          "total_time_ms": 0.2298,
+          "avg_time_ms": 0.0113,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0179,
+          "throughput_ops_per_sec": 87020.08,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    },
+    {
+      "algorithm": "kyber_768",
+      "category": "key_encapsulation_mechanism",
+      "security_level": 3,
+      "public_key_size": 1184,
+      "secret_key_size": 2400,
+      "ciphertext_size": 1088,
+      "signature_size": 0,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "kyber_768",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2217,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.011,
+          "throughput_ops_per_sec": 90225.43,
+          "memory_usage_bytes": 0
+        },
+        "encap": {
+          "algorithm": "kyber_768",
+          "operation": "encap",
+          "iterations": 20,
+          "total_time_ms": 0.3228,
+          "avg_time_ms": 0.0159,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0657,
+          "throughput_ops_per_sec": 61964.01,
+          "memory_usage_bytes": 0
+        },
+        "decap": {
+          "algorithm": "kyber_768",
+          "operation": "decap",
+          "iterations": 20,
+          "total_time_ms": 0.264,
+          "avg_time_ms": 0.013,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0435,
+          "throughput_ops_per_sec": 75771.35,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    },
+    {
+      "algorithm": "kyber_1024",
+      "category": "key_encapsulation_mechanism",
+      "security_level": 5,
+      "public_key_size": 1568,
+      "secret_key_size": 3168,
+      "ciphertext_size": 1568,
+      "signature_size": 0,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "kyber_1024",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2215,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0111,
+          "throughput_ops_per_sec": 90278.37,
+          "memory_usage_bytes": 0
+        },
+        "encap": {
+          "algorithm": "kyber_1024",
+          "operation": "encap",
+          "iterations": 20,
+          "total_time_ms": 0.2281,
+          "avg_time_ms": 0.0112,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0169,
+          "throughput_ops_per_sec": 87696.99,
+          "memory_usage_bytes": 0
+        },
+        "decap": {
+          "algorithm": "kyber_1024",
+          "operation": "decap",
+          "iterations": 20,
+          "total_time_ms": 0.2217,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0107,
+          "max_time_ms": 0.0111,
+          "throughput_ops_per_sec": 90209.56,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    },
+    {
+      "algorithm": "dilithium_2",
+      "category": "digital_signature",
+      "security_level": 1,
+      "public_key_size": 1312,
+      "secret_key_size": 2528,
+      "ciphertext_size": 0,
+      "signature_size": 2420,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "dilithium_2",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2362,
+          "avg_time_ms": 0.0116,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0235,
+          "throughput_ops_per_sec": 84668.27,
+          "memory_usage_bytes": 0
+        },
+        "sign": {
+          "algorithm": "dilithium_2",
+          "operation": "sign",
+          "iterations": 20,
+          "total_time_ms": 0.221,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0107,
+          "max_time_ms": 0.011,
+          "throughput_ops_per_sec": 90486.27,
+          "memory_usage_bytes": 0
+        },
+        "verify": {
+          "algorithm": "dilithium_2",
+          "operation": "verify",
+          "iterations": 20,
+          "total_time_ms": 0.226,
+          "avg_time_ms": 0.0111,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0151,
+          "throughput_ops_per_sec": 88497.53,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    },
+    {
+      "algorithm": "dilithium_3",
+      "category": "digital_signature",
+      "security_level": 3,
+      "public_key_size": 1952,
+      "secret_key_size": 4000,
+      "ciphertext_size": 0,
+      "signature_size": 3293,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "dilithium_3",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2206,
+          "avg_time_ms": 0.0108,
+          "min_time_ms": 0.0107,
+          "max_time_ms": 0.011,
+          "throughput_ops_per_sec": 90653.61,
+          "memory_usage_bytes": 0
+        },
+        "sign": {
+          "algorithm": "dilithium_3",
+          "operation": "sign",
+          "iterations": 20,
+          "total_time_ms": 0.2213,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0111,
+          "throughput_ops_per_sec": 90386.49,
+          "memory_usage_bytes": 0
+        },
+        "verify": {
+          "algorithm": "dilithium_3",
+          "operation": "verify",
+          "iterations": 20,
+          "total_time_ms": 0.2212,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.011,
+          "throughput_ops_per_sec": 90426.54,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    },
+    {
+      "algorithm": "dilithium_5",
+      "category": "digital_signature",
+      "security_level": 5,
+      "public_key_size": 2592,
+      "secret_key_size": 4864,
+      "ciphertext_size": 0,
+      "signature_size": 4595,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "dilithium_5",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2306,
+          "avg_time_ms": 0.0113,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0181,
+          "throughput_ops_per_sec": 86734.41,
+          "memory_usage_bytes": 0
+        },
+        "sign": {
+          "algorithm": "dilithium_5",
+          "operation": "sign",
+          "iterations": 20,
+          "total_time_ms": 0.2303,
+          "avg_time_ms": 0.0113,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0182,
+          "throughput_ops_per_sec": 86851.92,
+          "memory_usage_bytes": 0
+        },
+        "verify": {
+          "algorithm": "dilithium_5",
+          "operation": "verify",
+          "iterations": 20,
+          "total_time_ms": 0.2215,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.011,
+          "throughput_ops_per_sec": 90312.62,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    },
+    {
+      "algorithm": "falcon_512",
+      "category": "digital_signature",
+      "security_level": 1,
+      "public_key_size": 897,
+      "secret_key_size": 1281,
+      "ciphertext_size": 0,
+      "signature_size": 666,
+      "benchmarks": {
+        "keygen": {
+          "algorithm": "falcon_512",
+          "operation": "keygen",
+          "iterations": 20,
+          "total_time_ms": 0.2257,
+          "avg_time_ms": 0.0111,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0152,
+          "throughput_ops_per_sec": 88595.15,
+          "memory_usage_bytes": 0
+        },
+        "sign": {
+          "algorithm": "falcon_512",
+          "operation": "sign",
+          "iterations": 20,
+          "total_time_ms": 0.2209,
+          "avg_time_ms": 0.0109,
+          "min_time_ms": 0.0107,
+          "max_time_ms": 0.011,
+          "throughput_ops_per_sec": 90534.2,
+          "memory_usage_bytes": 0
+        },
+        "verify": {
+          "algorithm": "falcon_512",
+          "operation": "verify",
+          "iterations": 20,
+          "total_time_ms": 0.2293,
+          "avg_time_ms": 0.0113,
+          "min_time_ms": 0.0108,
+          "max_time_ms": 0.0183,
+          "throughput_ops_per_sec": 87228.07,
+          "memory_usage_bytes": 0
+        }
+      },
+      "recommendations": []
+    }
+  ],
+  "test_status": "PASSED"
+}
