@@ -1,0 +1,22 @@
+{
+  "test_suite": "Post-Quantum Key Exchange Selector & Benchmark Engine V2",
+  "tests_passed": 13,
+  "tests_total": 13,
+  "pass_rate": 1.0,
+  "execution_time_seconds": 0.014275312423706055,
+  "results": {
+    "test_algorithm_registry_initialization": true,
+    "test_security_level_filtering": true,
+    "test_use_case_filtering": true,
+    "test_algorithm_to_dict": true,
+    "test_single_algorithm_benchmark": true,
+    "test_algorithm_comparison": true,
+    "test_recommendation_tls_handshake": true,
+    "test_recommendation_high_security": true,
+    "test_recommendation_iot_constrained": true,
+    "test_hybrid_preference": true,
+    "test_comparison_report_generation": true,
+    "test_benchmark_history": true,
+    "test_recommendation_to_dict": true
+  }
+}
