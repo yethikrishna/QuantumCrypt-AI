@@ -36,3 +36,16 @@ from .post_quantum_secure_database_field_encryption_2026_june import (
 )
 
 __version__ = "2026.6.20.5"
+
+
+# Post-Quantum Secure Session Manager (June 20, 2026)
+from .post_quantum_secure_session_manager_2026_june import (
+    PostQuantumSecureSessionManager,
+    PostQuantumKeyGenerator,
+    SessionSecurityPolicy,
+    SessionState,
+    KeyExchangeAlgorithm,
+    CipherAlgorithm,
+    SecureSession
+)
+
