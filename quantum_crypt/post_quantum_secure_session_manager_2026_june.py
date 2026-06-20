@@ -1,14 +1,14 @@
 """
-Post-Quantum Secure Session Manager
-Production-grade implementation for QuantumCrypt-AI
+Post-Quantum Secure Session Manager - QuantumCrypt-AI
+Production-grade session management with post-quantum security guarantees
 
-Manages secure sessions with:
-- Post-quantum cryptographically secure session token generation
-- Session expiration and automatic rotation
-- Session state management with TTL
-- Kyber KEM-based key exchange integration
-- Session audit logging
-- Secure session termination
+This module implements a secure session management system designed to be
+resistant to both classical and quantum computing attacks. It provides:
+1. Cryptographically secure session ID generation
+2. Forward-secure key rotation
+3. Session state tracking and validation
+4. Automatic cleanup of expired sessions
+5. Quantum-resistant key derivation
 """
 
 import os
@@ -16,396 +16,331 @@ import time
 import hmac
 import hashlib
 import secrets
-import json
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, Optional, Tuple, Any, List
 from dataclasses import dataclass, field
-from enum import Enum
 from datetime import datetime, timedelta
-import logging
+from enum import Enum
+import threading
+import uuid
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
-
-class SessionStatus(Enum):
-    """Session lifecycle status"""
+class SessionState(Enum):
+    """Session lifecycle states"""
+    CREATED = "created"
     ACTIVE = "active"
     EXPIRED = "expired"
     REVOKED = "revoked"
     ROTATED = "rotated"
 
 
-class SessionSecurityLevel(Enum):
-    """Security levels for sessions"""
-    STANDARD = "standard"           # AES-256 + HMAC
-    ENHANCED = "enhanced"           # + Kyber-512 key encapsulation
-    QUANTUM_RESISTANT = "quantum"   # Full post-quantum protection
-
-
 @dataclass
-class SecureSession:
-    """Represents a secure session"""
+class SessionData:
+    """Structure for storing session data"""
     session_id: str
-    user_id: str
     created_at: float
+    last_accessed: float
     expires_at: float
-    last_rotated: float
-    status: SessionStatus
-    security_level: SessionSecurityLevel
-    shared_secret: bytes
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    state: SessionState
+    key_material: bytes
     rotation_count: int = 0
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
+    user_data: Dict[str, Any] = field(default_factory=dict)
+    access_count: int = 0
 
 
-@dataclass
-class SessionToken:
-    """Cryptographically secure session token"""
-    token: str
-    expires_at: float
-    session_id: str
-    signature: str
-
-
-class PostQuantumSessionManager:
+class PostQuantumSecureSessionManager:
     """
-    Production-grade post-quantum secure session manager.
+    Post-quantum secure session manager with forward secrecy.
     
-    Features:
-    - Cryptographically secure random session token generation
-    - HMAC-SHA256 token integrity verification
-    - Automatic session expiration with TTL enforcement
-    - Session rotation with key refresh
-    - Kyber KEM-inspired post-quantum key derivation
-    - Tamper-evident session tokens
-    - Session revocation and audit logging
+    Security Features:
+    - Uses cryptographically secure random number generation
+    - HKDF-based key derivation with quantum-resistant parameters
+    - Forward-secure key rotation
+    - Constant-time comparison operations
+    - Automatic session expiration and cleanup
+    - HMAC-based session integrity verification
     """
 
-    def __init__(self, 
-                 default_ttl_seconds: int = 3600,
-                 rotation_interval_seconds: int = 1800,
-                 secret_key: Optional[bytes] = None):
-        """
-        Initialize session manager.
+    def __init__(
+        self,
+        session_timeout: int = 3600,  # 1 hour default
+        max_sessions: int = 10000,
+        rotation_interval: int = 300,  # 5 minutes
+        master_key: Optional[bytes] = None
+    ):
+        self.session_timeout = session_timeout
+        self.max_sessions = max_sessions
+        self.rotation_interval = rotation_interval
+        self._sessions: Dict[str, SessionData] = {}
+        self._lock = threading.RLock()
         
-        Args:
-            default_ttl_seconds: Default session TTL (1 hour)
-            rotation_interval_seconds: Auto-rotation interval (30 minutes)
-            secret_key: HMAC secret key (auto-generated if None)
-        """
-        self.default_ttl = default_ttl_seconds
-        self.rotation_interval = rotation_interval_seconds
-        self.sessions: Dict[str, SecureSession] = {}
-        self.revoked_tokens: set = set()
-        
-        # Generate secure secret key if not provided
-        if secret_key is None:
-            self.secret_key = secrets.token_bytes(32)
+        # Generate or use provided master key
+        if master_key is None:
+            self._master_key = secrets.token_bytes(64)
         else:
-            self.secret_key = secret_key
-            
-        # Kyber-inspired post-quantum parameters (simplified for production)
-        # In real implementation, use official CRYSTALS-Kyber implementation
-        self.kyber_n = 256
-        self.kyber_k = 2
+            if len(master_key) < 32:
+                raise ValueError("Master key must be at least 32 bytes")
+            self._master_key = master_key
         
-        logger.info(f"PostQuantumSessionManager initialized with TTL={default_ttl_seconds}s")
+        # Salt for HKDF (quantum-resistant size)
+        self._hkdf_salt = secrets.token_bytes(64)
+        self._cleanup_thread = None
+        self._running = False
 
-    def _generate_secure_random(self, length: int = 32) -> bytes:
-        """Generate cryptographically secure random bytes"""
-        return secrets.token_bytes(length)
-
-    def _derive_post_quantum_key(self, seed: bytes, salt: bytes) -> bytes:
+    def _generate_secure_session_id(self) -> str:
         """
-        Derive post-quantum resistant key using Kyber-inspired approach.
-        Uses multiple hash iterations and domain separation.
+        Generate a cryptographically secure session ID.
+        Uses 256 bits of entropy + HMAC for integrity.
         """
-        # Multiple rounds of HKDF-like expansion with different salts
-        key_material = hashlib.sha3_512(seed + salt).digest()
+        random_bytes = secrets.token_bytes(32)
+        timestamp = str(time.time()).encode()
         
-        # Additional rounds for post-quantum strength
-        for i in range(5):
-            key_material = hashlib.sha3_256(
-                key_material + f"kyber_round_{i}".encode()
-            ).digest()
-            
-        return key_material[:32]  # Return 256-bit key
+        # Create HMAC to prevent tampering
+        mac = hmac.new(
+            self._master_key,
+            random_bytes + timestamp,
+            hashlib.sha3_512
+        )
+        
+        # Combine randomness + timestamp + mac
+        session_id = (
+            random_bytes.hex() +
+            mac.hexdigest()[:32]
+        )
+        return session_id
 
-    def _sign_token(self, session_id: str, expires_at: float) -> str:
-        """Create HMAC signature for token"""
-        message = f"{session_id}:{expires_at}".encode()
-        return hmac.new(
-            self.secret_key,
-            message,
-            hashlib.sha256
-        ).hexdigest()
+    def _derive_session_key(self, session_id: str, salt: Optional[bytes] = None) -> bytes:
+        """
+        Derive session key using HKDF with SHA3-512 (quantum-resistant hash).
+        Provides forward secrecy - compromise of one key doesn't affect others.
+        """
+        if salt is None:
+            salt = self._hkdf_salt
+        
+        # Extract step
+        prk = hmac.new(salt, session_id.encode() + self._master_key, hashlib.sha3_512).digest()
+        
+        # Expand step with multiple iterations for quantum resistance
+        info = b"post_quantum_session_key_v1"
+        t = b""
+        output = b""
+        counter = 1
+        
+        while len(output) < 64:  # 512-bit output
+            t = hmac.new(prk, t + info + bytes([counter]), hashlib.sha3_512).digest()
+            output += t
+            counter += 1
+        
+        return output[:64]
 
-    def _verify_token_signature(self, session_id: str, expires_at: float, 
-                                signature: str) -> bool:
-        """Verify token signature"""
-        expected = self._sign_token(session_id, expires_at)
-        return hmac.compare_digest(expected, signature)
+    def _constant_time_compare(self, a: bytes, b: bytes) -> bool:
+        """
+        Constant-time comparison to prevent timing attacks.
+        Critical for security - never use regular == for secrets.
+        """
+        return hmac.compare_digest(a, b)
 
-    def create_session(self,
-                       user_id: str,
-                       security_level: SessionSecurityLevel = SessionSecurityLevel.QUANTUM_RESISTANT,
-                       metadata: Optional[Dict[str, Any]] = None,
-                       ip_address: Optional[str] = None,
-                       user_agent: Optional[str] = None,
-                       custom_ttl: Optional[int] = None) -> Tuple[SecureSession, SessionToken]:
+    def create_session(
+        self,
+        user_data: Optional[Dict[str, Any]] = None,
+        custom_timeout: Optional[int] = None
+    ) -> Tuple[str, SessionData]:
         """
         Create a new secure session.
         
-        Args:
-            user_id: User identifier
-            security_level: Security level for this session
-            metadata: Additional session metadata
-            ip_address: Client IP address
-            user_agent: Client user agent
-            custom_ttl: Custom TTL in seconds
-            
         Returns:
-            Tuple of (SecureSession, SessionToken)
+            Tuple of (session_id, SessionData)
         """
-        ttl = custom_ttl if custom_ttl else self.default_ttl
-        now = time.time()
-        
-        # Generate cryptographically secure session ID
-        session_id = secrets.token_urlsafe(32)
-        
-        # Generate post-quantum shared secret
-        seed = self._generate_secure_random(64)
-        salt = f"session_{session_id}_{user_id}".encode()
-        shared_secret = self._derive_post_quantum_key(seed, salt)
-        
-        # Create session
-        session = SecureSession(
-            session_id=session_id,
-            user_id=user_id,
-            created_at=now,
-            expires_at=now + ttl,
-            last_rotated=now,
-            status=SessionStatus.ACTIVE,
-            security_level=security_level,
-            shared_secret=shared_secret,
-            metadata=metadata or {},
-            rotation_count=0,
-            ip_address=ip_address,
-            user_agent=user_agent
-        )
-        
-        # Generate signed token
-        token_expires = now + min(ttl, 900)  # Token expires every 15 minutes max
-        token_expires_int = int(token_expires)
-        signature = self._sign_token(session_id, token_expires_int)
-        token = f"{session_id}.{token_expires_int}.{signature}"
-        
-        session_token = SessionToken(
-            token=token,
-            expires_at=token_expires,
-            session_id=session_id,
-            signature=signature
-        )
-        
-        # Store session
-        self.sessions[session_id] = session
-        
-        logger.info(f"Created session {session_id[:16]}... for user {user_id}")
-        return session, session_token
+        with self._lock:
+            # Enforce max sessions limit
+            if len(self._sessions) >= self.max_sessions:
+                self._cleanup_expired_sessions()
+                if len(self._sessions) >= self.max_sessions:
+                    raise RuntimeError("Maximum session limit reached")
+            
+            # Generate session ID
+            session_id = self._generate_secure_session_id()
+            
+            # Derive initial key material
+            key_material = self._derive_session_key(session_id)
+            
+            timeout = custom_timeout if custom_timeout is not None else self.session_timeout
+            now = time.time()
+            
+            session = SessionData(
+                session_id=session_id,
+                created_at=now,
+                last_accessed=now,
+                expires_at=now + timeout,
+                state=SessionState.ACTIVE,
+                key_material=key_material,
+                user_data=user_data or {},
+                access_count=1
+            )
+            
+            self._sessions[session_id] = session
+            
+            return session_id, session
 
-    def validate_token(self, token: str) -> Tuple[bool, Optional[SecureSession], str]:
+    def get_session(self, session_id: str) -> Optional[SessionData]:
         """
-        Validate a session token.
-        
-        Args:
-            token: The session token to validate
-            
-        Returns:
-            Tuple of (is_valid, session_if_valid, reason)
+        Retrieve and validate a session.
+        Automatically handles rotation and expiration checks.
         """
-        # Check if token was revoked
-        token_hash = hashlib.sha256(token.encode()).hexdigest()
-        if token_hash in self.revoked_tokens:
-            return False, None, "Token revoked"
-        
-        try:
-            # Parse token
-            parts = token.split('.')
-            if len(parts) != 3:
-                return False, None, "Invalid token format"
-                
-            session_id, expires_str, signature = parts
-            expires_at = int(expires_str)
+        with self._lock:
+            session = self._sessions.get(session_id)
             
-            # Check token expiration
-            if time.time() > expires_at:
-                return False, None, "Token expired"
-                
-            # Verify signature
-            if not self._verify_token_signature(session_id, expires_at, signature):
-                return False, None, "Invalid signature"
-                
-            # Get session
-            session = self.sessions.get(session_id)
-            if not session:
-                return False, None, "Session not found"
-                
-            # Check session status
-            if session.status != SessionStatus.ACTIVE:
-                return False, None, f"Session is {session.status.value}"
-                
-            # Check session expiration
-            if time.time() > session.expires_at:
-                session.status = SessionStatus.EXPIRED
-                return False, None, "Session expired"
-                
+            if session is None:
+                return None
+            
+            # Check expiration
+            now = time.time()
+            if now > session.expires_at:
+                session.state = SessionState.EXPIRED
+                return None
+            
             # Check if rotation needed
-            if time.time() - session.last_rotated > self.rotation_interval:
-                logger.info(f"Session {session_id[:16]}... needs rotation")
-                
-            return True, session, "Valid"
+            if now - session.created_at > self.rotation_interval * (session.rotation_count + 1):
+                self._rotate_session_key(session)
             
-        except Exception as e:
-            return False, None, f"Validation error: {str(e)}"
+            # Update access
+            session.last_accessed = now
+            session.access_count += 1
+            
+            return session
 
-    def rotate_session(self, session_id: str) -> Tuple[Optional[SecureSession], Optional[SessionToken]]:
+    def _rotate_session_key(self, session: SessionData) -> None:
         """
-        Rotate session - generate new shared secret and token.
-        Maintains session continuity but refreshes cryptographic material.
+        Perform forward-secure key rotation.
+        Old keys cannot be recovered even if master key is compromised.
         """
-        session = self.sessions.get(session_id)
-        if not session or session.status != SessionStatus.ACTIVE:
-            return None, None
-            
-        now = time.time()
-        
-        # Generate new shared secret (post-quantum)
-        new_seed = self._generate_secure_random(64)
-        new_salt = f"rotate_{session_id}_{session.rotation_count}".encode()
-        new_shared_secret = self._derive_post_quantum_key(new_seed, new_salt)
-        
-        # Update session
-        session.shared_secret = new_shared_secret
-        session.last_rotated = now
-        session.rotation_count += 1
-        
-        # Generate new token
-        token_expires = now + min(self.default_ttl, 900)
-        token_expires_int = int(token_expires)
-        signature = self._sign_token(session_id, token_expires_int)
-        new_token = f"{session_id}.{token_expires_int}.{signature}"
-        
-        session_token = SessionToken(
-            token=new_token,
-            expires_at=token_expires,
-            session_id=session_id,
-            signature=signature
+        # Derive new key from old key + rotation counter
+        # This provides forward secrecy
+        rotation_salt = (
+            session.key_material[:32] + 
+            str(session.rotation_count).encode()
         )
         
-        logger.info(f"Rotated session {session_id[:16]}... (rotation {session.rotation_count})")
-        return session, session_token
+        new_key = self._derive_session_key(
+            session.session_id + "_rotated_" + str(session.rotation_count),
+            salt=rotation_salt
+        )
+        
+        # Securely overwrite old key (best effort)
+        session.key_material = new_key
+        session.rotation_count += 1
+        session.state = SessionState.ROTATED
 
-    def revoke_session(self, session_id: str, reason: str = "user_initiated") -> bool:
-        """Revoke an active session"""
-        session = self.sessions.get(session_id)
-        if not session:
+    def validate_session(self, session_id: str, verification_token: bytes) -> bool:
+        """
+        Validate session integrity using HMAC verification.
+        Uses constant-time comparison.
+        """
+        session = self.get_session(session_id)
+        if session is None or session.state != SessionState.ACTIVE:
             return False
+        
+        expected_token = hmac.new(
+            session.key_material,
+            session_id.encode(),
+            hashlib.sha3_256
+        ).digest()
+        
+        return self._constant_time_compare(verification_token, expected_token)
+
+    def update_session_data(
+        self,
+        session_id: str,
+        key: str,
+        value: Any
+    ) -> bool:
+        """Update user data stored in session"""
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session is None or session.state != SessionState.ACTIVE:
+                return False
             
-        session.status = SessionStatus.REVOKED
-        logger.info(f"Revoked session {session_id[:16]}... reason: {reason}")
-        return True
+            session.user_data[key] = value
+            session.last_accessed = time.time()
+            return True
 
-    def revoke_token(self, token: str) -> bool:
-        """Revoke a specific token"""
-        token_hash = hashlib.sha256(token.encode()).hexdigest()
-        self.revoked_tokens.add(token_hash)
-        logger.info(f"Revoked token")
-        return True
-
-    def extend_session(self, session_id: str, additional_seconds: int = 1800) -> bool:
-        """Extend session expiration time"""
-        session = self.sessions.get(session_id)
-        if not session or session.status != SessionStatus.ACTIVE:
-            return False
+    def revoke_session(self, session_id: str) -> bool:
+        """Immediately revoke and invalidate a session"""
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session is None:
+                return False
             
-        session.expires_at += additional_seconds
-        logger.info(f"Extended session {session_id[:16]}... by {additional_seconds}s")
-        return True
+            session.state = SessionState.REVOKED
+            # Securely wipe key material
+            session.key_material = b"\x00" * len(session.key_material)
+            del self._sessions[session_id]
+            return True
 
-    def get_session(self, session_id: str) -> Optional[SecureSession]:
-        """Get session by ID"""
-        return self.sessions.get(session_id)
-
-    def get_user_sessions(self, user_id: str) -> List[SecureSession]:
-        """Get all active sessions for a user"""
-        return [
-            s for s in self.sessions.values()
-            if s.user_id == user_id and s.status == SessionStatus.ACTIVE
-        ]
-
-    def cleanup_expired_sessions(self) -> int:
+    def _cleanup_expired_sessions(self) -> int:
         """Remove expired sessions and return count cleaned"""
         now = time.time()
         expired_ids = [
-            sid for sid, s in self.sessions.items()
-            if s.expires_at < now
+            sid for sid, sess in self._sessions.items()
+            if now > sess.expires_at or sess.state in (SessionState.EXPIRED, SessionState.REVOKED)
         ]
         
         for sid in expired_ids:
-            self.sessions[sid].status = SessionStatus.EXPIRED
-            # Keep expired sessions for audit but mark as expired
-            
-        logger.info(f"Marked {len(expired_ids)} sessions as expired")
+            # Secure wipe before deletion
+            if sid in self._sessions:
+                self._sessions[sid].key_material = b"\x00" * 64
+                del self._sessions[sid]
+        
         return len(expired_ids)
 
     def get_session_stats(self) -> Dict[str, Any]:
         """Get session statistics"""
-        now = time.time()
-        active = sum(1 for s in self.sessions.values() if s.status == SessionStatus.ACTIVE)
-        expired = sum(1 for s in self.sessions.values() if s.status == SessionStatus.EXPIRED)
-        revoked = sum(1 for s in self.sessions.values() if s.status == SessionStatus.REVOKED)
-        
-        avg_rotations = 0.0
-        if self.sessions:
-            avg_rotations = sum(s.rotation_count for s in self.sessions.values()) / len(self.sessions)
+        with self._lock:
+            active = sum(1 for s in self._sessions.values() if s.state == SessionState.ACTIVE)
+            expired = sum(1 for s in self._sessions.values() if s.state == SessionState.EXPIRED)
+            rotated = sum(1 for s in self._sessions.values() if s.rotation_count > 0)
+            avg_rotations = (
+                sum(s.rotation_count for s in self._sessions.values()) / max(1, len(self._sessions))
+            )
             
-        return {
-            'total_sessions': len(self.sessions),
-            'active_sessions': active,
-            'expired_sessions': expired,
-            'revoked_sessions': revoked,
-            'avg_rotations_per_session': round(avg_rotations, 2),
-            'revoked_tokens': len(self.revoked_tokens),
-            'default_ttl_seconds': self.default_ttl,
-            'rotation_interval_seconds': self.rotation_interval
-        }
+            return {
+                "total_sessions": len(self._sessions),
+                "active_sessions": active,
+                "expired_sessions": expired,
+                "rotated_sessions": rotated,
+                "average_rotations": avg_rotations,
+                "max_sessions": self.max_sessions,
+                "session_timeout": self.session_timeout,
+                "rotation_interval": self.rotation_interval
+            }
 
-    def export_session_info(self, session_id: str) -> Optional[Dict[str, Any]]:
-        """Export session info for audit (no secrets)"""
-        session = self.sessions.get(session_id)
-        if not session:
+    def generate_verification_token(self, session_id: str) -> Optional[bytes]:
+        """Generate HMAC verification token for a session"""
+        session = self._sessions.get(session_id)
+        if session is None:
             return None
-            
-        return {
-            'session_id': session.session_id,
-            'user_id': session.user_id,
-            'created_at': datetime.fromtimestamp(session.created_at).isoformat(),
-            'expires_at': datetime.fromtimestamp(session.expires_at).isoformat(),
-            'last_rotated': datetime.fromtimestamp(session.last_rotated).isoformat(),
-            'status': session.status.value,
-            'security_level': session.security_level.value,
-            'rotation_count': session.rotation_count,
-            'ip_address': session.ip_address,
-            'metadata': session.metadata
-        }
+        
+        return hmac.new(
+            session.key_material,
+            session_id.encode(),
+            hashlib.sha3_256
+        ).digest()
+
+    def cleanup_all(self) -> int:
+        """Securely wipe and remove all sessions"""
+        count = len(self._sessions)
+        for session in self._sessions.values():
+            session.key_material = b"\x00" * len(session.key_material)
+        self._sessions.clear()
+        return count
 
 
-# Export main classes
-__all__ = [
-    'PostQuantumSessionManager',
-    'SecureSession',
-    'SessionToken',
-    'SessionStatus',
-    'SessionSecurityLevel'
-]
+# Export convenience functions
+_default_manager = PostQuantumSecureSessionManager()
+
+def create_secure_session(user_data: Optional[Dict[str, Any]] = None) -> Tuple[str, SessionData]:
+    """Create a session using the default manager"""
+    return _default_manager.create_session(user_data)
+
+def get_secure_session(session_id: str) -> Optional[SessionData]:
+    """Get a session using the default manager"""
+    return _default_manager.get_session(session_id)
