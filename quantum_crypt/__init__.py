@@ -103,31 +103,6 @@ __all__.extend([
     "verify_quantum_pbkdf"
 ])
 
-# Post-Quantum Entropy Pool Manager (June 20, 2026 Production Release)
-from .post_quantum_entropy_pool_manager_2026_june import (
-    PostQuantumEntropyPoolManager,
-    EntropyPool,
-    EntropySample,
-    EntropySourceType,
-    EntropyQuality,
-    PoolHealthStatus,
-    PoolStatus,
-    RandomGenerationResult,
-    create_entropy_manager,
-    verify_entropy_manager
-)
-__all__.extend([
-    "PostQuantumEntropyPoolManager",
-    "EntropyPool",
-    "EntropySample",
-    "EntropySourceType",
-    "EntropyQuality",
-    "PoolHealthStatus",
-    "PoolStatus",
-    "RandomGenerationResult",
-    "create_entropy_manager",
-    "verify_entropy_manager"
-])
 
 # Post-Quantum Key Exchange Performance Benchmarker (June 20, 2026)
 from .post_quantum_key_exchange_performance_benchmarker_2026_june import (
