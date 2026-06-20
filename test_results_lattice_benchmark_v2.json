@@ -1,0 +1,24 @@
+{
+  "test_timestamp": "2026-06-21T06:08:58.146339",
+  "module": "Lattice Crypto Benchmark v2",
+  "passed": 8,
+  "total": 8,
+  "results": {
+    "test_benchmark_single_operation": true,
+    "test_benchmark_multiple_algorithms": true,
+    "test_validation_correctness": true,
+    "test_all_algorithms_validation": true,
+    "test_comparison_report": true,
+    "test_json_export": true,
+    "test_algorithm_profiles": true,
+    "test_statistical_calculations": true
+  },
+  "verification": {
+    "status": "success",
+    "benchmarks_completed": 4,
+    "validations_completed": 10,
+    "validations_passed": 10,
+    "export_ok": true,
+    "algorithms_tested": 10
+  }
+}
