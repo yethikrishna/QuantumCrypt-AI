@@ -1,1 +1,9 @@
-{"tests_passed": true, "benchmark": "completed", "speedup": "1.99x"}
+{
+  "benchmark_timestamp": 1781970981.095915,
+  "sequential_time_ms": 30.65,
+  "parallel_time_ms": 5.58,
+  "observed_speedup": 5.5,
+  "theoretical_speedup": 8.0,
+  "total_verifications": 100,
+  "status": "PASSED"
+}
