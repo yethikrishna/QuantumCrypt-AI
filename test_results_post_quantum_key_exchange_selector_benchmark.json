@@ -1,0 +1,26 @@
+{
+  "test_module": "post_quantum_key_exchange_selector_benchmark_2026_june",
+  "timestamp": "2026-06-21T07:24:51",
+  "total_tests": 10,
+  "passed_tests": 10,
+  "all_passed": true,
+  "results": {
+    "Protocol listing": true,
+    "Protocol parameters": true,
+    "Single protocol benchmark": true,
+    "Benchmark caching": true,
+    "Balanced protocol selection": true,
+    "Performance mode selection": true,
+    "Constrained environment selection": true,
+    "Security mode selection": true,
+    "Hardware detection": true,
+    "Comparison report": true
+  },
+  "hardware_info": {
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "system": "Linux",
+    "python_version": "3.10.12",
+    "cpu_count": "2"
+  }
+}
