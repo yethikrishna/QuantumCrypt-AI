@@ -1,60 +1,19 @@
 {
-  "metadata": {
-    "benchmark_date": "2026-06-20 18:39:16",
-    "profiler_version": "2026.06",
-    "note": "HONEST BENCHMARK - All timings from real computational operations"
-  },
+  "test_timestamp": "2026-06-20T18:55:32.357212",
+  "module": "post_quantum_crypto_algorithm_benchmark_profiler",
+  "passed": 10,
+  "total": 10,
+  "all_passed": true,
   "results": {
-    "CRYSTALS-Kyber-512": {
-      "category": "Key Encapsulation Mechanism",
-      "security_level": 1,
-      "key_sizes": {
-        "public_key_bytes": 800,
-        "private_key_bytes": 1632,
-        "ciphertext_bytes": 768,
-        "signature_bytes": 0
-      },
-      "overall_performance_score": 636.1,
-      "benchmarks": {
-        "keygen": {
-          "iterations": 3,
-          "avg_time_ms": 1.5721,
-          "min_time_ms": 1.5634,
-          "max_time_ms": 1.5769,
-          "std_dev_ms": 0.0076,
-          "operations_per_second": 636.1,
-          "cpu_cycles_estimate": 4716213
-        }
-      }
-    }
-  },
-  "recommendations": {
-    "summary": {
-      "total_algorithms_benchmarked": 1,
-      "generated_at": "2026-06-20 18:39:16"
-    },
-    "recommendations_by_category": {
-      "Key Encapsulation Mechanism": [
-        {
-          "algorithm": "CRYSTALS-Kyber-512",
-          "score": 636.1
-        }
-      ]
-    },
-    "size_comparison": [
-      {
-        "algorithm": "CRYSTALS-Kyber-512",
-        "pub_key_bytes": 800,
-        "priv_key_bytes": 1632,
-        "total_key_size": 2432,
-        "performance_score": 636.1
-      }
-    ],
-    "performance_leaders": [
-      {
-        "algorithm": "CRYSTALS-Kyber-512",
-        "score": 636.1
-      }
-    ]
+    "initialization": "PASSED",
+    "algorithm_registry": "PASSED",
+    "mock_algorithms": "PASSED",
+    "single_benchmark": "PASSED",
+    "comparative_benchmark": "PASSED",
+    "report_generation": "PASSED",
+    "markdown_export": "PASSED",
+    "json_export": "PASSED",
+    "category_filtering": "PASSED",
+    "full_suite": "PASSED"
   }
 }
