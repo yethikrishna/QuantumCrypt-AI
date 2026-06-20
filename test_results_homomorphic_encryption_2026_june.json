@@ -1,0 +1,7 @@
+{
+  "module": "post_quantum_homomorphic_encryption_scheme",
+  "tests_passed": 10,
+  "tests_total": 10,
+  "success_rate": 1.0,
+  "status": "PASSED"
+}
