@@ -47,3 +47,20 @@ from .post_quantum_secure_session_manager_2026_june import (
     SessionSecurityLevel
 )
 
+
+# Post-Quantum Memory-Hard PBKDF Engine (June 20, 2026)
+# Quantum-resistant password hashing with memory-hard construction
+from .post_quantum_memory_hard_pbkdf_enhanced_2026_june import (
+    QuantumSecurePBKDF,
+    PasswordManager,
+    PBKDFParameters,
+    HashAlgorithm,
+    SecurityLevel,
+    VerificationResult,
+    VerificationStatus,
+    DerivedKey,
+    create_quantum_pbkdf,
+    verify_quantum_pbkdf
+)
+
+__version__ = "2026.6.20.6"
