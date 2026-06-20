@@ -64,3 +64,32 @@ from .post_quantum_memory_hard_pbkdf_enhanced_2026_june import (
 )
 
 __version__ = "2026.6.20.6"
+
+
+# Post-Quantum Entropy Pool Manager (June 20, 2026 Production Release)
+# Cryptographic entropy collection, mixing, and distribution engine
+from .post_quantum_entropy_pool_manager_2026_june import (
+    PostQuantumEntropyPoolManager,
+    EntropyPool,
+    EntropySample,
+    EntropySourceType,
+    EntropyQuality,
+    PoolHealthStatus,
+    PoolStatus,
+    RandomGenerationResult,
+    create_entropy_manager,
+    verify_entropy_manager
+)
+__all__.extend([
+    "PostQuantumEntropyPoolManager",
+    "EntropyPool",
+    "EntropySample",
+    "EntropySourceType",
+    "EntropyQuality",
+    "PoolHealthStatus",
+    "PoolStatus",
+    "RandomGenerationResult",
+    "create_entropy_manager",
+    "verify_entropy_manager"
+])
+__version__ = "2026.6.20.7"
