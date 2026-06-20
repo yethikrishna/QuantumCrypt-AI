@@ -1,0 +1,10 @@
+{
+  "test_timestamp": 1781931088.9245188,
+  "test_datetime": "2026-06-20 12:51:28",
+  "tests_run": 23,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASSED",
+  "monitor_version": "pq_perf_monitor_v1"
+}
