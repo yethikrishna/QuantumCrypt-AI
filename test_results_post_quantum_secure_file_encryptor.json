@@ -1,0 +1,173 @@
+{
+  "test_date": "2026-06-21",
+  "encryptor_version": "v1.0",
+  "total_tests": 8,
+  "tests_passed": 6,
+  "tests_failed": 2,
+  "success_rate": 0.75,
+  "test_results": [
+    {
+      "test": "file_encryption_decryption",
+      "passed": true,
+      "files_tested": 3,
+      "results": [
+        {
+          "filename": "small_file.txt",
+          "original_size": 210,
+          "encrypted_size": 272,
+          "encryption_success": true,
+          "decryption_success": true,
+          "integrity_verified": true,
+          "content_match": true,
+          "encryption_time_ms": 0.7,
+          "decryption_time_ms": 0.29,
+          "overhead_ratio": 1.2952
+        },
+        {
+          "filename": "medium_file.txt",
+          "original_size": 38000,
+          "encrypted_size": 38062,
+          "encryption_success": true,
+          "decryption_success": true,
+          "integrity_verified": true,
+          "content_match": true,
+          "encryption_time_ms": 0.44,
+          "decryption_time_ms": 0.29,
+          "overhead_ratio": 1.0016
+        },
+        {
+          "filename": "large_file.txt",
+          "original_size": 430000,
+          "encrypted_size": 430062,
+          "encryption_success": true,
+          "decryption_success": true,
+          "integrity_verified": true,
+          "content_match": true,
+          "encryption_time_ms": 1.41,
+          "decryption_time_ms": 1.31,
+          "overhead_ratio": 1.0001
+        }
+      ]
+    },
+    {
+      "test": "wrong_key_rejection",
+      "passed": true,
+      "encryption_success": true,
+      "wrong_key_decryption_fails": true
+    },
+    {
+      "test": "tamper_detection",
+      "passed": true,
+      "encryption_success": true,
+      "tamper_detected": true
+    },
+    {
+      "test": "security_levels",
+      "passed": true,
+      "levels_tested": 3,
+      "results_by_level": {
+        "LEVEL_1": {
+          "pk_size": 32,
+          "sk_size": 32,
+          "aes_key_size": 32,
+          "salt_size": 16
+        },
+        "LEVEL_3": {
+          "pk_size": 48,
+          "sk_size": 48,
+          "aes_key_size": 32,
+          "salt_size": 16
+        },
+        "LEVEL_5": {
+          "pk_size": 64,
+          "sk_size": 64,
+          "aes_key_size": 32,
+          "salt_size": 16
+        }
+      }
+    },
+    {
+      "test": "kem_operations",
+      "passed": false,
+      "keypair_generated": true,
+      "encapsulation_works": true,
+      "decapsulation_works": true,
+      "secrets_match": false
+    },
+    {
+      "test": "file_type_detection",
+      "passed": true,
+      "files_tested": 5,
+      "results": [
+        {
+          "filename": "document.pdf",
+          "detected": "document",
+          "expected": "document",
+          "correct": true
+        },
+        {
+          "filename": "image.png",
+          "detected": "image",
+          "expected": "image",
+          "correct": true
+        },
+        {
+          "filename": "data.txt",
+          "detected": "text",
+          "expected": "text",
+          "correct": true
+        },
+        {
+          "filename": "archive.zip",
+          "detected": "archive",
+          "expected": "archive",
+          "correct": true
+        },
+        {
+          "filename": "unknown.xyz",
+          "detected": "unknown",
+          "expected": "unknown",
+          "correct": true
+        }
+      ]
+    },
+    {
+      "success": true,
+      "encryption_successful": true,
+      "decryption_successful": true,
+      "integrity_verified": true,
+      "content_matches": true,
+      "encryption_time_ms": 0.39,
+      "decryption_time_ms": 0.17,
+      "compression_ratio": 1.011,
+      "message": "Post-Quantum File Encryptor verified and working correctly"
+    },
+    {
+      "test": "performance_benchmark",
+      "passed": true,
+      "benchmarks": [
+        {
+          "size_bytes": 1024,
+          "encryption_time_ms": 0.23,
+          "decryption_time_ms": 0.99,
+          "encryption_speed_bytes_per_ms": 4436.9,
+          "decryption_speed_bytes_per_ms": 1029.7
+        },
+        {
+          "size_bytes": 10240,
+          "encryption_time_ms": 0.17,
+          "decryption_time_ms": 0.16,
+          "encryption_speed_bytes_per_ms": 59159.3,
+          "decryption_speed_bytes_per_ms": 65472.1
+        },
+        {
+          "size_bytes": 102400,
+          "encryption_time_ms": 0.38,
+          "decryption_time_ms": 0.37,
+          "encryption_speed_bytes_per_ms": 271833.4,
+          "decryption_speed_bytes_per_ms": 280167.5
+        }
+      ]
+    }
+  ]
+}

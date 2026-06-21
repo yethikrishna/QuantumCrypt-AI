@@ -286,3 +286,28 @@ __all__.extend([
     "SAMPLE_MPC_CONFIGS"
 ])
 __version__ = "2026.6.21.3"
+
+
+# Post-Quantum Secure File Encryptor (June 21, 2026)
+from .post_quantum_secure_file_encryptor_2026_june import (
+    PostQuantumFileEncryptor,
+    EncryptionKey,
+    EncryptionMode,
+    KeySecurityLevel,
+    FileType,
+    LatticeBasedKEM,
+    create_file_encryptor,
+    verify_file_encryptor
+)
+__all__.extend([
+    "PostQuantumFileEncryptor",
+    "EncryptionKey",
+    "EncryptionMode",
+    "KeySecurityLevel",
+    "FileType",
+    "LatticeBasedKEM",
+    "create_file_encryptor",
+    "verify_file_encryptor"
+])
+__version__ = "2026.6.21.4"
+
