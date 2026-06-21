@@ -507,3 +507,33 @@ __all__.extend([
     "DilithiumLikeSignature"
 ])
 __version__ = "2026.6.21.61"
+
+
+# Vulnerability EPSS Score Integrator (June 22, 2026 Production Release)
+# FIRST.org EPSS + CISA KEV + CVSS integration for vulnerability prioritization
+from .vulnerability_epss_score_integrator_2026_june import (
+    VulnerabilityEPSSIntegrator,
+    CVSSSeverity,
+    ExploitLikelihood,
+    PriorityLevel,
+    ThreatSource,
+    CVERecord,
+    VulnerabilityScore,
+    EPSSIntegrationResult,
+    create_epss_integrator,
+    verify_epss_integrator
+)
+__all__.extend([
+    "VulnerabilityEPSSIntegrator",
+    "CVSSSeverity",
+    "ExploitLikelihood",
+    "PriorityLevel",
+    "ThreatSource",
+    "CVERecord",
+    "VulnerabilityScore",
+    "EPSSIntegrationResult",
+    "create_epss_integrator",
+    "verify_epss_integrator"
+])
+__version__ = "2026.6.22.1"
+
