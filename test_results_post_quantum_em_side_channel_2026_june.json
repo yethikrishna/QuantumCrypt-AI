@@ -1,0 +1,60 @@
+{
+  "test_version": "em_side_channel_2026_june_v1",
+  "timestamp": 1782070952.0819514,
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "elapsed_seconds": 0.707,
+  "results": [
+    {
+      "name": "test_lattice_analyzer_basic",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_ntt_emission_simulation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_gaussian_sampling_emission",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_em_correlation_analysis",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_cpa_attack_simulator",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_polynomial_multiplication_validation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_ntt_validation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_gaussian_sampling_validation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_cpa_resistance_validation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_full_em_validation_suite",
+      "passed": true,
+      "error": null
+    }
+  ]
+}
