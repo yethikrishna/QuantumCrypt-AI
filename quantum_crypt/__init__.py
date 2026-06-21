@@ -448,3 +448,40 @@ __all__.extend([
 ])
 __version__ = "2026.6.21.57"
 __version__ = "2026.6.21.59"
+
+# Post-Quantum Secure Session Manager with PFS v1 (June 21, 2026 Production Release)
+# Hybrid PQC key exchange, perfect forward secrecy, and session management
+from .post_quantum_secure_session_manager_pfs_v1_2026_june import (
+    KeyExchangeAlgorithm,
+    CipherAlgorithm,
+    HashAlgorithm,
+    SessionState,
+    SessionEventType,
+    SessionSecurityPolicy,
+    KeyMaterial,
+    ResumptionTicket,
+    SessionEvent,
+    SecureSession,
+    SimulatedHybridKEM,
+    SecureSessionManager,
+    create_secure_session_manager,
+    verify_secure_session_manager
+)
+__all__.extend([
+    "KeyExchangeAlgorithm",
+    "CipherAlgorithm",
+    "HashAlgorithm",
+    "SessionState",
+    "SessionEventType",
+    "SessionSecurityPolicy",
+    "KeyMaterial",
+    "ResumptionTicket",
+    "SessionEvent",
+    "SecureSession",
+    "SimulatedHybridKEM",
+    "SecureSessionManager",
+    "create_secure_session_manager",
+    "verify_secure_session_manager"
+])
+__version__ = "2026.6.21.60"
+
