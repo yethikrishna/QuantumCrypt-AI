@@ -309,5 +309,41 @@ __all__.extend([
     "create_file_encryptor",
     "verify_file_encryptor"
 ])
-__version__ = "2026.6.21.4"
+
+# + Post-Quantum Secure HSM Emulator (June 21, 2026)
+from .post_quantum_secure_hsm_emulator_2026_june import (
+    PostQuantumHSMEmulator,
+    KeyAlgorithm,
+    KeyType,
+    KeyState,
+    HSMRole,
+    OperationType,
+    HSMStats,
+    KeyMetadata,
+    HSMOperation,
+    SecureKeyStore,
+    PostQuantumKeyGenerator,
+    HSMSignatureEngine,
+    HSMEncryptionEngine,
+    create_post_quantum_hsm,
+    verify_post_quantum_hsm
+)
+__all__.extend([
+    "PostQuantumHSMEmulator",
+    "KeyAlgorithm",
+    "KeyType",
+    "KeyState",
+    "HSMRole",
+    "OperationType",
+    "HSMStats",
+    "KeyMetadata",
+    "HSMOperation",
+    "SecureKeyStore",
+    "PostQuantumKeyGenerator",
+    "HSMSignatureEngine",
+    "HSMEncryptionEngine",
+    "create_post_quantum_hsm",
+    "verify_post_quantum_hsm"
+])
+__version__ = "2026.6.21.55"
 

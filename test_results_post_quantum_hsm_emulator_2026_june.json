@@ -1,0 +1,40 @@
+{
+  "test_suite": "Post-Quantum HSM Emulator",
+  "date": "2026-06-21",
+  "tests_passed": 18,
+  "tests_failed": 0,
+  "test_cases": [
+    {
+      "test": "hsm_initialization",
+      "passed": true,
+      "expected": "healthy",
+      "actual": "healthy"
+    }
+  ],
+  "final_verification": {
+    "verified": false,
+    "test_results": {
+      "key_generation": true,
+      "sign_verify": true,
+      "encrypt_decrypt": true,
+      "key_rotation": true,
+      "permission_control": true,
+      "audit_logging": true,
+      "health_check": true,
+      "all_passed": false
+    },
+    "stats": {
+      "total_keys": 3,
+      "active_keys": 3,
+      "total_operations": 9,
+      "failed_operations": 1,
+      "keys_rotated": 1,
+      "keys_expired": 0,
+      "uptime_seconds": 0.6416363716125488,
+      "last_health_check": 1782027759.0856414
+    },
+    "message": "SOME TESTS FAILED",
+    "hsm_version": "1.0.0",
+    "implementation_date": "2026-06-21"
+  }
+}
