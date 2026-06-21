@@ -1,0 +1,36 @@
+{
+  "test_suite": "post_quantum_secure_mpc_engine_v25",
+  "timestamp": "2026-06-21T19:42:56.905598",
+  "session": "60",
+  "results": {
+    "tests_passed": 6,
+    "tests_failed": 0,
+    "test_details": [
+      {
+        "test": "shamir_sharing",
+        "status": "passed"
+      },
+      {
+        "test": "secure_addition",
+        "status": "passed"
+      },
+      {
+        "test": "beaver_triple",
+        "status": "passed"
+      },
+      {
+        "test": "commitment",
+        "status": "passed"
+      },
+      {
+        "test": "zk_proof",
+        "status": "passed"
+      },
+      {
+        "test": "metrics_report",
+        "status": "passed"
+      }
+    ]
+  },
+  "status": "PASSED"
+}
