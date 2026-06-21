@@ -1,0 +1,60 @@
+{
+  "test_module": "post_quantum_secure_mpc_engine_v21",
+  "timestamp": 1782023374.525724,
+  "tests_passed": 10,
+  "tests_total": 10,
+  "success_rate": 1.0,
+  "prime_used": 170141183460469231731687303715884105727,
+  "results": [
+    {
+      "name": "Test 1: Basic Secret Sharing",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 2: Threshold Enforcement",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 3: Subset Consistency",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 4: Secure Addition",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 5: Security Levels",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 6: Large Secret",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 7: Commitment Verification",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 8: Convenience Functions",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 9: High-level Interface",
+      "success": true,
+      "error": ""
+    },
+    {
+      "name": "Test 10: Audit Logging",
+      "success": true,
+      "error": ""
+    }
+  ]
+}
