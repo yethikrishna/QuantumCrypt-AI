@@ -1,0 +1,68 @@
+{
+  "test_suite": "Post-Quantum Hybrid KEM TLS 1.3 Simulator",
+  "version": "1.0",
+  "date": "June 21, 2026",
+  "total_tests": 12,
+  "passed_tests": 12,
+  "all_passed": true,
+  "results": [
+    {
+      "test": "Basic handshake Kyber-768",
+      "passed": true
+    },
+    {
+      "test": "All KEM algorithms",
+      "passed": true
+    },
+    {
+      "test": "All ECDHE curves",
+      "passed": true
+    },
+    {
+      "test": "Cipher suites",
+      "passed": true
+    },
+    {
+      "test": "State machine",
+      "passed": true
+    },
+    {
+      "test": "Handshake log",
+      "passed": true
+    },
+    {
+      "test": "Hybrid key contribution",
+      "passed": true
+    },
+    {
+      "test": "Master secret",
+      "passed": true
+    },
+    {
+      "test": "Session ID",
+      "passed": true
+    },
+    {
+      "test": "Performance benchmark",
+      "passed": true
+    },
+    {
+      "test": "Algorithm comparison",
+      "passed": true
+    },
+    {
+      "test": "Metadata completeness",
+      "passed": true
+    }
+  ],
+  "benchmark_sample": {
+    "iterations": 50,
+    "success_rate": 1.0,
+    "avg_time_ms": 0.045342445373535156,
+    "min_time_ms": 0.04124641418457031,
+    "max_time_ms": 0.08845329284667969,
+    "median_time_ms": 0.043392181396484375,
+    "kem_algorithm": "kyber-768",
+    "ecdhe_curve": "x25519"
+  }
+}
