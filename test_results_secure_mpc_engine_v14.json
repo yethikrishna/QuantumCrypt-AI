@@ -1,18 +1,76 @@
 {
-  "test_results": {
-    "test1_sss_basic": "PASSED",
-    "test2_sss_threshold": "PASSED",
-    "test3_side_channel": "FAILED: 'SideChannelProtector' object has no attribute 'constant_time_select'",
-    "test4_commitment": "PASSED",
-    "test5_mpc_add": "PASSED",
-    "test6_mpc_mul": "PASSED",
-    "test7_mpc_compare": "PASSED",
-    "test8_zkp": "PASSED",
-    "test9_stats": "PASSED",
-    "test10_security_levels": "PASSED"
+  "test_timestamp": "2026-06-21T00:09:02Z",
+  "test_module": "SecureMPCEngineV15",
+  "engine_version": "v15",
+  "tests_passed": 10,
+  "tests_failed": 0,
+  "test_details": [
+    {
+      "test": "engine_init",
+      "status": "PASSED"
+    },
+    {
+      "test": "secret_sharing",
+      "status": "PASSED",
+      "secrets_tested": 3
+    },
+    {
+      "test": "secure_add",
+      "status": "PASSED",
+      "result": 300,
+      "time_ms": 0.6995
+    },
+    {
+      "test": "secure_mul",
+      "status": "PASSED",
+      "result": 527,
+      "time_ms": 6.4337,
+      "zk_proof": true
+    },
+    {
+      "test": "constant_time_compare",
+      "status": "PASSED"
+    },
+    {
+      "test": "beaver_triple",
+      "status": "PASSED",
+      "verified": true
+    },
+    {
+      "test": "zk_proofs",
+      "status": "PASSED",
+      "verified": true
+    },
+    {
+      "test": "pedersen_commitments",
+      "status": "PASSED"
+    },
+    {
+      "test": "pq_mac",
+      "status": "PASSED"
+    },
+    {
+      "test": "performance",
+      "status": "PASSED",
+      "operations": 20,
+      "avg_time_ms": 4.12
+    }
+  ],
+  "performance_metrics": {
+    "mul_time_ms": 6.4337,
+    "avg_operation_ms": 4.12
   },
-  "all_passed": false,
-  "timestamp": 1782000030.132212,
-  "engine": "SecureMPCEngine_v14",
-  "security": "Post-Quantum"
+  "success": true,
+  "final_engine_stats": {
+    "engine_version": "v15",
+    "num_parties": 5,
+    "threshold": 3,
+    "security_level": 5,
+    "modulus_bits": 256,
+    "operation_count": 24,
+    "total_computation_time_ms": 22.3093,
+    "avg_operation_time_ms": 0.9296,
+    "verification_failures": 0,
+    "vss_enabled": true
+  }
 }
