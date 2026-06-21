@@ -1,0 +1,58 @@
+{
+  "test_timestamp": 1782064426.771717,
+  "engine_version": "v34",
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "test_details": [
+    {
+      "test": "initialization",
+      "status": "PASSED"
+    },
+    {
+      "test": "additive_sharing",
+      "status": "PASSED"
+    },
+    {
+      "test": "shamir_sharing",
+      "status": "PASSED"
+    },
+    {
+      "test": "authenticated_sharing",
+      "status": "PASSED"
+    },
+    {
+      "test": "secure_addition",
+      "status": "PASSED"
+    },
+    {
+      "test": "secure_multiplication",
+      "status": "PASSED"
+    },
+    {
+      "test": "secure_comparison",
+      "status": "PASSED"
+    },
+    {
+      "test": "dot_product",
+      "status": "PASSED",
+      "metadata": {
+        "dimension": 4,
+        "num_parties": 3,
+        "latency_ms": 0.012636184692382812,
+        "operations_count": 4
+      }
+    },
+    {
+      "test": "statistics",
+      "status": "PASSED"
+    },
+    {
+      "test": "prime_field",
+      "status": "PASSED"
+    },
+    {
+      "test": "metrics",
+      "status": "PASSED"
+    }
+  ]
+}
