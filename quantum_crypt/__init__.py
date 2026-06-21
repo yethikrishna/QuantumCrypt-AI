@@ -535,5 +535,31 @@ __all__.extend([
     "create_epss_integrator",
     "verify_epss_integrator"
 ])
-__version__ = "2026.6.22.1"
 
+"""
++ Observability Engine (June 22, 2026) - Add-only logging and metrics layer
+Security-conscious: never logs keys, plaintext, or secrets by default
+"""
+from .observability_engine_2026_june import (
+    ObservabilityState,
+    observe,
+    observe_class,
+    CryptoMetricsReporter,
+    CryptoOperationType,
+    enable_observability,
+    disable_observability,
+    get_observability_metrics,
+    reset_observability_metrics,
+)
+__all__.extend([
+    "ObservabilityState",
+    "observe",
+    "observe_class",
+    "CryptoMetricsReporter",
+    "CryptoOperationType",
+    "enable_observability",
+    "disable_observability",
+    "get_observability_metrics",
+    "reset_observability_metrics",
+])
+__version__ = "2026.6.22.2"
