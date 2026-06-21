@@ -1,0 +1,59 @@
+{
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "test_cases": [
+    {
+      "test": "initialization",
+      "status": "PASSED"
+    },
+    {
+      "test": "hkdf_extract",
+      "status": "PASSED"
+    },
+    {
+      "test": "hkdf_expand",
+      "status": "PASSED"
+    },
+    {
+      "test": "constant_time_compare",
+      "status": "PASSED"
+    },
+    {
+      "test": "salt_generation",
+      "status": "PASSED"
+    },
+    {
+      "test": "memory_hard_transform",
+      "status": "PASSED",
+      "memory_kb": 64,
+      "time_ms": 0.7727146148681641
+    },
+    {
+      "test": "full_key_derivation",
+      "status": "PASSED",
+      "time_ms": 0.7545948028564453,
+      "memory_kb": 64
+    },
+    {
+      "test": "key_verification",
+      "status": "PASSED"
+    },
+    {
+      "test": "forward_secrecy",
+      "status": "PASSED"
+    },
+    {
+      "test": "key_chain",
+      "status": "PASSED"
+    },
+    {
+      "test": "security_report",
+      "status": "PASSED"
+    }
+  ],
+  "start_time": 1782074308.9404042,
+  "security_warnings": [
+    "MINIMAL security level - FOR TESTING ONLY, not production safe",
+    "256-bit hash provides 128-bit quantum security - use 512-bit for post-quantum"
+  ]
+}
