@@ -1,0 +1,160 @@
+{
+  "test_timestamp": "2026-06-21T21:12:39.892645Z",
+  "passed": 38,
+  "failed": 0,
+  "success_rate": 100.0,
+  "tests": [
+    {
+      "name": "Key ID generated",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key has correct size (LEVEL_5 = 64 bytes)",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key has security level 5",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key creation timestamp set",
+      "status": "PASSED"
+    },
+    {
+      "name": "LEVEL_1 key has 32 bytes",
+      "status": "PASSED"
+    },
+    {
+      "name": "LEVEL_3 key has 48 bytes",
+      "status": "PASSED"
+    },
+    {
+      "name": "MAC computed successfully",
+      "status": "PASSED"
+    },
+    {
+      "name": "MAC has correct size (32 bytes)",
+      "status": "PASSED"
+    },
+    {
+      "name": "Algorithm recorded correctly",
+      "status": "PASSED"
+    },
+    {
+      "name": "Hex output works",
+      "status": "PASSED"
+    },
+    {
+      "name": "HMAC-SHA2-512 has correct size (64 bytes)",
+      "status": "PASSED"
+    },
+    {
+      "name": "HMAC-SHA3-512 computed successfully",
+      "status": "PASSED"
+    },
+    {
+      "name": "SHA3-512 has correct size",
+      "status": "PASSED"
+    },
+    {
+      "name": "Valid MAC verification passes",
+      "status": "PASSED"
+    },
+    {
+      "name": "Result marked as verified",
+      "status": "PASSED"
+    },
+    {
+      "name": "Invalid MAC verification fails",
+      "status": "PASSED"
+    },
+    {
+      "name": "Poly1305 MAC computed",
+      "status": "PASSED"
+    },
+    {
+      "name": "Poly1305 has correct size (16 bytes)",
+      "status": "PASSED"
+    },
+    {
+      "name": "KMAC-128 computed",
+      "status": "PASSED"
+    },
+    {
+      "name": "KMAC-256 computed",
+      "status": "PASSED"
+    },
+    {
+      "name": "BLAKE3 keyed hash computed",
+      "status": "PASSED"
+    },
+    {
+      "name": "String messages supported",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key retrieval works",
+      "status": "PASSED"
+    },
+    {
+      "name": "Non-existent key returns None",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key revocation successful",
+      "status": "PASSED"
+    },
+    {
+      "name": "Revoked key not returned",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key import successful",
+      "status": "PASSED"
+    },
+    {
+      "name": "Imported key stored",
+      "status": "PASSED"
+    },
+    {
+      "name": "Subkey derived successfully",
+      "status": "PASSED"
+    },
+    {
+      "name": "Subkey different from parent",
+      "status": "PASSED"
+    },
+    {
+      "name": "Key rotation generates new key",
+      "status": "PASSED"
+    },
+    {
+      "name": "Old key revoked",
+      "status": "PASSED"
+    },
+    {
+      "name": "Batch verification works",
+      "status": "PASSED"
+    },
+    {
+      "name": "Streaming MAC computed",
+      "status": "PASSED"
+    },
+    {
+      "name": "MACs computed tracked",
+      "status": "PASSED"
+    },
+    {
+      "name": "Verifications tracked",
+      "status": "PASSED"
+    },
+    {
+      "name": "Success rate calculated",
+      "status": "PASSED"
+    },
+    {
+      "name": "MAC is deterministic",
+      "status": "PASSED"
+    }
+  ]
+}
