@@ -1,0 +1,110 @@
+{
+  "test_suite": "Post-Quantum Session Key Manager v4 Tests",
+  "timestamp": "2026-06-21T18:27:45Z",
+  "total_tests": 17,
+  "passed": 17,
+  "failed": 0,
+  "pass_rate": "100.0%",
+  "total_time_ms": 1104.27,
+  "results": [
+    {
+      "test": "test_hkdf_basic",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_hkdf_different_context",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_hybrid_kem_keygen",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_hybrid_kem_encaps_decaps",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_session_creation",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_session_key_derivation",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_session_key_rotation",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_key_ratcheting_forward_secrecy",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_session_state_transitions",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_session_close",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_nonexistent_session",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_max_sessions_enforcement",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_session_expiration",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_get_stats",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_key_ratcheting_chain",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_security_levels",
+      "status": "PASSED",
+      "error": null
+    },
+    {
+      "test": "test_audit_logging",
+      "status": "PASSED",
+      "error": null
+    }
+  ],
+  "code_quality": {
+    "type_hints": "Full coverage on all functions",
+    "thread_safety": "RLock protection on all shared state",
+    "forward_secrecy": "Key ratcheting with old key invalidation",
+    "audit_compliance": "Full session lifecycle audit logging",
+    "documentation": "Docstrings on all classes and methods"
+  },
+  "security_features": [
+    "HKDF RFC 5869 compliant key derivation",
+    "Hybrid classical + post-quantum KEM",
+    "Perfect forward secrecy via ratcheting",
+    "Secure memory wiping on session close",
+    "Cryptographically secure random generation"
+  ]
+}
