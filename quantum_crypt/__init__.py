@@ -377,3 +377,50 @@ __all__.extend([
     "create_mpc_engine_v22",
     "verify_mpc_engine_v22"
 ])
+
+# + Hybrid TLS 1.3 Key Exchange Engine V23 (June 21, 2026)
+from .post_quantum_hybrid_tls_key_exchange_v23_2026_june import (
+    HybridTLSKeyExchangeEngineV23,
+    SecurityLevel,
+    KeyExchangeMode,
+    TLSVersion,
+    CipherSuite,
+    KeyType,
+    SessionState,
+    KeyPair,
+    SharedSecret,
+    TLSKeyMaterial,
+    PSKEntry,
+    HandshakeMessage,
+    TLSSession,
+    ConstantTimeProtector,
+    X25519KeyExchange,
+    MLKEMStyleKeyExchange,
+    HybridKDF,
+    TLS13KeySchedule,
+    create_hybrid_tls_engine,
+    verify_tls_engine
+)
+__all__.extend([
+    "HybridTLSKeyExchangeEngineV23",
+    "SecurityLevel",
+    "KeyExchangeMode",
+    "TLSVersion",
+    "CipherSuite",
+    "KeyType",
+    "SessionState",
+    "KeyPair",
+    "SharedSecret",
+    "TLSKeyMaterial",
+    "PSKEntry",
+    "HandshakeMessage",
+    "TLSSession",
+    "ConstantTimeProtector",
+    "X25519KeyExchange",
+    "MLKEMStyleKeyExchange",
+    "HybridKDF",
+    "TLS13KeySchedule",
+    "create_hybrid_tls_engine",
+    "verify_tls_engine"
+])
+__version__ = "2026.6.21.59"

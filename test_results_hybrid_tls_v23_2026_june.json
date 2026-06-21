@@ -1,0 +1,9 @@
+{
+  "engine": "HybridTLSKeyExchangeEngineV23",
+  "version": "23.0.0",
+  "total_tests": 7,
+  "passed": 7,
+  "failed": 0,
+  "success_rate": 100.0,
+  "timestamp": "2026-06-21T16:17:40.856119"
+}
