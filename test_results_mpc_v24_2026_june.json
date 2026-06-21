@@ -1,0 +1,96 @@
+{
+  "test_suite": "Post-Quantum Secure MPC Engine V24",
+  "version": "v24",
+  "timestamp": 1782035721.013011,
+  "tests_run": 10,
+  "tests_passed": 9,
+  "tests_failed": 1,
+  "test_cases": [
+    {
+      "name": "Initialization",
+      "status": "passed"
+    },
+    {
+      "name": "Shamir Secret Sharing",
+      "status": "failed",
+      "error": ""
+    },
+    {
+      "name": "Additive Secret Sharing",
+      "status": "passed",
+      "time_ms": 0.019073486328125,
+      "parties": 10
+    },
+    {
+      "name": "Beaver Triple Generation",
+      "status": "passed",
+      "time_ms": 0.03981590270996094
+    },
+    {
+      "name": "Secure Addition",
+      "status": "passed",
+      "time_ms": 0.012874603271484375,
+      "result_correct": true
+    },
+    {
+      "name": "Secure Multiplication",
+      "status": "passed",
+      "time_ms": 0.038623809814453125,
+      "result_correct": true
+    },
+    {
+      "name": "Post-Quantum Commitment",
+      "status": "passed",
+      "time_ms": 0.04887580871582031,
+      "tamper_resistant": true
+    },
+    {
+      "name": "Full MPC Computation",
+      "status": "passed",
+      "time_ms": 0.1881122589111328,
+      "verification_passed": true
+    },
+    {
+      "name": "Batch Triple Generation",
+      "status": "passed",
+      "time_ms": 1.5289783477783203,
+      "triples_per_second": 65403.1498518634
+    },
+    {
+      "name": "Statistics Reporting",
+      "status": "passed"
+    }
+  ],
+  "performance_metrics": {
+    "triples_per_second": 65403.1498518634,
+    "ms_per_triple": 0.015289783477783203
+  },
+  "security_properties": {
+    "field_size": 2147483647,
+    "field_bits": 31,
+    "security_model": "semi-honest",
+    "commitment_scheme": "SHA3-256 hash-based"
+  },
+  "limitations": [
+    "Semi-honest security model only (not malicious)",
+    "31-bit integer field size limitation",
+    "No network communication layer implemented",
+    "Timing side channels possible (no constant-time guarantees)",
+    "Beaver triples pre-generated, not OT-based"
+  ],
+  "total_time_ms": 3.164052963256836,
+  "self_test_results": {
+    "passed": [
+      "Shamir Secret Sharing",
+      "Additive Secret Sharing",
+      "Beaver Triple Generation",
+      "Secure Addition",
+      "Secure Multiplication",
+      "Full MPC Demo",
+      "Post-Quantum Commitment",
+      "Statistics Reporting"
+    ],
+    "failed": [],
+    "total_time_ms": 0.3097057342529297
+  }
+}
