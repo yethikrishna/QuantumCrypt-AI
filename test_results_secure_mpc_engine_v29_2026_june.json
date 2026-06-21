@@ -1,0 +1,92 @@
+{
+  "engine_version": "v29",
+  "timestamp": "2026-06-21T14:54:21Z",
+  "results": {
+    "tests_passed": 7,
+    "tests_failed": 1,
+    "test_details": [
+      {
+        "test": "shamir_roundtrip",
+        "status": "passed"
+      },
+      {
+        "test": "threshold_enforcement",
+        "status": "passed"
+      },
+      {
+        "test": "secure_addition",
+        "status": "passed"
+      },
+      {
+        "test": "secure_multiplication",
+        "status": "failed",
+        "error": "Multiplication should be correct"
+      },
+      {
+        "test": "secure_comparison",
+        "status": "passed"
+      },
+      {
+        "test": "dynamic_threshold",
+        "status": "passed"
+      },
+      {
+        "test": "security_metrics",
+        "status": "passed"
+      },
+      {
+        "test": "string_support",
+        "status": "passed"
+      }
+    ]
+  },
+  "final_metrics": {
+    "version": "v29",
+    "timestamp": "2026-06-21T14:54:21.382511Z",
+    "security_level": "HIGH",
+    "security_bits": 256,
+    "adversary_model": "semi_honest",
+    "prime_field_size": 383,
+    "metrics": {
+      "total_secrets_split": 6,
+      "total_secrets_reconstructed": 5,
+      "total_mpc_computations": 7,
+      "total_multiplications": 2,
+      "total_comparisons": 3,
+      "integrity_checks_passed": 5,
+      "integrity_checks_failed": 0,
+      "zk_proofs_verified": 5,
+      "zk_proofs_failed": 0,
+      "beaver_triples_generated": 2,
+      "avg_split_time_ms": 0.1176595687866211,
+      "avg_reconstruct_time_ms": 0.23508071899414062,
+      "avg_mult_time_ms": 0.059723854064941406,
+      "total_compute_time_ms": 2.098560333251953
+    },
+    "integrity_verification_rate_percent": 100.0,
+    "zk_verification_rate_percent": 100.0,
+    "default_config": {
+      "num_parties": 3,
+      "threshold": 2,
+      "integrity_checks_enabled": true,
+      "zk_proofs_enabled": false
+    },
+    "v29_enhancements": [
+      "beaver_triple_multiplication",
+      "secure_comparison_protocol",
+      "zero_knowledge_proofs",
+      "dynamic_threshold_adjustment",
+      "side_channel_blinding",
+      "malicious_adversary_model",
+      "secure_dot_product"
+    ]
+  },
+  "status": "partial_success",
+  "v29_new_features": [
+    "Beaver triple secure multiplication",
+    "Secure comparison protocol",
+    "Dynamic threshold adjustment",
+    "Side-channel blinding protection",
+    "Malicious adversary model support"
+  ]
+}
