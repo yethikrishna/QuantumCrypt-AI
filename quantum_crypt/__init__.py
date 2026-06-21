@@ -347,3 +347,33 @@ __all__.extend([
 ])
 __version__ = "2026.6.21.55"
 
+
+# + Secure Multi-Party Computation Engine V22 (June 21, 2026)
+from .post_quantum_secure_mpc_engine_v22_2026_june import (
+    SecureMPCEngineV22,
+    EnhancedShamirSecretSharing,
+    BeaverTripleGenerator,
+    ConstantTimeProtector,
+    ShamirShare,
+    BeaverTriple,
+    MPCResult,
+    SecurityLevel,
+    MPCOperation,
+    VerificationStatus,
+    create_mpc_engine_v22,
+    verify_mpc_engine_v22
+)
+__all__.extend([
+    "SecureMPCEngineV22",
+    "EnhancedShamirSecretSharing",
+    "BeaverTripleGenerator",
+    "ConstantTimeProtector",
+    "ShamirShare",
+    "BeaverTriple",
+    "MPCResult",
+    "SecurityLevel",
+    "MPCOperation",
+    "VerificationStatus",
+    "create_mpc_engine_v22",
+    "verify_mpc_engine_v22"
+])
