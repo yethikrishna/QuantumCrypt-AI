@@ -1,0 +1,304 @@
+{
+  "generated_at": "2026-06-21T06:08:58.119492",
+  "suite_version": "v2",
+  "benchmarks": [
+    {
+      "algorithm": "CRYSTALS-Kyber-768",
+      "operation": "key_generation",
+      "iterations": 20,
+      "mean_time_ms": 0.0176,
+      "median_time_ms": 0.0168,
+      "min_time_ms": 0.0165,
+      "max_time_ms": 0.0259,
+      "std_dev_ms": 0.0026,
+      "operations_per_second": 56712.33,
+      "memory_usage_kb": 54
+    },
+    {
+      "algorithm": "CRYSTALS-Kyber-768",
+      "operation": "encapsulation",
+      "iterations": 20,
+      "mean_time_ms": 0.0174,
+      "median_time_ms": 0.0168,
+      "min_time_ms": 0.0166,
+      "max_time_ms": 0.0279,
+      "std_dev_ms": 0.0025,
+      "operations_per_second": 57610.49,
+      "memory_usage_kb": 54
+    },
+    {
+      "algorithm": "CRYSTALS-Kyber-768",
+      "operation": "decapsulation",
+      "iterations": 20,
+      "mean_time_ms": 0.0171,
+      "median_time_ms": 0.0169,
+      "min_time_ms": 0.0164,
+      "max_time_ms": 0.0226,
+      "std_dev_ms": 0.0013,
+      "operations_per_second": 58450.65,
+      "memory_usage_kb": 54
+    },
+    {
+      "algorithm": "CRYSTALS-Dilithium-3",
+      "operation": "key_generation",
+      "iterations": 20,
+      "mean_time_ms": 0.0172,
+      "median_time_ms": 0.0167,
+      "min_time_ms": 0.0165,
+      "max_time_ms": 0.0259,
+      "std_dev_ms": 0.0021,
+      "operations_per_second": 58159.82,
+      "memory_usage_kb": 59
+    }
+  ],
+  "validations": [
+    {
+      "algorithm": "CRYSTALS-Kyber-512",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "CRYSTALS-Kyber-768",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "CRYSTALS-Kyber-1024",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "CRYSTALS-Dilithium-2",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "CRYSTALS-Dilithium-3",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "CRYSTALS-Dilithium-5",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "Falcon-512",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "Falcon-1024",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "NTRU-HPS-2048",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    },
+    {
+      "algorithm": "NTRU-HPS-4096",
+      "test_type": "correctness_validation",
+      "passed": true,
+      "details": {
+        "public_key_size_matches": true,
+        "private_key_size_matches": true,
+        "security_level_valid": true,
+        "quantum_security_positive": true
+      },
+      "error": null
+    }
+  ],
+  "comparison": {
+    "generated_at": "2026-06-21T06:08:58.119494",
+    "version": "v2",
+    "summary": {
+      "algorithms_tested": 10,
+      "benchmarks_run": 4,
+      "validations_run": 10
+    },
+    "fastest_by_operation": {
+      "key_generation": {
+        "fastest": "CRYSTALS-Dilithium-3",
+        "time_ms": 0.0172,
+        "ranking": [
+          {
+            "algorithm": "CRYSTALS-Dilithium-3",
+            "time_ms": 0.0172
+          },
+          {
+            "algorithm": "CRYSTALS-Kyber-768",
+            "time_ms": 0.0176
+          }
+        ]
+      },
+      "encapsulation": {
+        "fastest": "CRYSTALS-Kyber-768",
+        "time_ms": 0.0174,
+        "ranking": [
+          {
+            "algorithm": "CRYSTALS-Kyber-768",
+            "time_ms": 0.0174
+          }
+        ]
+      },
+      "decapsulation": {
+        "fastest": "CRYSTALS-Kyber-768",
+        "time_ms": 0.0171,
+        "ranking": [
+          {
+            "algorithm": "CRYSTALS-Kyber-768",
+            "time_ms": 0.0171
+          }
+        ]
+      }
+    },
+    "most_efficient": {},
+    "security_comparison": [
+      {
+        "algorithm": "CRYSTALS-Kyber-512",
+        "security_level": 1,
+        "quantum_security_bits": 128,
+        "public_key_size_kb": 0.78,
+        "private_key_size_kb": 1.59,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "CRYSTALS-Kyber-768",
+        "security_level": 3,
+        "quantum_security_bits": 192,
+        "public_key_size_kb": 1.16,
+        "private_key_size_kb": 2.34,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "CRYSTALS-Kyber-1024",
+        "security_level": 5,
+        "quantum_security_bits": 256,
+        "public_key_size_kb": 1.53,
+        "private_key_size_kb": 3.09,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "CRYSTALS-Dilithium-2",
+        "security_level": 2,
+        "quantum_security_bits": 128,
+        "public_key_size_kb": 1.28,
+        "private_key_size_kb": 2.47,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "CRYSTALS-Dilithium-3",
+        "security_level": 3,
+        "quantum_security_bits": 192,
+        "public_key_size_kb": 1.91,
+        "private_key_size_kb": 3.91,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "CRYSTALS-Dilithium-5",
+        "security_level": 5,
+        "quantum_security_bits": 256,
+        "public_key_size_kb": 2.53,
+        "private_key_size_kb": 4.75,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "Falcon-512",
+        "security_level": 1,
+        "quantum_security_bits": 128,
+        "public_key_size_kb": 0.88,
+        "private_key_size_kb": 1.25,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "Falcon-1024",
+        "security_level": 5,
+        "quantum_security_bits": 256,
+        "public_key_size_kb": 1.75,
+        "private_key_size_kb": 2.25,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "NTRU-HPS-2048",
+        "security_level": 1,
+        "quantum_security_bits": 128,
+        "public_key_size_kb": 0.68,
+        "private_key_size_kb": 0.91,
+        "nist_standardized": true
+      },
+      {
+        "algorithm": "NTRU-HPS-4096",
+        "security_level": 5,
+        "quantum_security_bits": 256,
+        "public_key_size_kb": 1.32,
+        "private_key_size_kb": 1.76,
+        "nist_standardized": true
+      }
+    ]
+  }
+}

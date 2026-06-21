@@ -1,0 +1,12 @@
+{
+  "test_status": "PASSED",
+  "performance": {
+    "keys_created": 100,
+    "create_time_ms": 1.0080337524414062,
+    "rotations_performed": 10,
+    "rotation_time_ms": 0.14448165893554688,
+    "avg_create_ms_per_key": 0.010080337524414062,
+    "avg_rotation_ms_per_key": 0.014448165893554688
+  },
+  "timestamp": "2026-06-21 11:21:20"
+}
