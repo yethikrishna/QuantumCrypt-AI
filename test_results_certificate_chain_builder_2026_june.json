@@ -1,0 +1,41 @@
+{
+  "test_suite": "PostQuantumCertificateChainBuilder",
+  "timestamp": 1782031419.2614481,
+  "passed": 8,
+  "failed": 0,
+  "total": 8,
+  "results": [
+    {
+      "test": "test_certificate_dataclass",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hybrid_signature_verifier",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hybrid_kem_encapsulator",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_certificate_revocation_list",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_certificate_chain_builder_basic",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_certificate_chain_building_and_validation",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_expiration_monitoring",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_statistics",
+      "status": "PASSED"
+    }
+  ]
+}

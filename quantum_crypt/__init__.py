@@ -423,4 +423,28 @@ __all__.extend([
     "create_hybrid_tls_engine",
     "verify_tls_engine"
 ])
+# + Post-Quantum Certificate Chain Builder v1 (June 21, 2026)
+from .post_quantum_certificate_chain_builder_hybrid_kem_2026_june import (
+    SignatureAlgorithm,
+    KEMAlgorithm,
+    CertificateStatus,
+    Certificate,
+    ValidationResult,
+    HybridSignatureVerifier,
+    HybridKEMEncapsulator,
+    CertificateRevocationList,
+    PostQuantumCertificateChainBuilder
+)
+__all__.extend([
+    "SignatureAlgorithm",
+    "KEMAlgorithm",
+    "CertificateStatus",
+    "Certificate",
+    "ValidationResult",
+    "HybridSignatureVerifier",
+    "HybridKEMEncapsulator",
+    "CertificateRevocationList",
+    "PostQuantumCertificateChainBuilder"
+])
+__version__ = "2026.6.21.57"
 __version__ = "2026.6.21.59"
