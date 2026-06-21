@@ -1,0 +1,50 @@
+{
+  "test_suite": "PostQuantumSideChannelResistantKeyWrapperV1",
+  "version": "v1",
+  "timestamp": "2026-06-21T19:14:53.606333",
+  "passed": 10,
+  "failed": 0,
+  "total": 10,
+  "results": [
+    {
+      "test": "test_wrap_unwrap_boolean_masking",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_wrap_unwrap_arithmetic_masking",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_wrap_unwrap_hybrid_masking",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_constant_time_comparison",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hmac_verification_failure",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_key_length_validation",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_key_blinding",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_mask_rotation",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_all_key_types",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_security_metrics",
+      "status": "PASSED"
+    }
+  ]
+}
