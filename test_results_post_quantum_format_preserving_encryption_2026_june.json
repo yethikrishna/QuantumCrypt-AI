@@ -1,0 +1,44 @@
+{
+  "test_timestamp": "2026-06-21T20:52:52.006803+00:00",
+  "all_tests_passed": true,
+  "test_results": {
+    "Basic Numeric": true,
+    "Credit Card Numeric": true,
+    "Even-Length Numeric": true,
+    "Alphanumeric": true,
+    "Tweak Separation": true,
+    "Consistency": true,
+    "Batch Operation": true,
+    "Invalid Inputs": true,
+    "Honest Stats": true
+  },
+  "honest_stats": {
+    "summary": "HONEST STATISTICS - No marketing inflation",
+    "algorithm": "FF1 (NIST SP 800-38G)",
+    "quantum_resistant": false,
+    "note": "Requires hybrid post-quantum wrapper for quantum resistance",
+    "total_operations": 36,
+    "encryptions": 21,
+    "decryptions": 15,
+    "failed": 1,
+    "success_rate": 1.0,
+    "average_operation_time_ms": 0.0771,
+    "rounds": 10,
+    "key_id": "3ec2584d1fec4832",
+    "key_source": "random_generated_test_only",
+    "limitations": [
+      "Not quantum-resistant alone",
+      "FF1 mode only",
+      "Python implementation has timing side channels",
+      "No HSM/KMS integration",
+      "No NIST certification"
+    ]
+  },
+  "limitations": [
+    "FF1 mode only - no FF3-1 implementation",
+    "Not quantum-resistant alone - requires hybrid PQ wrapper",
+    "Credit card BIN ranges not preserved",
+    "Luhn preservation is heuristic",
+    "Python implementation has timing side channel risks"
+  ]
+}
