@@ -260,4 +260,29 @@ __all__.extend([
     "SecurityValidator",
     "HybridKEMSignatureSessionManager"
 ])
-__version__ = "2026.6.21.2"
+# Post-Quantum Secure MPC Engine v18 (June 21, 2026)
+from .post_quantum_secure_mpc_engine_v18_2026_june import (
+    SecurityLevel,
+    MPCProtocol,
+    SecretShare,
+    MPCResult,
+    GaloisFieldArithmetic,
+    ConstantTimeExecutor,
+    ZeroKnowledgeProofVerifier,
+    ShamirSecretSharingV18,
+    PostQuantumSecureMPCEngineV18,
+    SAMPLE_MPC_CONFIGS
+)
+__all__.extend([
+    "SecurityLevel",
+    "MPCProtocol",
+    "SecretShare",
+    "MPCResult",
+    "GaloisFieldArithmetic",
+    "ConstantTimeExecutor",
+    "ZeroKnowledgeProofVerifier",
+    "ShamirSecretSharingV18",
+    "PostQuantumSecureMPCEngineV18",
+    "SAMPLE_MPC_CONFIGS"
+])
+__version__ = "2026.6.21.3"
