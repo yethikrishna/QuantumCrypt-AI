@@ -1,0 +1,61 @@
+{
+  "test_date": "2026-06-21",
+  "engine_version": "v1",
+  "passed": 13,
+  "failed": 0,
+  "total": 13,
+  "test_results": [
+    {
+      "test": "test_classical_verifier_initialization",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_pq_verifier_initialization",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_engine_initialization",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hybrid_and_mode_verification",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hybrid_or_mode_verification",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hybrid_pq_first_mode",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_hybrid_weighted_voting_mode",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_batch_verification",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_caching_functionality",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_security_analysis",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_invalid_signature_detection",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_engine_statistics",
+      "status": "PASSED"
+    },
+    {
+      "test": "test_all_hybrid_modes",
+      "status": "PASSED"
+    }
+  ]
+}
