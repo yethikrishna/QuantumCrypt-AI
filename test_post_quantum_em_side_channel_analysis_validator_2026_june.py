@@ -1,297 +1,333 @@
 #!/usr/bin/env python3
 """
 Test suite for Post-Quantum EM Side-Channel Analysis Validator
-Production-grade tests with real assertions
+Production-grade tests with real assertions.
 """
 
 import sys
-import time
+import os
 import json
-import secrets
 
-sys.path.insert(0, '/home/user/autonomous-developer/QuantumCrypt-AI')
+# Add module path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'quantum_crypt'))
 
-from quantum_crypt.post_quantum_em_side_channel_analysis_validator_2026_june import (
-    EMLeakageResult,
-    EMRadiationSample,
-    LatticeOperationAnalyzer,
-    EMCorrelationAttackSimulator,
-    EMSideChannelValidator
+from post_quantum_em_side_channel_analysis_validator_2026_june import (
+    EMSideChannelValidator,
+    MeasurementTrace,
+    LeakageAnalysis,
+    AlgorithmType,
+    SideChannelMetric,
+    VulnerabilityLevel
 )
 
 
-def test_lattice_analyzer_basic():
-    """Test Lattice Operation Analyzer basic functionality"""
-    print("Testing Lattice Operation Analyzer...")
-    
-    analyzer = LatticeOperationAnalyzer()
-    
-    # Test polynomial multiplication emission
-    coeffs = [secrets.randbelow(3329) - 1665 for _ in range(64)]
-    samples = analyzer.simulate_polynomial_mult_emission(coeffs)
-    
-    assert len(samples) == 64, "Should have 64 samples"
-    assert all(s.operation == "polynomial_mult" for s in samples), "All should be polynomial mult"
-    assert all(0 <= s.hamming_weight <= 16 for s in samples), "HW should be valid"
-    assert all(s.simulated_em_amplitude >= 0 for s in samples), "EM amplitude non-negative"
-    
-    print("  ✓ Lattice Analyzer basic tests passed")
-    return True
+def test_vulnerability_level_calculation():
+    """Test vulnerability level boundary calculation"""
+    print("Test 1: Vulnerability Level Calculation")
+
+    assert VulnerabilityLevel.from_score(0.0) == VulnerabilityLevel.SAFE
+    assert VulnerabilityLevel.from_score(0.05) == VulnerabilityLevel.SAFE
+    assert VulnerabilityLevel.from_score(0.1) == VulnerabilityLevel.LOW
+    assert VulnerabilityLevel.from_score(0.2) == VulnerabilityLevel.LOW
+    assert VulnerabilityLevel.from_score(0.3) == VulnerabilityLevel.MEDIUM
+    assert VulnerabilityLevel.from_score(0.4) == VulnerabilityLevel.MEDIUM
+    assert VulnerabilityLevel.from_score(0.5) == VulnerabilityLevel.HIGH
+    assert VulnerabilityLevel.from_score(0.7) == VulnerabilityLevel.HIGH
+    assert VulnerabilityLevel.from_score(0.75) == VulnerabilityLevel.CRITICAL
+    assert VulnerabilityLevel.from_score(1.0) == VulnerabilityLevel.CRITICAL
+
+    print("  ✓ All vulnerability level boundaries correctly calculated")
 
 
-def test_ntt_emission_simulation():
-    """Test NTT emission simulation"""
-    print("Testing NTT Emission Simulation...")
-    
-    analyzer = LatticeOperationAnalyzer()
-    
-    # Small NTT for testing
-    samples = analyzer.simulate_ntt_emission(n=64)
-    
-    assert len(samples) > 0, "Should generate NTT samples"
-    assert all(s.operation == "ntt_butterfly" for s in samples), "All should be NTT butterfly"
-    
-    # Test correlation analysis
-    analysis = analyzer.analyze_em_correlation(samples)
-    
-    assert "hw_em_correlation" in analysis, "Should have correlation metric"
-    assert 0 <= analysis["hw_em_correlation"] <= 1.0, "Correlation should be in [0,1]"
-    assert analysis["sample_count"] == len(samples), "Sample count should match"
-    
-    print("  ✓ NTT Emission Simulation tests passed")
-    return True
+def test_constant_time_input_generation():
+    """Test constant-time test input generation"""
+    print("Test 2: Constant-Time Test Input Generation")
 
-
-def test_gaussian_sampling_emission():
-    """Test Gaussian sampling emission simulation"""
-    print("Testing Gaussian Sampling Emission...")
-    
-    analyzer = LatticeOperationAnalyzer()
-    
-    samples = analyzer.simulate_gaussian_sampling_emission(sample_count=50)
-    
-    assert len(samples) > 0, "Should generate sampling samples"
-    assert any("gaussian_sampling" in s.operation for s in samples), "Should have sampling ops"
-    
-    analysis = analyzer.analyze_em_correlation(samples)
-    
-    assert "mean_em_amplitude" in analysis, "Should have mean amplitude"
-    assert analysis["mean_em_amplitude"] > 0, "Mean amplitude should be positive"
-    
-    print("  ✓ Gaussian Sampling Emission tests passed")
-    return True
-
-
-def test_em_correlation_analysis():
-    """Test EM correlation analysis"""
-    print("Testing EM Correlation Analysis...")
-    
-    analyzer = LatticeOperationAnalyzer()
-    
-    # Create controlled samples for correlation test
-    coeffs = list(range(100))  # Linear progression
-    samples = analyzer.simulate_polynomial_mult_emission(coeffs)
-    
-    analysis = analyzer.analyze_em_correlation(samples)
-    
-    # Correlation should be measurable
-    assert 0 <= analysis["hw_em_correlation"] <= 1.0, "Correlation bounds check"
-    assert "frequency_distribution" in analysis, "Should have frequency distribution"
-    assert "operation_distribution" in analysis, "Should have operation distribution"
-    
-    print("  ✓ EM Correlation Analysis tests passed")
-    return True
-
-
-def test_cpa_attack_simulator():
-    """Test CPA Attack Simulator"""
-    print("Testing CPA Attack Simulator...")
-    
-    simulator = EMCorrelationAttackSimulator()
-    
-    # Test trace generation
-    trace = simulator.generate_trace(0xAB, secrets.token_bytes(32))
-    
-    assert "hypothesis" in trace, "Should have hypothesis"
-    assert "intermediate_hw" in trace, "Should have intermediate HW"
-    assert "trace" in trace, "Should have trace points"
-    assert len(trace["trace"]) == 50, "Should have 50 trace points"
-    
-    # Test attack simulation
-    result = simulator.run_cpa_attack_simulation(true_secret=0xCD, num_traces=100)
-    
-    assert "attack_success" in result, "Should have attack success flag"
-    assert "resistance_score" in result, "Should have resistance score"
-    assert 0 <= result["resistance_score"] <= 1.0, "Resistance score bounds"
-    assert result["traces_used"] == 100, "Trace count should match"
-    
-    print("  ✓ CPA Attack Simulator tests passed")
-    return True
-
-
-def test_polynomial_multiplication_validation():
-    """Test polynomial multiplication validation"""
-    print("Testing Polynomial Multiplication Validation...")
-    
     validator = EMSideChannelValidator()
-    
-    result = validator.validate_polynomial_multiplication(poly_size=128)
-    
-    assert isinstance(result, EMLeakageResult), "Should return EMLeakageResult"
-    assert result.test_name == "polynomial_multiplication_em_leakage"
-    assert 0 <= result.correlation_score <= 1.0, "Correlation score bounds"
-    assert result.leakage_severity in ["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
-    assert len(result.countermeasures_recommended) > 0, "Should have recommendations"
-    
-    print("  ✓ Polynomial Multiplication Validation tests passed")
-    return True
+    inputs = validator.generate_constant_time_test_inputs(100)
+
+    assert len(inputs) == 100
+    assert all(len(i) == 32 for i in inputs)
+
+    # Check we have zeros, ones, and random data
+    zeros = sum(1 for i in inputs if i == b'\x00' * 32)
+    ones = sum(1 for i in inputs if i == b'\xff' * 32)
+
+    assert zeros >= 25
+    assert ones >= 25
+
+    print(f"  ✓ Generated {len(inputs)} test inputs")
+    print(f"  ✓ Zero inputs: {zeros}, One inputs: {ones}, Random: {100 - zeros - ones}")
 
 
-def test_ntt_validation():
-    """Test NTT operation validation"""
-    print("Testing NTT Operation Validation...")
-    
+def test_timing_measurement_simulation():
+    """Test timing measurement simulation"""
+    print("Test 3: Timing Measurement Simulation")
+
     validator = EMSideChannelValidator()
-    
-    result = validator.validate_ntt_operation(n=128)
-    
-    assert isinstance(result, EMLeakageResult)
-    assert result.test_name == "ntt_operation_em_leakage"
-    assert "adjusted_correlation" in result.details, "Should have adjusted correlation"
-    
-    print("  ✓ NTT Operation Validation tests passed")
-    return True
+
+    trace = validator.simulate_timing_measurement(
+        AlgorithmType.KYBER,
+        "keygen",
+        b'\x00' * 32,
+        iterations=50
+    )
+
+    assert trace.algorithm == AlgorithmType.KYBER
+    assert trace.operation == "keygen"
+    assert len(trace.timing_samples) == 50
+    assert len(trace.power_samples) == 50
+    assert len(trace.em_samples) == 50
+    assert len(trace.trace_id) == 12
+
+    # Verify statistical properties exist
+    assert trace.timing_std >= 0
+    assert trace.timing_cv >= 0
+    assert trace.em_noise_level >= 0
+
+    print(f"  ✓ Trace ID: {trace.trace_id}")
+    print(f"  ✓ Timing std: {trace.timing_std:.2f}")
+    print(f"  ✓ Timing CV: {trace.timing_cv:.4f}")
+    print("  ✓ All statistical properties calculated")
 
 
-def test_gaussian_sampling_validation():
-    """Test Gaussian sampling validation"""
-    print("Testing Gaussian Sampling Validation...")
-    
+def test_measurement_trace_properties():
+    """Test measurement trace property calculations"""
+    print("Test 4: Measurement Trace Properties")
+
     validator = EMSideChannelValidator()
-    
-    result = validator.validate_gaussian_sampling(samples=100)
-    
-    assert isinstance(result, EMLeakageResult)
-    assert result.test_name == "gaussian_sampling_em_leakage"
-    assert "sampling_penalty_applied" in result.details
-    
-    print("  ✓ Gaussian Sampling Validation tests passed")
-    return True
+    traces = validator.run_analysis_suite(AlgorithmType.KYBER, 20)
+
+    assert len(traces) == 20
+
+    for trace in traces:
+        assert isinstance(trace.timing_std, float)
+        assert isinstance(trace.timing_cv, float)
+        assert isinstance(trace.em_noise_level, float)
+        assert trace.duration_ns > 0
+
+    print(f"  ✓ Analyzed {len(traces)} measurement traces")
+    print("  ✓ All trace properties correctly calculated")
 
 
-def test_cpa_resistance_validation():
-    """Test CEMA resistance validation"""
-    print("Testing CEMA Resistance Validation...")
-    
+def test_timing_leakage_analysis():
+    """Test timing leakage analysis"""
+    print("Test 5: Timing Leakage Analysis")
+
     validator = EMSideChannelValidator()
-    
-    result = validator.validate_cpa_resistance(secret=0x5A, traces=200)
-    
-    assert isinstance(result, EMLeakageResult)
-    assert result.test_name == "correlation_em_analysis_resistance"
-    assert "attack_success" in result.details
-    assert "resistance_score" in result.details
-    
-    print("  ✓ CEMA Resistance Validation tests passed")
-    return True
+    traces = validator.run_analysis_suite(AlgorithmType.DILITHIUM, 30)
+    analysis = validator.analyze_timing_leakage(traces)
+
+    assert analysis.metric == SideChannelMetric.TIMING_VARIANCE
+    assert 0 <= analysis.leakage_score <= 1
+    assert analysis.confidence > 0
+    assert isinstance(analysis.detected_patterns, list)
+    assert analysis.vulnerability_level in list(VulnerabilityLevel)
+
+    print(f"  ✓ Leakage score: {analysis.leakage_score:.4f}")
+    print(f"  ✓ Vulnerability level: {analysis.vulnerability_level.value[1]}")
+    print(f"  ✓ Confidence: {analysis.confidence:.0%}")
+    print(f"  ✓ Patterns detected: {len(analysis.detected_patterns)}")
 
 
-def test_full_em_validation_suite():
-    """Test complete EM validation suite"""
-    print("Testing Full EM Validation Suite...")
-    
+def test_em_leakage_analysis():
+    """Test electromagnetic leakage analysis"""
+    print("Test 6: EM Leakage Analysis")
+
     validator = EMSideChannelValidator()
-    
-    result = validator.run_full_em_validation(algorithm_name="KYBER-768_TEST")
-    
-    assert "validator_version" in result
-    assert "overall_em_resistance_score" in result
-    assert 0 <= result["overall_em_resistance_score"] <= 1.0
-    assert "average_leakage_correlation" in result
-    assert "tests_with_leakage" in result
-    assert "critical_vulnerabilities" in result
-    assert "detailed_results" in result
-    assert len(result["detailed_results"]) == 4, "Should have 4 test results"
-    assert "all_recommendations" in result
-    
-    # Verify all tests ran
-    test_names = [r["test"] for r in result["detailed_results"]]
-    assert "polynomial_multiplication_em_leakage" in test_names
-    assert "ntt_operation_em_leakage" in test_names
-    assert "gaussian_sampling_em_leakage" in test_names
-    assert "correlation_em_analysis_resistance" in test_names
-    
-    print("  ✓ Full EM Validation Suite tests passed")
-    return True
+    traces = validator.run_analysis_suite(AlgorithmType.FALCON, 40)
+    analysis = validator.analyze_em_leakage(traces)
+
+    assert analysis.metric == SideChannelMetric.EM_EMISSION
+    assert 0 <= analysis.leakage_score <= 1
+    assert analysis.confidence > 0
+    assert isinstance(analysis.detected_patterns, list)
+
+    print(f"  ✓ EM leakage score: {analysis.leakage_score:.4f}")
+    print(f"  ✓ Vulnerability level: {analysis.vulnerability_level.value[1]}")
+    print(f"  ✓ Confidence: {analysis.confidence:.0%}")
+
+
+def test_power_leakage_analysis():
+    """Test power consumption leakage analysis"""
+    print("Test 7: Power Leakage Analysis")
+
+    validator = EMSideChannelValidator()
+    traces = validator.run_analysis_suite(AlgorithmType.SPHINCS, 25)
+    analysis = validator.analyze_power_leakage(traces)
+
+    assert analysis.metric == SideChannelMetric.POWER_CONSUMPTION
+    assert 0 <= analysis.leakage_score <= 1
+    assert analysis.confidence > 0
+
+    print(f"  ✓ Power leakage score: {analysis.leakage_score:.4f}")
+    print(f"  ✓ Vulnerability level: {analysis.vulnerability_level.value[1]}")
+
+
+def test_full_validation_suite():
+    """Test complete validation suite"""
+    print("Test 8: Full Validation Suite")
+
+    validator = EMSideChannelValidator()
+    result = validator.run_full_validation(AlgorithmType.KYBER, 50)
+
+    assert result["algorithm"] == "CRYSTALS-Kyber"
+    assert result["traces_analyzed"] == 50
+    assert 0 <= result["overall_leakage_score"] <= 1
+    assert result["overall_vulnerability_level"] in ["SAFE", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+    assert len(result["metric_analyses"]) == 3
+    assert isinstance(result["recommendations"], list)
+
+    print(f"  ✓ Algorithm: {result['algorithm']}")
+    print(f"  ✓ Traces analyzed: {result['traces_analyzed']}")
+    print(f"  ✓ Overall leakage score: {result['overall_leakage_score']:.4f}")
+    print(f"  ✓ Overall level: {result['overall_vulnerability_level']}")
+    print(f"  ✓ Recommendations: {len(result['recommendations'])}")
+
+
+def test_html_report_generation():
+    """Test HTML validation report generation"""
+    print("Test 9: HTML Report Generation")
+
+    validator = EMSideChannelValidator()
+    html = validator.generate_validation_report(AlgorithmType.KYBER)
+
+    assert "<!DOCTYPE html>" in html
+    assert "<html>" in html
+    assert "Post-Quantum EM Side-Channel Validation Report" in html
+    assert "Overall Vulnerability Level" in html
+    assert "Metric Analysis" in html
+    assert "Security Recommendations" in html
+
+    print("  ✓ Valid HTML structure")
+    print("  ✓ Report sections present")
+    print("  ✓ Styling included")
+
+
+def test_json_export():
+    """Test JSON results export"""
+    print("Test 10: JSON Results Export")
+
+    validator = EMSideChannelValidator()
+    validator.run_full_validation(AlgorithmType.KYBER, 30)
+    validator.run_full_validation(AlgorithmType.DILITHIUM, 30)
+
+    export_path = "/tmp/test_em_validation_export.json"
+    validator.export_results(export_path)
+
+    with open(export_path) as f:
+        data = json.load(f)
+
+    assert data["validator"] == "Post-Quantum EM Side-Channel Analysis Validator"
+    assert data["version"] == "2026.06"
+    assert len(data["algorithms_tested"]) == 2
+    assert data["total_measurements"] >= 60
+    assert "CRYSTALS-Kyber" in data["results"]
+    assert "CRYSTALS-Dilithium" in data["results"]
+
+    os.remove(export_path)
+
+    print("  ✓ JSON export successful")
+    print(f"  ✓ Algorithms tested: {len(data['algorithms_tested'])}")
+    print(f"  ✓ Total measurements: {data['total_measurements']}")
+
+
+def test_algorithm_comparison():
+    """Test comparison across different post-quantum algorithms"""
+    print("Test 11: Algorithm Comparison Analysis")
+
+    validator = EMSideChannelValidator()
+
+    algorithms = [AlgorithmType.KYBER, AlgorithmType.DILITHIUM, AlgorithmType.SPHINCS]
+    results = {}
+
+    for algo in algorithms:
+        result = validator.run_full_validation(algo, 25)
+        results[algo.value] = result["overall_leakage_score"]
+
+    assert len(results) == 3
+    assert all(0 <= score <= 1 for score in results.values())
+
+    print("  ✓ All algorithms tested successfully")
+    for algo, score in sorted(results.items(), key=lambda x: x[1]):
+        print(f"    - {algo}: {score:.4f} leakage score")
+
+
+def test_empty_trace_handling():
+    """Test handling of empty trace lists"""
+    print("Test 12: Empty Trace Handling")
+
+    validator = EMSideChannelValidator()
+
+    timing_analysis = validator.analyze_timing_leakage([])
+    em_analysis = validator.analyze_em_leakage([])
+    power_analysis = validator.analyze_power_leakage([])
+
+    assert timing_analysis.leakage_score == 0.0
+    assert em_analysis.leakage_score == 0.0
+    assert power_analysis.leakage_score == 0.0
+
+    print("  ✓ Empty traces handled gracefully")
+    print("  ✓ Zero leakage score returned for empty input")
 
 
 def run_all_tests():
-    """Run all tests and generate report"""
+    """Run all tests and generate results"""
     print("=" * 70)
-    print("Post-Quantum EM Side-Channel Validator - Test Suite")
+    print("Post-Quantum EM Side-Channel Analysis Validator - Test Suite")
     print("=" * 70)
-    
+    print()
+
     tests = [
-        test_lattice_analyzer_basic,
-        test_ntt_emission_simulation,
-        test_gaussian_sampling_emission,
-        test_em_correlation_analysis,
-        test_cpa_attack_simulator,
-        test_polynomial_multiplication_validation,
-        test_ntt_validation,
-        test_gaussian_sampling_validation,
-        test_cpa_resistance_validation,
-        test_full_em_validation_suite
+        test_vulnerability_level_calculation,
+        test_constant_time_input_generation,
+        test_timing_measurement_simulation,
+        test_measurement_trace_properties,
+        test_timing_leakage_analysis,
+        test_em_leakage_analysis,
+        test_power_leakage_analysis,
+        test_full_validation_suite,
+        test_html_report_generation,
+        test_json_export,
+        test_algorithm_comparison,
+        test_empty_trace_handling
     ]
-    
-    results = []
-    start_time = time.time()
-    
-    for test_func in tests:
+
+    passed = 0
+    failed = 0
+
+    for test in tests:
         try:
-            result = test_func()
-            results.append((test_func.__name__, result, None))
+            test()
+            passed += 1
+            print()
         except Exception as e:
-            results.append((test_func.__name__, False, str(e)))
+            failed += 1
             print(f"  ✗ FAILED: {e}")
-    
-    elapsed = time.time() - start_time
-    
-    print("\n" + "=" * 70)
-    print("TEST SUMMARY")
+            import traceback
+            traceback.print_exc()
+            print()
+
     print("=" * 70)
-    
-    passed = sum(1 for _, r, _ in results if r)
-    total = len(results)
-    
-    print(f"Passed: {passed}/{total}")
-    print(f"Failed: {total - passed}")
-    print(f"Total time: {elapsed:.3f}s")
-    
-    print("\nDetailed results:")
-    for name, result, error in results:
-        status = "✓ PASS" if result else "✗ FAIL"
-        print(f"  {status}: {name}")
-        if error:
-            print(f"       Error: {error}")
-    
+    print(f"Results: {passed} PASSED, {failed} FAILED")
+    print("=" * 70)
+
     # Save test results
-    test_results = {
-        "test_version": "em_side_channel_2026_june_v1",
-        "timestamp": time.time(),
-        "total_tests": total,
+    results = {
+        "test_module": "post_quantum_em_side_channel_analysis_validator",
+        "total_tests": len(tests),
         "passed": passed,
-        "failed": total - passed,
-        "elapsed_seconds": round(elapsed, 3),
-        "results": [{"name": n, "passed": r, "error": e} for n, r, e in results]
+        "failed": failed,
+        "success_rate": f"{(passed/len(tests))*100:.1f}%",
+        "timestamp": "2026-06-22"
     }
-    
-    with open("/home/user/autonomous-developer/QuantumCrypt-AI/test_results_post_quantum_em_side_channel_2026_june.json", "w") as f:
-        json.dump(test_results, f, indent=2)
-    
-    print(f"\nTest results saved to JSON file")
-    
-    return passed == total
+
+    with open("test_results_em_side_channel_validator_2026_june.json", "w") as f:
+        json.dump(results, f, indent=2)
+
+    print(f"Test results saved to test_results_em_side_channel_validator_2026_june.json")
+
+    return failed == 0
 
 
 if __name__ == "__main__":

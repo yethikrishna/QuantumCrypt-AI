@@ -1,0 +1,8 @@
+{
+  "test_module": "post_quantum_em_side_channel_analysis_validator",
+  "total_tests": 12,
+  "passed": 12,
+  "failed": 0,
+  "success_rate": "100.0%",
+  "timestamp": "2026-06-22"
+}
