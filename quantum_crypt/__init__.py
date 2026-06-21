@@ -485,3 +485,25 @@ __all__.extend([
 ])
 __version__ = "2026.6.21.60"
 
+
+# Post-Quantum Digital Signature Hybrid Verification Engine (June 21, 2026 Production Release)
+# Hybrid ECDSA + CRYSTALS-Dilithium signature verification with crypto-agility
+from .post_quantum_digital_signature_hybrid_verification_engine_2026_june import (
+    HybridDigitalSignatureEngine,
+    Signature,
+    KeyPair,
+    SignatureAlgorithm,
+    VerificationStatus,
+    SimplifiedECDSA,
+    DilithiumLikeSignature
+)
+__all__.extend([
+    "HybridDigitalSignatureEngine",
+    "Signature",
+    "KeyPair",
+    "SignatureAlgorithm",
+    "VerificationStatus",
+    "SimplifiedECDSA",
+    "DilithiumLikeSignature"
+])
+__version__ = "2026.6.21.61"

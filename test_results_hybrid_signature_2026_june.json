@@ -1,0 +1,58 @@
+{
+  "test_date": "2026-06-21 22:27:00",
+  "total_tests": 10,
+  "passed": 10,
+  "failed": 0,
+  "results": [
+    {
+      "test": "test_ecdsa_basic",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_dilithium_like",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_hybrid_signature",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_tamper_detection",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_signature_serialization",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_expired_key",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_wrong_key",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_batch_verification",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_key_management",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "test_standalone_crypto",
+      "passed": true,
+      "error": null
+    }
+  ]
+}
