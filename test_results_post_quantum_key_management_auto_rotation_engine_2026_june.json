@@ -1,0 +1,8 @@
+{
+  "test_timestamp": 1782044467.6902633,
+  "module": "post_quantum_key_management_auto_rotation_engine",
+  "total_tests": 9,
+  "passed": 9,
+  "failed": 0,
+  "success_rate": 1.0
+}
