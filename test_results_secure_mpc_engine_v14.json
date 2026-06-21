@@ -1,0 +1,18 @@
+{
+  "test_results": {
+    "test1_sss_basic": "PASSED",
+    "test2_sss_threshold": "PASSED",
+    "test3_side_channel": "FAILED: 'SideChannelProtector' object has no attribute 'constant_time_select'",
+    "test4_commitment": "PASSED",
+    "test5_mpc_add": "PASSED",
+    "test6_mpc_mul": "PASSED",
+    "test7_mpc_compare": "PASSED",
+    "test8_zkp": "PASSED",
+    "test9_stats": "PASSED",
+    "test10_security_levels": "PASSED"
+  },
+  "all_passed": false,
+  "timestamp": 1782000030.132212,
+  "engine": "SecureMPCEngine_v14",
+  "security": "Post-Quantum"
+}
