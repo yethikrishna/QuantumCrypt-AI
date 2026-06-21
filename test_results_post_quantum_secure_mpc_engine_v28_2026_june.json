@@ -1,0 +1,71 @@
+{
+  "test_suite": "Post-Quantum Secure MPC Engine v28",
+  "timestamp": "2026-06-21T14:40:25Z",
+  "total_tests": 12,
+  "passed": 12,
+  "failed": 0,
+  "success_rate": 100.0,
+  "total_time_seconds": 0.005,
+  "results": [
+    {
+      "test": "Secure Random Generation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "Side-Channel Operations",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "Shamir Secret Sharing (Basic)",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "Shamir Threshold Enforcement",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "Share Integrity Verification",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "Additive Secret Sharing",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "MPC Engine Shamir Roundtrip",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "MPC Engine Secure Addition",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "MPC Engine Random Generation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "MPC Engine Security Metrics",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "MPC Engine Security Self-Test",
+      "passed": true,
+      "error": null
+    },
+    {
+      "test": "Different Security Levels",
+      "passed": true,
+      "error": null
+    }
+  ]
+}
