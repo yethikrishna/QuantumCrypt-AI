@@ -1,0 +1,56 @@
+{
+  "test_suite": "post_quantum_hybrid_kem_engine",
+  "date": "2026-06-21 10:24:22",
+  "total_tests": 9,
+  "passed": 9,
+  "failed": 0,
+  "success_rate": 1.0,
+  "total_time_seconds": 0.05617094039916992,
+  "tests": [
+    {
+      "name": "test_classical_kem",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_post_quantum_kem",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_hybrid_key_generation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_hybrid_encapsulation_decapsulation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_hybrid_encryption_decryption",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_authentication_verification",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_different_security_levels",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_classical_only_mode",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_performance_benchmark",
+      "passed": true,
+      "error": null
+    }
+  ]
+}
