@@ -1,0 +1,69 @@
+{
+  "module": "post_quantum_key_diversification_derivation_engine_v2_2026_june",
+  "timestamp": 1782052256.087329,
+  "all_passed": true,
+  "passed_count": 13,
+  "total_tests": 13,
+  "test_results": [
+    {
+      "test": "hkdf_basic",
+      "passed": true,
+      "length": 32
+    },
+    {
+      "test": "purpose_derivation",
+      "passed": true,
+      "domain_separation": true
+    },
+    {
+      "test": "user_diversification",
+      "passed": true,
+      "keys_different": true
+    },
+    {
+      "test": "deterministic",
+      "passed": true
+    },
+    {
+      "test": "hierarchical",
+      "passed": true,
+      "path_depth": 4
+    },
+    {
+      "test": "key_ratcheting",
+      "passed": true,
+      "forward_secrecy": true
+    },
+    {
+      "test": "multi_context",
+      "passed": true,
+      "num_keys": 5
+    },
+    {
+      "test": "consistency_verify",
+      "passed": true
+    },
+    {
+      "test": "multi_user_hierarchy",
+      "passed": true,
+      "num_users": 5
+    },
+    {
+      "test": "key_lengths",
+      "passed": true
+    },
+    {
+      "test": "fingerprint",
+      "passed": true
+    },
+    {
+      "test": "safe_serialization",
+      "passed": true
+    },
+    {
+      "test": "performance",
+      "passed": true,
+      "avg_ms": 0.00962972640991211
+    }
+  ]
+}
