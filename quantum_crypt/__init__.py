@@ -605,3 +605,43 @@ __all__.extend([
     "AuditExporter",
     "CryptoPerformanceMonitor",
 ])
+
+"""
++ Security Hardening: Rate Limiting & DoS Protection (June 22, 2026) - Dimension B
+  Token Bucket, Fixed Window, Sliding Window rate limiters, Circuit Breaker pattern,
+  Adaptive Rate Limiting, and centralized Request Throttling for DoS protection
+"""
+from .security_hardening_rate_limiting_dos_protection_2026_june import (
+    RateLimitAlgorithm,
+    CircuitBreakerState,
+    RateLimitConfig,
+    RateLimitResult,
+    RateLimitExceeded,
+    CircuitBreakerOpen,
+    TokenBucketLimiter,
+    FixedWindowLimiter,
+    SlidingWindowLimiter,
+    CircuitBreaker,
+    AdaptiveRateLimiter,
+    RequestThrottler,
+    rate_limit,
+    with_circuit_breaker,
+)
+__all__.extend([
+    "RateLimitAlgorithm",
+    "CircuitBreakerState",
+    "RateLimitConfig",
+    "RateLimitResult",
+    "RateLimitExceeded",
+    "CircuitBreakerOpen",
+    "TokenBucketLimiter",
+    "FixedWindowLimiter",
+    "SlidingWindowLimiter",
+    "CircuitBreaker",
+    "AdaptiveRateLimiter",
+    "RequestThrottler",
+    "rate_limit",
+    "with_circuit_breaker",
+])
+__version__ = "2026.6.22.90"
+
