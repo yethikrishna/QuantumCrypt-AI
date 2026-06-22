@@ -563,3 +563,45 @@ __all__.extend([
     "reset_observability_metrics",
 ])
 __version__ = "2026.6.22.2"
+
+"""
++ Post-Quantum Crypto Observability & Audit Logging (June 22, 2026)
+  NIST SP 800-53 compliant audit logging, key lifecycle tracking,
+  algorithm performance monitoring, and chain-hashed audit trails
+"""
+from .pq_crypto_observability_audit_logging_2026_june import (
+    enable_crypto_observability,
+    disable_crypto_observability,
+    reset_crypto_observability,
+    get_crypto_audit_logs,
+    get_crypto_performance_report,
+    export_crypto_audit_json,
+    export_crypto_audit_csv,
+    CryptoObservabilityState,
+    CryptoOperation,
+    AlgorithmClass,
+    KeyLifecycleEvent,
+    AuditSeverity,
+    audit_crypto_operation,
+    KeyLifecycleTracker,
+    AuditExporter,
+    CryptoPerformanceMonitor,
+)
+__all__.extend([
+    "enable_crypto_observability",
+    "disable_crypto_observability",
+    "reset_crypto_observability",
+    "get_crypto_audit_logs",
+    "get_crypto_performance_report",
+    "export_crypto_audit_json",
+    "export_crypto_audit_csv",
+    "CryptoObservabilityState",
+    "CryptoOperation",
+    "AlgorithmClass",
+    "KeyLifecycleEvent",
+    "AuditSeverity",
+    "audit_crypto_operation",
+    "KeyLifecycleTracker",
+    "AuditExporter",
+    "CryptoPerformanceMonitor",
+])
