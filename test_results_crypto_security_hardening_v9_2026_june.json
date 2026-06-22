@@ -1,0 +1,167 @@
+{
+  "test_module": "crypto_security_hardening_v9_2026_june",
+  "dimension": "B - Security Hardening",
+  "timestamp": 1782119697.2145126,
+  "passed": 38,
+  "failed": 0,
+  "tests": {
+    "TestSecureMemoryZeroization": [
+      {
+        "name": "test_constant_time_compare_different_length",
+        "passed": true
+      },
+      {
+        "name": "test_constant_time_compare_equal",
+        "passed": true
+      },
+      {
+        "name": "test_constant_time_compare_not_equal",
+        "passed": true
+      },
+      {
+        "name": "test_constant_time_timing_resistance",
+        "passed": true
+      },
+      {
+        "name": "test_convenience_functions",
+        "passed": true
+      },
+      {
+        "name": "test_custom_config",
+        "passed": true
+      },
+      {
+        "name": "test_get_stats",
+        "passed": true
+      },
+      {
+        "name": "test_multiple_overwrite_patterns",
+        "passed": true
+      },
+      {
+        "name": "test_singleton_instance",
+        "passed": true
+      },
+      {
+        "name": "test_wipe_object_bytearray",
+        "passed": true
+      },
+      {
+        "name": "test_wipe_object_list",
+        "passed": true
+      },
+      {
+        "name": "test_zeroize_after_context_manager",
+        "passed": true
+      },
+      {
+        "name": "test_zeroize_bytearray",
+        "passed": true
+      },
+      {
+        "name": "test_zeroize_empty_buffer",
+        "passed": true
+      },
+      {
+        "name": "test_zeroize_memoryview",
+        "passed": true
+      },
+      {
+        "name": "test_zeroizer_initialization",
+        "passed": true
+      }
+    ],
+    "TestCryptoInputValidation": [
+      {
+        "name": "test_convenience_functions",
+        "passed": true
+      },
+      {
+        "name": "test_entropy_calculation",
+        "passed": true
+      },
+      {
+        "name": "test_validate_bytes_from_base64",
+        "passed": true
+      },
+      {
+        "name": "test_validate_bytes_from_hex",
+        "passed": true
+      },
+      {
+        "name": "test_validate_bytes_null_rejected",
+        "passed": true
+      },
+      {
+        "name": "test_validate_bytes_too_large",
+        "passed": true
+      },
+      {
+        "name": "test_validate_bytes_valid",
+        "passed": true
+      },
+      {
+        "name": "test_validate_ciphertext",
+        "passed": true
+      },
+      {
+        "name": "test_validate_hash_sha256",
+        "passed": true
+      },
+      {
+        "name": "test_validate_key_aes_valid",
+        "passed": true
+      },
+      {
+        "name": "test_validate_key_aes_wrong_size",
+        "passed": true
+      },
+      {
+        "name": "test_validate_key_all_same_bytes",
+        "passed": true
+      },
+      {
+        "name": "test_validate_key_weak_pattern",
+        "passed": true
+      },
+      {
+        "name": "test_validate_nonce_valid",
+        "passed": true
+      },
+      {
+        "name": "test_validate_nonce_wrong_length",
+        "passed": true
+      },
+      {
+        "name": "test_validate_plaintext_empty",
+        "passed": true
+      },
+      {
+        "name": "test_validation_stats",
+        "passed": true
+      },
+      {
+        "name": "test_validator_initialization",
+        "passed": true
+      },
+      {
+        "name": "test_validator_singleton",
+        "passed": true
+      }
+    ],
+    "TestIntegrationSecurity": [
+      {
+        "name": "test_combined_zeroize_and_validate",
+        "passed": true
+      },
+      {
+        "name": "test_constant_time_compare_security",
+        "passed": true
+      },
+      {
+        "name": "test_production_safe_usage_pattern",
+        "passed": true
+      }
+    ]
+  }
+}
