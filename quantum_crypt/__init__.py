@@ -643,5 +643,29 @@ __all__.extend([
     "rate_limit",
     "with_circuit_breaker",
 ])
+
+__version__ = "2026.6.22.99"
+"""
++ Security Hardening: Enhanced Adaptive Rate Limiting & DoS Protection v10 (June 22, 2026) - Dimension B
+  Hybrid sliding window + token bucket algorithm, adaptive penalty scaling,
+  client fingerprinting for anonymous clients, operation cost weighting,
+  and thread-safe implementation for high-concurrency environments
+"""
+from .crypto_security_hardening_adaptive_rate_limiting_dos_protection_v10_2026_june import (
+    RateLimitConfig as EnhancedRateLimitConfig,
+    ClientState,
+    AdaptiveRateLimiter as EnhancedAdaptiveRateLimiter,
+    RateLimitExceededError,
+    get_global_rate_limiter,
+    rate_limited,
+)
+__all__.extend([
+    "EnhancedRateLimitConfig",
+    "ClientState",
+    "EnhancedAdaptiveRateLimiter",
+    "RateLimitExceededError",
+    "get_global_rate_limiter",
+    "rate_limited",
+])
 __version__ = "2026.6.22.90"
 
