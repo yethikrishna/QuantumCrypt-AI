@@ -562,7 +562,30 @@ __all__.extend([
     "get_observability_metrics",
     "reset_observability_metrics",
 ])
-__version__ = "2026.6.22.2"
+"""
++ PQC Hybrid Signature Scheme v28 (June 24, 2026) - Dimension A Feature Expansion
+  Hybrid ECDSA + SPHINCS+-like hash-based signatures for transitional security
+  NIST PQC Security Levels 1/3/5, multiple composition modes
+"""
+from .pqc_hybrid_signature_scheme_v28_2026_june import (
+    SecurityLevel,
+    HybridMode,
+    HybridKeyPair,
+    HybridSignature,
+    PQHashBasedSigner,
+    PQCHybridSigner,
+    CRYPTOGRAPHY_AVAILABLE,
+)
+__all__.extend([
+    "SecurityLevel",
+    "HybridMode",
+    "HybridKeyPair",
+    "HybridSignature",
+    "PQHashBasedSigner",
+    "PQCHybridSigner",
+    "CRYPTOGRAPHY_AVAILABLE",
+])
+__version__ = "2026.6.24.127"
 
 """
 + Post-Quantum Crypto Observability & Audit Logging (June 22, 2026)
