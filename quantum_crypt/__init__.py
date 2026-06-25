@@ -690,5 +690,43 @@ __all__.extend([
     "get_global_rate_limiter",
     "rate_limited",
 ])
-__version__ = "2026.6.22.90"
+
+# Comprehensive Crypto Security Hardening Framework v29 (June 25, 2026 - Dimension B)
+from .crypto_security_hardening_framework_v29_2026_june import (
+    CryptoSecureMemory,
+    CryptoConstantTime,
+    CryptoInputValidator,
+    CryptoRateLimiter,
+    CryptoSecurityHardeningWrapper,
+    CryptoSecurityLevel,
+    CryptoRateLimitConfig,
+    CryptoValidationRule,
+    CryptoSecurityError,
+    CryptoValidationError,
+    CryptoRateLimitError,
+    crypto_secure_memory,
+    crypto_constant_time,
+    default_crypto_validator,
+    default_crypto_rate_limiter,
+)
+__all__.extend([
+    # Crypto Security Hardening v29
+    "CryptoSecureMemory",
+    "CryptoConstantTime",
+    "CryptoInputValidator",
+    "CryptoRateLimiter",
+    "CryptoSecurityHardeningWrapper",
+    "CryptoSecurityLevel",
+    "CryptoRateLimitConfig",
+    "CryptoValidationRule",
+    "CryptoSecurityError",
+    "CryptoValidationError",
+    "CryptoRateLimitError",
+    "crypto_secure_memory",
+    "crypto_constant_time",
+    "default_crypto_validator",
+    "default_crypto_rate_limiter",
+])
+
+__version__ = "2026.6.25.146"
 
